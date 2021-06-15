@@ -274,7 +274,6 @@ public class MailService {
 			} else {
 				sendRequest.setSaveItemToFolder(false);
 			}
-			System.out.println("Sending email ");
 			SendItemResponseTypeHolder sendItemResult = new SendItemResponseTypeHolder();
 			service.getServiceStub().sendItem(sendRequest, null, mailboxCultureType, requestVersion, sendItemResult,
 					serverVersion);

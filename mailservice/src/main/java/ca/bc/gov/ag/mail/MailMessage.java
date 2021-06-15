@@ -11,6 +11,9 @@ public class MailMessage {
 	private String body;
 	private List<String> attachments;
 
+	public MailMessage() {
+	}
+	
 	public MailMessage(final String uuid) {
 		this.uuid = uuid;
 		this.to = "";
