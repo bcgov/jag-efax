@@ -1,8 +1,12 @@
 package ca.bc.gov.ag.mail;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.apache.commons.collections4.ListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +21,9 @@ import ca.bc.gov.ag.exception.MailException;
 /**
  * This {@link MailController} exposes the {@link MailService} in a REST API.
  */
-@RestController
 @RequestMapping("/v1")
-public class MailController {
+@RestController
+public class MailController { 
 
 	private Logger logger = LoggerFactory.getLogger(MailController.class);
 	
@@ -31,14 +35,15 @@ public class MailController {
 	 * 
 	 * @param mailMessage contains a uuid, to, subject, and body components, as well as a list of URIs (Strings) to include
 	 *                    as attachments.
+	 * @throws URISyntaxException, MailException 
 	 * @throws MailException if any error occurs during delivery.
 	 */
 	@PostMapping(path = "/sendMessage", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void sendMessage(@RequestBody MailMessage mailMessage) throws MailException {
-		logger.debug("Request to /api/v1/sendMessage, uuid: {}", mailMessage.getUuid());
+	public void sendMessage(@RequestBody @Valid MailMessage mailMessage) throws URISyntaxException, MailException {
+		logger.debug("Request to /sendMessage, uuid: {}", mailMessage.getUuid());
 		
 		try {
-			List<String> attachments = mailMessage.getAttachments();
+			List<String> attachments = ListUtils.emptyIfNull(mailMessage.getAttachments());
 			URI[] attachmentRefs = new URI[attachments.size()];
 			for (int i = 0; i < attachmentRefs.length; i++) {
 				attachmentRefs[i] = new URI(attachments.get(i));
@@ -50,14 +55,12 @@ public class MailController {
 					mailMessage.getSubject(), 
 					mailMessage.getBody(), 
 					attachmentRefs);
-		} catch (Exception e) {
+		} catch (URISyntaxException | MailException e) {
 			logger.error("Error sending message, uuid: {}", mailMessage.getUuid());
 			logger.error("Exception:", e);
-			throw new MailException("Could not send message", e);
-		}
-		finally {
-			logger.debug("Message pushed to ExchangeServer, uuid: {}", mailMessage.getUuid());
-		}
+			throw e;
+		} 
+		logger.debug("Message pushed to ExchangeServer, uuid: {}", mailMessage.getUuid());
 	}
 	
 }

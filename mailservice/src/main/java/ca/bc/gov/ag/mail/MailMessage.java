@@ -3,10 +3,15 @@ package ca.bc.gov.ag.mail;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotEmpty;
+
 public class MailMessage {
 
+	@NotEmpty(message = "Property 'uuid' must not be empty")
 	private String uuid;
+	@NotEmpty(message = "Property 'to' must not be empty")
 	private String to;
+	@NotEmpty(message = "Property 'subject' must not be empty")
 	private String subject;
 	private String body;
 	private List<String> attachments;
