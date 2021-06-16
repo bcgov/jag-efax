@@ -5,5 +5,5 @@
     <artifactId>jag-efax</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>main-process-ws</artifactId>
+  <artifactId>doc-distrib-ws</artifactId>
 </project>
