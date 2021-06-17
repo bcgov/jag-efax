@@ -1,0 +1,73 @@
+<!--
+	$Author: stdickso $
+	$Date: 2008-03-11 17:33:00 $
+	$Name: not supported by cvs2svn $
+	$Revision: 1.1.1.1 $
+  -->
+<definitions
+     name="DocumentDistributionMainProcess"
+     targetNamespace="http://ag.gov.bc.ca/DocumentDistributionMainProcess"
+     xmlns="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+     xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:pns1="http://ag.gov.bc.ca/DocumentDistributionMainProcess/correlationset"
+     xmlns:client="http://ag.gov.bc.ca/DocumentDistributionMainProcess"   
+    >
+    <import namespace="http://ag.gov.bc.ca/DocumentDistributionMainProcess/correlationset"
+         location="DocumentDistributionMainProcess_Properties.wsdl"/>
+    <import namespace="http://schemas.oracle.com/bpel/extension" location="RuntimeFault.wsdl"/>    
+    <types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+             xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:client="http://ag.gov.bc.ca/DocumentDistributionMainProcess">
+            <import namespace="http://ag.gov.bc.ca/DocumentDistributionMainProcess" schemaLocation="DocumentDistributionMainProcess.xsd"/>
+        </schema>
+    </types>
+    <message name="DocumentDistributionMainProcessResponseMessage">
+        <part name="payload" element="client:DocumentDistributionMainProcessProcessResponse"/>
+    </message>
+    <message name="DocumentDistributionMainProcessUpdateMessage">
+        <part name="payload" element="client:DocumentDistributionMainProcessProcessUpdate"/>
+    </message>
+    <message name="DocumentDistributionRequestMessage">
+        <part name="payload" element="client:DocumentDistributionRequest"/>
+    </message>
+    <message name="DocumentDistributionMainProcessCorrelationMessage">
+        <part name="payload" element="client:DocumentDistributionMainProcessProcessCorrelation"/>
+    </message>
+    <message name="DocumentDistributionFaultMessage">
+        <part name="payload" element="client:DocumentDistributionMainProcessProcessFault"/>
+    </message>
+    <portType name="DocumentDistributionMainProcessCallback">
+        <operation name="onResult">
+            <input message="client:DocumentDistributionMainProcessResponseMessage"/>
+        </operation>
+    </portType>
+    <portType name="DocumentDistributionMainProcess">
+        <operation name="update">
+            <input message="client:DocumentDistributionMainProcessUpdateMessage"/>
+        </operation>
+        <operation name="initiate">
+            <input message="client:DocumentDistributionRequestMessage"/>
+        </operation>
+    </portType>
+    <plnk:partnerLinkType name="DocumentDistributionMainProcess">
+        <plnk:role name="DocumentDistributionMainProcessProvider">
+            <plnk:portType name="client:DocumentDistributionMainProcess"/>
+        </plnk:role>
+        <plnk:role name="DocumentDistributionMainProcessRequester">
+            <plnk:portType name="client:DocumentDistributionMainProcessCallback"/>
+        </plnk:role>
+    </plnk:partnerLinkType>
+    <bpws:propertyAlias propertyName="pns1:uuid" messageType="client:DocumentDistributionMainProcessCorrelationMessage"
+         part="payload" query="/client:DocumentDistributionMainProcessProcessCorrelation/client:uuid"/>
+    <bpws:propertyAlias propertyName="pns1:uuid" messageType="client:DocumentDistributionMainProcessUpdateMessage"
+         part="payload" query="/client:DocumentDistributionMainProcessProcessUpdate/client:uuid"/>
+    <bpws:propertyAlias propertyName="pns1:uuid" messageType="ns1:SendEmailServiceRequestMessage" part="payload"
+         query="/ns1:SendEmailServiceProcessRequest/ns1:uuid" xmlns:ns1="http://ag.gov.bc.ca/SendEmailService"/>
+    <bpws:propertyAlias propertyName="pns1:uuid" messageType="ns1:SendFaxServiceRequestMessage" part="payload"
+         query="/ns1:SendFaxServiceProcessRequest/ns1:uuid" xmlns:ns1="http://ag.gov.bc.ca/SendFaxService"/>
+    <bpws:propertyAlias propertyName="pns1:uuid" messageType="ns1:EmailListenerPartnerLinkRequestMessage"
+         part="payload" query="/ns1:EmailListenerPartnerLinkProcessRequest/ns1:uuid" xmlns:ns1="http://ag.gov.bc.ca/EmailListenerPartnerLink"/>
+    <bpws:propertyAlias propertyName="pns1:uuid" messageType="ns1:FaxListenerPartnerLinkRequestMessage" part="payload"
+         query="/ns1:FaxListenerPartnerLinkProcessRequest/ns1:uuid" xmlns:ns1="http://ag.gov.bc.ca/FaxListenerPartnerLink"/>
+</definitions>
