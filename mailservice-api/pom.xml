@@ -8,6 +8,12 @@
 		<artifactId>jag-efax</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>mailservice</artifactId>
+	<artifactId>mailservice-api</artifactId>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+	</dependencies>
 </project>
