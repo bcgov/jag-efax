@@ -20,6 +20,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<main.basedir>${project.basedir}</main.basedir>
 	</properties>
 
 	<modules>
@@ -30,7 +31,7 @@
 	<repositories>
 		<repository>
 			<id>nexus</id>
-			<url>file:///${project.basedir}/nexus</url>
+			<url>file:${file.separator}${file.separator}${main.basedir}${file.separator}nexus</url>
 		</repository>
 	</repositories>
 
