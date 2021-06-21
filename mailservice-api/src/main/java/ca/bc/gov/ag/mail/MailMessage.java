@@ -1,6 +1,5 @@
 package ca.bc.gov.ag.mail;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
@@ -17,14 +16,6 @@ public class MailMessage {
 	private List<String> attachments;
 
 	public MailMessage() {
-	}
-	
-	public MailMessage(final String uuid) {
-		this.uuid = uuid;
-		this.to = "";
-		this.subject = "";
-		this.body = "";
-		this.attachments = new ArrayList<String>();
 	}
 
 	public String getUuid() {
@@ -65,10 +56,6 @@ public class MailMessage {
 
 	public void setAttachments(List<String> attachments) {
 		this.attachments = attachments;
-	}
-
-	public void cleanup() {
-		attachments.clear();
 	}
 
 }
