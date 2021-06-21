@@ -1,4 +1,4 @@
-package ca.bc.gov.ag.dist.ws;
+package ca.bc.gov.ag.dist;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,21 +9,14 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Status;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.io.ClassPathResource;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ApplicationTest {
+public class ApplicationTest extends BaseTestSuite {
 	
-	@Autowired
-	private TestRestTemplate restTemplate;
-
 	@Test
 	public void contextLoads() {
 		// assert the health check returns { "status" : "UP" } - this confirms the ws is up.
