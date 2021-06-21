@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
@@ -66,20 +65,7 @@ public class MailService {
 	@Autowired
 	private PdfService pdfService;
 	
-	public void sendMessage(final String uuid, final String to, final String subject, final String body,
-			final URI... attachments) throws MailException {
-
-		MailMessage mailMessage = new MailMessage(uuid);
-		mailMessage.setTo(to);
-		mailMessage.setSubject(subject);
-		mailMessage.setBody(body);
-
-		if ((attachments != null) && (attachments.length > 0)) {
-			for (int i = 0; i < attachments.length; i++) {
-				mailMessage.getAttachments().add(attachments[i].toString());
-			}
-		}
-		
+	public void sendMessage(final MailMessage mailMessage) throws MailException {
 		try {
 			processMessage(mailMessage);
 		} catch (Exception e) {
@@ -104,12 +90,10 @@ public class MailService {
 					throw new Exception("Unable to Delete file");
 				}
 			}
-			// Cleanup
-			msg.cleanup();
 		} catch (SecurityException se) {
-			throw new MailException("Security Exception in class setMessage", se);
+			throw new MailException("Security Exception in cleanupMessage", se);
 		} catch (Exception e) {
-			throw new MailException("Unknown Exception in class setMessage", e);
+			throw new MailException("Unknown Exception in cleanupMessage", e);
 		}
 
 	}
@@ -290,6 +274,7 @@ public class MailService {
 			try {
 				cleanupMessage(m);
 			} catch (Exception e) {
+				// FIXME: techdept - this should not be an exception since it has nothing to do with whether a fax/email successfully sends or not.
 				throw new MailException("Exception Cleaning up Temporary File");
 			}
 		}
