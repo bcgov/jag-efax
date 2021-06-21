@@ -49,12 +49,7 @@ public class MailController {
 				attachmentRefs[i] = new URI(attachments.get(i));
 			}
 			
-			mailService.sendMessage(
-					mailMessage.getUuid(), 
-					mailMessage.getTo(), 
-					mailMessage.getSubject(), 
-					mailMessage.getBody(), 
-					attachmentRefs);
+			mailService.sendMessage(mailMessage);
 		} catch (URISyntaxException | MailException e) {
 			logger.error("Error sending message, uuid: {}", mailMessage.getUuid());
 			logger.error("Exception:", e);
