@@ -1,25 +1,41 @@
 package ca.bc.gov.ag;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.URI;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import ca.bc.gov.ag.mail.MailService;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ApplicationTest {
 
+	@Autowired
+	private TestRestTemplate restTemplate;
+	
 	@Autowired
 	private MailService mailService;
 	
 	@Test
 	public void contextLoads() {
 		assertNotNull(mailService);
+	}
+
+	@Test
+	public void healthCheck() {
+		// assert the health check returns { "status" : "UP" } - this confirms the ws is up.
+		
+		JsonNode node = restTemplate.getForObject("/actuator/health", JsonNode.class);
+		assertTrue(Status.UP.getCode().equals(node.get("status").asText()));		
 	}
 	
 	@Disabled
