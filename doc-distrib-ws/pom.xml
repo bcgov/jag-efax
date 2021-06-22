@@ -13,7 +13,7 @@
 	<properties>
 		<main.basedir>${project.basedir}${file.separator}..</main.basedir>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -63,7 +63,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<packageName>ca.bc.gov.ag.dist.ws</packageName>
+					<packageName>ca.bc.gov.ag.dist.ws.model</packageName>
 					<sources>
 						<source>${project.basedir}/src/main/resources/DocumentDistributionMainProcess.xsd</source>
 					</sources>
