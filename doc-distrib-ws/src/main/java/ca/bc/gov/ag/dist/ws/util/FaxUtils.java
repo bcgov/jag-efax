@@ -19,7 +19,8 @@ public class FaxUtils {
 	 * ie. IMCEAFAX-Somebody+402505555555@domain.com
 	 */
 	public static String getFaxDestination(String faxFormat, String to, String faxNumber) {
-
+		// FIXME: techdept - codeclimate reports this method is too complicated and large (complexity of 8, max 5 allowed)
+		
 		// Left in for testing - if fax number contains an '@', it is    
 		// likely an email address so just pass through the fax number unchanged.  
 		if (faxNumber.contains("@")) {
