@@ -9,6 +9,8 @@ import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ca.bc.gov.ag.dist.ws.model.DocumentDistributionRequest;
+
 @Endpoint
 public class DocumentDistributionEndpoint {
 	
