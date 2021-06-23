@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -20,6 +21,7 @@ import ca.bc.gov.ag.dist.ws.model.DocumentDistributionRequest;
 import ca.bc.gov.ag.dist.ws.util.FaxUtils;
 
 @Endpoint
+@EnableConfigurationProperties(DocumentDistributionProperties.class)
 public class DocumentDistributionEndpoint {
 
 	private Logger logger = LoggerFactory.getLogger(DocumentDistributionEndpoint.class);
@@ -35,7 +37,7 @@ public class DocumentDistributionEndpoint {
 
 		logger.trace("Request to initiate soap message, jobId: {}", request.getJobId());
 		logRequest(request);
-		
+				
 		// DocumentDistributionMainProcess.bpel:generateInternalUUID
 		UUID uuid = UUID.randomUUID();
 
