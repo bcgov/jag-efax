@@ -17,7 +17,6 @@ import ca.bc.gov.ag.dist.mailservice.MailMessage;
 import ca.bc.gov.ag.dist.mailservice.MailServiceApi;
 import ca.bc.gov.ag.dist.ws.config.DocumentDistributionProperties;
 import ca.bc.gov.ag.dist.ws.config.WebServiceConfig;
-import ca.bc.gov.ag.dist.ws.exception.FaxTransformationFault;
 import ca.bc.gov.ag.dist.ws.model.DocumentDistributionRequest;
 import ca.bc.gov.ag.dist.ws.util.FaxUtils;
 
