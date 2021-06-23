@@ -11,12 +11,16 @@ public abstract class ServiceFaultException extends RuntimeException {
     private DocumentDistributionProperties documentDistributionProperties;
     private String jobId;
     private FaultId faultId;
-
+    
     public ServiceFaultException(FaultId faultId, String jobId, String message) {
         super(message);
         this.faultId = faultId;
         this.jobId = jobId;
         documentDistributionProperties = SpringContext.getBean(DocumentDistributionProperties.class);
+    }
+
+    public ServiceFaultException(FaultId faultId, String message) {
+        this(faultId, null, message);
     }
 
     public DocumentDistributionMainProcessProcessFault getProcessFault() {
