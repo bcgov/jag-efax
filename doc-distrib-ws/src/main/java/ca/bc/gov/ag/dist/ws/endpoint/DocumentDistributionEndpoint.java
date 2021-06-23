@@ -17,7 +17,13 @@ import ca.bc.gov.ag.dist.mailservice.MailMessage;
 import ca.bc.gov.ag.dist.mailservice.MailServiceApi;
 import ca.bc.gov.ag.dist.ws.config.DocumentDistributionProperties;
 import ca.bc.gov.ag.dist.ws.config.WebServiceConfig;
+import ca.bc.gov.ag.dist.ws.exception.CatchAllFault;
+import ca.bc.gov.ag.dist.ws.exception.FAXSendFault;
+import ca.bc.gov.ag.dist.ws.exception.FaxTransformationFault;
+import ca.bc.gov.ag.dist.ws.exception.RuntimeFault;
+import ca.bc.gov.ag.dist.ws.exception.UnknownChannelFault;
 import ca.bc.gov.ag.dist.ws.model.DocumentDistributionRequest;
+import ca.bc.gov.ag.dist.ws.model.RequestChannel;
 import ca.bc.gov.ag.dist.ws.util.FaxUtils;
 
 @Endpoint
@@ -35,31 +41,48 @@ public class DocumentDistributionEndpoint {
 	@PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "DocumentDistributionRequest")
 	public void initiate(@RequestPayload DocumentDistributionRequest request) {
 
-		logger.trace("Request to initiate soap message, jobId: {}", request.getJobId());
+		String jobId = request.getJobId();
+        logger.trace("Request to initiate soap message, jobId: {}", jobId);
 		logRequest(request);
-				
-		// DocumentDistributionMainProcess.bpel:generateInternalUUID
-		UUID uuid = UUID.randomUUID();
-
-		// DocumentDistributionMainProcess.bpel:constructFaxDestination
-		String faxDestination = FaxUtils.getFaxDestination(
-				documentDistributionProperties.getFaxFormat(),
-				request.getTo(),
-				request.getTransport());
-
-		// DocumentDistributionMainProcess.bpel:assignFinalFaxNumber
-		request.setTransport(faxDestination);
-
-		// DocumentDistributionMainProcess.bpel:prepareFaxMessage
-		// DocumentDistributionMainProcess.bpel:getAttachmentCount
-		// DocumentDistributionMainProcess.bpel:addAttachment
-		// DocumentDistributionMainProcess.bpel:setDocSentDateTimeStamp
-		MailMessage mailMessage = FaxUtils.prepareFaxMessage(uuid, request);
 		
-		// DocumentDistributionMainProcess.bpel:sendFax-Synch
-		mailServiceApi.sendMessage(mailMessage);
+		if (!RequestChannel.FAX.getName().equals(request.getChannel())) {
+		    throw new UnknownChannelFault(jobId, "Unrecognized channel - only 'fax' is implemented.");
+		}
+
+		try {
+            
+    		// DocumentDistributionMainProcess.bpel:generateInternalUUID
+    		UUID uuid = UUID.randomUUID();
+    
+    		// DocumentDistributionMainProcess.bpel:constructFaxDestination
+    		String faxDestination = FaxUtils.getFaxDestination(
+    				documentDistributionProperties.getFaxFormat(),
+    				request.getTo(),
+    				request.getTransport());
+    
+    		// DocumentDistributionMainProcess.bpel:assignFinalFaxNumber
+    		request.setTransport(faxDestination);
+    
+    		// DocumentDistributionMainProcess.bpel:prepareFaxMessage
+    		// DocumentDistributionMainProcess.bpel:getAttachmentCount
+    		// DocumentDistributionMainProcess.bpel:addAttachment
+    		// DocumentDistributionMainProcess.bpel:setDocSentDateTimeStamp
+    		MailMessage mailMessage = FaxUtils.prepareFaxMessage(uuid, request);
+    		
+    		// DocumentDistributionMainProcess.bpel:sendFax-Synch
+    		mailServiceApi.sendMessage(mailMessage);
+
+        } catch (FaxTransformationFault e) { // catch and re-throw with jobId
+            throw new FaxTransformationFault(jobId, e);
+        } catch (RuntimeFault e) {
+            throw new RuntimeFault(jobId, e);
+        } catch (FAXSendFault e) {
+            throw new FAXSendFault(jobId, e);
+        } catch (Exception e) {
+            throw new CatchAllFault(jobId, e) ;
+        }
 		
-		logger.trace("Fax sent, jobId: {}", request.getJobId());
+		logger.trace("Fax sent, jobId: {}", jobId);
 	}
 
 	/** Logs the request for debugging purposes. */
