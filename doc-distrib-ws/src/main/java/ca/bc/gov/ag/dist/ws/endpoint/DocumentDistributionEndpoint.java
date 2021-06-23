@@ -38,9 +38,7 @@ public class DocumentDistributionEndpoint {
 
 		logger.trace("Request to initiate soap message, jobId: {}", request.getJobId());
 		logRequest(request);
-		
-		if (true) throw new FaxTransformationFault(request.getJobId(), "A custom error message ...");
-		
+				
 		// DocumentDistributionMainProcess.bpel:generateInternalUUID
 		UUID uuid = UUID.randomUUID();
 
