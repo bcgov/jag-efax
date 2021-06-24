@@ -52,6 +52,7 @@ import com.microsoft.schemas.exchange.services._2006.types.TargetFolderIdType;
 import com.microsoft.schemas.exchange.services._2006.types.holders.ServerVersionInfoHolder;
 
 import ca.bc.gov.ag.exception.MailException;
+import ca.bc.gov.ag.model.MailMessage;
 import ca.bc.gov.ag.pdf.PdfService;
 import ca.bc.gov.ag.util.StringUtils;
 import ca.bc.gov.jag.ews.proxy.ExchangeWebServiceClient;

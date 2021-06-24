@@ -2,10 +2,10 @@ package ca.bc.gov.ag.dist.ws.util;
 
 import java.util.UUID;
 
-import ca.bc.gov.ag.dist.mailservice.MailMessage;
 import ca.bc.gov.ag.dist.ws.exception.FaxTransformationFault;
 import ca.bc.gov.ag.dist.ws.exception.RuntimeFault;
 import ca.bc.gov.ag.dist.ws.model.DocumentDistributionRequest;
+import ca.bc.gov.ag.model.MailMessage;
 
 public class FaxUtils {
 
@@ -88,6 +88,7 @@ public class FaxUtils {
     
             MailMessage mailMessage = new MailMessage();
             mailMessage.setUuid(uuid.toString());
+            mailMessage.setJobId(request.getJobId());
             mailMessage.setTo(request.getTransport());
             mailMessage.setSubject(subject.toString());
             mailMessage.setBody(request.getBody());

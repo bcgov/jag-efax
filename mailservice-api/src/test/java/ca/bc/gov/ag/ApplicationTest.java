@@ -15,8 +15,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import ca.bc.gov.ag.mail.MailMessage;
 import ca.bc.gov.ag.mail.MailService;
+import ca.bc.gov.ag.model.MailMessage;
 
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ApplicationTest {
