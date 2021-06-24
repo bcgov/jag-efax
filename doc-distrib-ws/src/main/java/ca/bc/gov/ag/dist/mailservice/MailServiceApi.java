@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import ca.bc.gov.ag.dist.ws.exception.FAXSendFault;
+
 @Service
 @EnableConfigurationProperties(MailServiceProperties.class)
 public class MailServiceApi {
@@ -17,8 +19,12 @@ public class MailServiceApi {
 	private MailServiceProperties mailServiceProperties;
 
 	public ResponseEntity<Void> sendMessage(MailMessage mailMessage) {
-		return restTemplate.postForEntity(
-				mailServiceProperties.getMailApiBaseUrl() + "/sendMessage", mailMessage, Void.class);
+	    try {
+            return restTemplate.postForEntity(
+	                mailServiceProperties.getMailApiBaseUrl() + "/sendMessage", mailMessage, Void.class);
+        } catch (Exception e) {
+            throw new FAXSendFault(e.getMessage());
+        }
 	}
 
 }
