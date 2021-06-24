@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import ca.bc.gov.ag.dist.BaseTestSuite;
+import ca.bc.gov.ag.model.MailMessage;
 
 class MailServiceTest extends BaseTestSuite {
 
