@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import ca.bc.gov.ag.dist.ws.exception.FAXSendFault;
+import ca.bc.gov.ag.model.MailMessage;
 
 @Service
 @EnableConfigurationProperties(MailServiceProperties.class)
