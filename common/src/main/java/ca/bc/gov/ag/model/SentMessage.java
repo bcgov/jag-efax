@@ -11,16 +11,16 @@ public class SentMessage {
     @Id
     private String uuid;
     private String jobId;
-    private Date createDate;
+    private Date createdTs;
 
     public SentMessage() {
     }
 
-    public SentMessage(String uuid, String jobId, Date createDate) {
+    public SentMessage(String uuid, String jobId, Date createdTs) {
         super();
         this.uuid = uuid;
         this.jobId = jobId;
-        this.createDate = createDate;
+        this.createdTs = createdTs;
     }
 
     public String getUuid() {
@@ -39,12 +39,12 @@ public class SentMessage {
         this.jobId = jobId;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreatedTs() {
+        return createdTs;
     }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    
+    public void setCreatedTs(Date createdTs) {
+        this.createdTs = createdTs;
     }
 
 }
