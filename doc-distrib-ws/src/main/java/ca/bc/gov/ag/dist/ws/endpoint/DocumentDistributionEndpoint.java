@@ -13,7 +13,6 @@ import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ca.bc.gov.ag.dist.mailservice.MailMessage;
 import ca.bc.gov.ag.dist.mailservice.MailServiceApi;
 import ca.bc.gov.ag.dist.ws.config.DocumentDistributionProperties;
 import ca.bc.gov.ag.dist.ws.config.WebServiceConfig;
@@ -25,6 +24,7 @@ import ca.bc.gov.ag.dist.ws.exception.UnknownChannelFault;
 import ca.bc.gov.ag.dist.ws.model.DocumentDistributionRequest;
 import ca.bc.gov.ag.dist.ws.model.RequestChannel;
 import ca.bc.gov.ag.dist.ws.util.FaxUtils;
+import ca.bc.gov.ag.model.MailMessage;
 
 @Endpoint
 @EnableConfigurationProperties(DocumentDistributionProperties.class)
