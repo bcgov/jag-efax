@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Status;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -18,8 +17,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import ca.bc.gov.ag.mail.MailService;
 import ca.bc.gov.ag.model.MailMessage;
 
-@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ApplicationTest {
+public class ApplicationTest extends BaseTestSuite {
 
 	@Autowired
 	private TestRestTemplate restTemplate;
