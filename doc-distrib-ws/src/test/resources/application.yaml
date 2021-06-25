@@ -1,0 +1,58 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+logging:
+  level:
+    root: INFO
+    ca.bc.gov.ag.dist.ws: TRACE
+
+mailservice:
+  mailApiBaseUrl: ${MAILAPI_URL:http://localhost:8090/api/v1/}
+
+spring:
+  redis:
+    host: ${REDIS_HOST:localhost}
+    # Port on which an embedded redis server will run for unit tests
+    port: ${REDIS_PORT:6370}
+
+ws:  
+  faxFormat: IMCEAFAX-%RECIPIENT%+40%FAXNUMBER%@Victoria1.gov.bc.ca
+  
+  # Timeout (in milliseconds) when no reponse has been received by exhange for a sent fax
+  #   After this timeout, the fax is considered lost and a failed status is returned to the user.  
+  faxTimeout: 1500000    # 25 minutes 
+  
+  # Interval (in milliseconds) when to poll/check for timed-out sent faxes.
+  faxTimeoutCheck: 60000 # 60 seconds
+  
+  faults:
+    100:
+      code: GFAL
+      message: Problem reading configuration properties.
+    200:
+      code: GFAL
+      message: Problem sending fax message.
+    201:
+      code: GFAL
+      message: Problem listening for fax response.
+    202:
+      code: TOUT
+      message: Timed out waiting for fax response.
+    203:
+      code: GFAL
+      message: Problem processing fax response.
+    204:
+      code: BADN
+      message: Problem transforming fax number.
+    400:
+      code: GFAL
+      message: Problem sending result to caller.
+    500:
+      code: GFAL
+      message: Unrecognized channel.
+    600:
+      code: GFAL
+      message: Runtime fault encountered.
+    700:
+      code: GFAL
+      message: Unspecified fault encountered.
