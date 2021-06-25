@@ -62,7 +62,7 @@ public class MailController {
 
             mailService.sendMessage(mailMessage);
 
-        } catch (URISyntaxException | MailException e) {
+        } catch (Exception e) {
             logger.error("Error sending message, uuid: {}", mailMessage.getUuid());
             logger.error("Exception:", e);
             sentMessageRepository.deleteById(mailMessage.getUuid());
