@@ -14,6 +14,8 @@ import java.util.List;
 import javax.xml.rpc.ServiceException;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +62,8 @@ import ca.bc.gov.jag.ews.proxy.ExchangeWebServiceClient;
 @Service
 public class MailService {
 
+    private Logger logger = LoggerFactory.getLogger(MailService.class);
+    
 	@Autowired
 	private MailProperties mailProperties;
 	
@@ -138,16 +142,16 @@ public class MailService {
 		try {
 			ExchangeWebServiceClient service;
 			try {
-				service = new ExchangeWebServiceClient(mailProperties.getExchangeWSEndpoint(),
-						mailProperties.getUsername(), mailProperties.getPassword());
+				service = new ExchangeWebServiceClient(
+				        mailProperties.getExchangeWSEndpoint(),
+						mailProperties.getUsername(), 
+						mailProperties.getPassword());
 			} catch (ServiceException e) {
-				System.out.println("ServiceException: ");
-				e.printStackTrace(System.out);
-				throw new MailException("ServiceException Exception in class processMessage", e);
+			    logger.error("ServiceException: ", e);
+				throw new MailException("ServiceException Exception in method processMessage", e);
 			} catch (MalformedURLException e) {
-				System.out.println("MalformedURLException: ");
-				e.printStackTrace(System.out);
-				throw new MailException("MalformedURLException Exception in class processMessage", e);
+			    logger.error("MalformedURLException: ", e);
+				throw new MailException("MalformedURLException Exception in method processMessage", e);
 			}
 			MailboxCultureType mailboxCultureType = new MailboxCultureType("en-US");
 			ServerVersionInfoHolder serverVersion = new ServerVersionInfoHolder();
