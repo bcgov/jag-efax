@@ -10,4 +10,8 @@
 	</parent>
 	<artifactId>common</artifactId>
 
+	<properties>
+		<main.basedir>${project.basedir}${file.separator}..</main.basedir>
+	</properties>
+	
 </project>
