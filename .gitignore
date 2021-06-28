@@ -1,3 +1,6 @@
+# Docker files
+.env
+
 # Compiled class file
 *.class
 

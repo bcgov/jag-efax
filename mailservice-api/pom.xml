@@ -25,4 +25,16 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>ca.bc.gov.ag.Application</mainClass>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
