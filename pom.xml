@@ -36,6 +36,32 @@
 		</repository>
 	</repositories>
 
+
+	<profiles>
+		<profile>
+			<id>default</id>
+			<modules>
+				<module>common</module>
+				<module>doc-distrib-ws</module>
+				<module>mailservice-api</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>webservice</id>
+			<modules>
+				<module>common</module>
+				<module>doc-distrib-ws</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>mailservice</id>
+			<modules>
+				<module>common</module>
+				<module>mailservice-api</module>
+			</modules>
+		</profile>
+	</profiles>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
