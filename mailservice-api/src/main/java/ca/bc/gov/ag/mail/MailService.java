@@ -14,6 +14,7 @@ import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
+import org.apache.axis.AxisFault;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -285,9 +286,11 @@ public class MailService {
 			} else {
 				throw new MailException("Exception sending message. " + sentRespMsg.getMessageText());
 			}
-		} catch (Exception e) {
-			throw new MailException("Unknown Exception in class processMessage", e);
-		} finally {
+		} catch (AxisFault e) {
+            throw new MailException("Invalid Exchange credentials", e);
+        } catch (Exception e) {
+            throw new MailException("Unknown Exception in class processMessage", e);
+        } finally {
 			try {
 				cleanupMessage(m);
 			} catch (Exception e) {
