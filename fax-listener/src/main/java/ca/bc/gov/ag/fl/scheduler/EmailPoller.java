@@ -29,7 +29,7 @@ public class EmailPoller {
             return;
         }
         
-        logger.debug("Started email indox poll.");
+        logger.debug("Started email inbox poll.");
         
         List<EmailMessage> emailMessages = emailService.getEfaxInboxEmails();
         
