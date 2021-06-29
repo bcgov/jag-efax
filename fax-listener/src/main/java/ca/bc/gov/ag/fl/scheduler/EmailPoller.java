@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +20,15 @@ public class EmailPoller {
     @Autowired
     private EmailService emailService;
     
+    @Value(value = "${exchange.poller.enabled}")
+    private boolean enabled;
+    
     @Scheduled(fixedDelayString = "${exchange.poller.interval}")
     public void pollForEmails() throws Exception {
+        if (!enabled) {
+            return;
+        }
+        
         logger.debug("Started email indox poll.");
         
         List<EmailMessage> emailMessages = emailService.getEfaxInboxEmails();
