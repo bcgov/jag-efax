@@ -7,7 +7,17 @@ spring:
     port: ${REDIS_PORT:6379}
     password: ${REDIS_PASSWORD:admin}
 
+exchange:
+  service:  
+    endpoint: ${EXCHANGE_ENDPOINT:}
+    username: ${EXCHANGE_USERNAME:}
+    password: ${EXCHANGE_PASSWORD:}
+  poller:  
+    enabled: true
+    # Interval (in milliseconds) of how often to poll the exchange server email inbox  
+    interval: 300000    # 5 minutes 
+    
 logging:
   level:
     root: ${LOGGER_ROOT:INFO}
-    ca.bc.gov.ag.mail: DEBUG
+    ca.bc.gov.ag: TRACE
