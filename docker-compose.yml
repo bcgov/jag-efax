@@ -10,9 +10,9 @@ services:
     hostname: webservice
     build:
       context: .
-      dockerfile: Dockerfile.webservice
+      dockerfile: Dockerfile
       args:
-        - MVN_PROFILE=webservice
+        - MODULE=doc-distrib-ws
         - SKIP_TESTS=true
     ports:
       - "8080:8080"
@@ -30,9 +30,9 @@ services:
     hostname: mailservice
     build:
       context: .
-      dockerfile: Dockerfile.mailservice
+      dockerfile: Dockerfile
       args:
-        - MVN_PROFILE=mailservice
+        - MODULE=mailservice-api
         - SKIP_TESTS=true
     ports:
       - "8090:8090"
@@ -59,9 +59,9 @@ services:
     hostname: faxlistener
     build:
       context: .
-      dockerfile: Dockerfile.faxlistener
+      dockerfile: Dockerfile
       args:
-        - MVN_PROFILE=fax-listener
+        - MODULE=fax-listener
         - SKIP_TESTS=true
     ports:
       - "8083:8083"
