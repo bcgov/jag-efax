@@ -1,0 +1,13 @@
+server:
+  port: ${SERVER_PORT:8083}
+    
+spring:
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:admin}
+
+logging:
+  level:
+    root: ${LOGGER_ROOT:INFO}
+    ca.bc.gov.ag.mail: DEBUG

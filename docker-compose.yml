@@ -50,6 +50,25 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_PASSWORD=admin
+
+  #############################################################################################
+  ###                                  Fax Listener Service                                 ###
+  #############################################################################################
+  faxlistener:
+    container_name: faxlistener
+    hostname: faxlistener
+    build:
+      context: .
+      dockerfile: Dockerfile.faxlistener
+      args:
+        - MVN_PROFILE=fax-listener
+        - SKIP_TESTS=true
+    ports:
+      - "8083:8083"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=admin
       
   #############################################################################################
   ###                                 REDIS SERVER                                          ###
