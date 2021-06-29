@@ -4,14 +4,14 @@
 FROM maven:3.6.3-jdk-8 as build
 
 ARG SKIP_TESTS=false
-ARG MVN_PROFILE=mailservice
+ARG MODULE=
 
 WORKDIR /
 
 COPY . .
 
 RUN mvn -B clean package \
-        -P ${MVN_PROFILE} \
+        -P ${MODULE} \
         -Dmaven.test.skip=${SKIP_TESTS}
 
 
@@ -20,7 +20,9 @@ RUN mvn -B clean package \
 #############################################################################################
 FROM openjdk:8-jdk-slim
 
-COPY --from=build ./mailservice-api/target/mailservice-api-0.0.1-SNAPSHOT.jar /app/mailservice.jar
+ARG MODULE=
 
-CMD ["java", "-jar", "/app/mailservice.jar"]
+COPY --from=build ./${MODULE}/target/${MODULE}-0.0.1-SNAPSHOT.jar /app/service.jar
+
+CMD ["java", "-jar", "/app/service.jar"]
 #############################################################################################
