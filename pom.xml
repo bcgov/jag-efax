@@ -24,9 +24,10 @@
 	</properties>
 
 	<modules>
-		<module>mailservice-api</module>
-		<module>doc-distrib-ws</module>
 		<module>common</module>
+		<module>doc-distrib-ws</module>
+		<module>mailservice-api</module>
+		<module>fax-listener</module>
 	</modules>
 
 	<repositories>
@@ -36,6 +37,40 @@
 		</repository>
 	</repositories>
 
+
+	<profiles>
+		<profile>
+			<id>default</id>
+			<modules>
+				<module>common</module>
+				<module>doc-distrib-ws</module>
+				<module>mailservice-api</module>
+				<module>fax-listener</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>doc-distrib-ws</id>
+			<modules>
+				<module>common</module>
+				<module>doc-distrib-ws</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>mailservice-api</id>
+			<modules>
+				<module>common</module>
+				<module>mailservice-api</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>fax-listener</id>
+			<modules>
+				<module>common</module>
+				<module>fax-listener</module>
+			</modules>
+		</profile>
+	</profiles>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
