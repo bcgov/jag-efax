@@ -1,0 +1,22 @@
+server:
+  port: ${SERVER_PORT:8083}
+    
+spring:
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6370}
+    
+exchange:
+  service:  
+    endpoint: ${EXCHANGE_ENDPOINT}
+    username: ${EXCHANGE_USERNAME}
+    password: ${EXCHANGE_PASSWORD}
+  poller:  
+    enabled: false
+    # Interval (in milliseconds) of how often to poll the exchange server email inbox  
+    interval: 300000    # 5 minutes 
+
+logging:
+  level:
+    root: ${LOGGER_ROOT:INFO}
+    ca.bc.gov.ag.mail: DEBUG

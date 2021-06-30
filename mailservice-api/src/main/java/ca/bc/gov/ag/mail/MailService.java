@@ -9,10 +9,12 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
+import org.apache.axis.AxisFault;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +57,9 @@ import com.microsoft.schemas.exchange.services._2006.types.holders.ServerVersion
 
 import ca.bc.gov.ag.exception.MailException;
 import ca.bc.gov.ag.model.MailMessage;
+import ca.bc.gov.ag.model.SentMessage;
 import ca.bc.gov.ag.pdf.PdfService;
+import ca.bc.gov.ag.repository.SentMessageRepository;
 import ca.bc.gov.ag.util.StringUtils;
 import ca.bc.gov.jag.ews.proxy.ExchangeWebServiceClient;
 
@@ -66,17 +70,26 @@ public class MailService {
     
 	@Autowired
 	private MailProperties mailProperties;
-	
+
+    @Autowired
+    private SentMessageRepository sentMessageRepository;
+    
 	@Autowired
 	private PdfService pdfService;
 	
-	public void sendMessage(final MailMessage mailMessage) throws MailException {
-		try {
-			processMessage(mailMessage);
-		} catch (Exception e) {
-			throw new MailException("Unknown Exception in class sendMessage", e);
-		}
-	}
+    public void sendMessage(final MailMessage mailMessage) throws MailException {
+        try {
+            // Store the UUID of this message in the redis queue. To avoid race conditions, this is stored now (before the actual sending of the
+            // message) and removed if there is an error.
+            SentMessage sentMessage = new SentMessage(mailMessage.getUuid(), mailMessage.getJobId(), new Date());
+            sentMessageRepository.save(sentMessage);
+
+            processMessage(mailMessage);
+        } catch (Exception e) {
+            sentMessageRepository.deleteById(mailMessage.getUuid());
+            throw new MailException("Unknown Exception in class sendMessage", e);
+        }
+    }
 
 	// Post processing cleanup
 	// Delete temp attachment(s) file(s)
@@ -273,9 +286,11 @@ public class MailService {
 			} else {
 				throw new MailException("Exception sending message. " + sentRespMsg.getMessageText());
 			}
-		} catch (Exception e) {
-			throw new MailException("Unknown Exception in class processMessage", e);
-		} finally {
+		} catch (AxisFault e) {
+            throw new MailException("Invalid Exchange credentials", e);
+        } catch (Exception e) {
+            throw new MailException("Unknown Exception in class processMessage", e);
+        } finally {
 			try {
 				cleanupMessage(m);
 			} catch (Exception e) {

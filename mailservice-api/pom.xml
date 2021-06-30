@@ -25,8 +25,19 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
-	<plugins>
-		<!--jacoco code coverage-->
+
+	<build>
+		<plugins>
+      
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>ca.bc.gov.ag.Application</mainClass>
+				</configuration>
+			</plugin>
+      
+      <!--jacoco code coverage-->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -57,5 +68,6 @@
                     </execution>
                 </executions>
             </plugin>
-	</plugins>
+		</plugins>
+	</build>
 </project>
