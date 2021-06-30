@@ -25,4 +25,37 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+	<plugins>
+		<!--jacoco code coverage-->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.6</version>
+
+                <configuration>
+                    <excludes>
+                        <exclude>**/*/mappers/*Impl.java</exclude>
+                        <exclude>**/*/efilingapi/api/**/*</exclude>
+                        <exclude>org/openapitools/configuration/**/*</exclude>
+                    </excludes>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+
+                    <!-- attached to Maven test phase -->
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+	</plugins>
 </project>
