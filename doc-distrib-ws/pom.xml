@@ -13,11 +13,16 @@
 	<properties>
 		<main.basedir>${project.basedir}${file.separator}..</main.basedir>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web-services</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ca.bc.gov.ag</groupId>
+			<artifactId>common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -63,7 +68,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<packageName>ca.bc.gov.ag.dist.ws</packageName>
+					<packageName>ca.bc.gov.ag.dist.ws.model</packageName>
 					<sources>
 						<source>${project.basedir}/src/main/resources/DocumentDistributionMainProcess.xsd</source>
 					</sources>
