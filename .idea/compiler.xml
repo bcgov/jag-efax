@@ -6,11 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="common" />
         <module name="mailservice-api" />
         <module name="doc-distrib-ws" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="common" target="1.8" />
       <module name="doc-distrib-ws" target="1.8" />
       <module name="jag-efax" target="1.8" />
       <module name="mailservice-api" target="1.8" />
@@ -18,6 +20,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="common" options="-parameters" />
       <module name="doc-distrib-ws" options="-parameters" />
       <module name="mailservice-api" options="-parameters" />
     </option>

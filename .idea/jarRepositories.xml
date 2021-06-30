@@ -9,7 +9,17 @@
     <remote-repository>
       <option name="id" value="nexus" />
       <option name="name" value="nexus" />
+      <option name="url" value="file://$PROJECT_DIR$/mailservice-api/../nexus" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="nexus" />
+      <option name="name" value="nexus" />
       <option name="url" value="file:////home/shmazool/.work/jag-efax/mailservice-api/nexus" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="nexus" />
+      <option name="name" value="nexus" />
+      <option name="url" value="file://$PROJECT_DIR$/nexus" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="central" />
@@ -30,6 +40,16 @@
       <option name="id" value="nexus" />
       <option name="name" value="nexus" />
       <option name="url" value="file:////home/shmazool/.work/jag-efax/doc-distrib-ws/nexus" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="nexus" />
+      <option name="name" value="nexus" />
+      <option name="url" value="file://$PROJECT_DIR$/common/../nexus" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="nexus" />
+      <option name="name" value="nexus" />
+      <option name="url" value="file://$PROJECT_DIR$/doc-distrib-ws/../nexus" />
     </remote-repository>
   </component>
 </project>

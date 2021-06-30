@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/doc-distrib-ws/doc-distrib-ws.iml" filepath="$PROJECT_DIR$/doc-distrib-ws/doc-distrib-ws.iml" />
       <module fileurl="file://$PROJECT_DIR$/jag-efax.iml" filepath="$PROJECT_DIR$/jag-efax.iml" />
       <module fileurl="file://$PROJECT_DIR$/mailservice-api/mailservice-api.iml" filepath="$PROJECT_DIR$/mailservice-api/mailservice-api.iml" />
