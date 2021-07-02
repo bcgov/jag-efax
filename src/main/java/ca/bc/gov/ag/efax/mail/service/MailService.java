@@ -69,15 +69,18 @@ import ca.bc.gov.jag.ews.proxy.ExchangeWebServiceClient;
 public class MailService {    
     private Logger logger = LoggerFactory.getLogger(MailService.class);
     
-	@Autowired
-	private ExchangeProperties exchangeProperties;
+    @Autowired
+    private ExchangeProperties exchangeProperties;
 
     @Autowired
     private SentMessageRepository sentMessageRepository;
+
+    @Autowired
+    private ExchangeServiceFactory exchangeServiceFactory;
     
-	@Autowired
-	private PdfService pdfService;
-	
+    @Autowired
+    private PdfService pdfService;
+    
     public void sendMessage(final MailMessage mailMessage) {
         try {
             // Store the UUID of this message in the redis queue. To avoid race conditions, this is stored now (before the actual sending of the
@@ -92,246 +95,234 @@ public class MailService {
         }
     }
 
-	// Post processing cleanup
-	// Delete temp attachment(s) file(s)
-	// Remove uuid-message key-value pair from messageMap
-	private void cleanupMessage(MailMessage msg) throws Exception {
-	    // FIXME: techdept - codeclimate reports this class is too complex.
-		try {
-			// Delete temp attachment file(s)
-			List<String> attachmentList = msg.getAttachments();
-			for (int i = 0; i < attachmentList.size(); i++) {
-				String tempFilename = "tmp_attach_" + StringUtils.normalizeUUID(msg.getUuid()) + "_" + i + ".pdf";
-				File tempFile = new File(exchangeProperties.getTempDirectory() + tempFilename);
-				if (!tempFile.exists()) {
-					throw new Exception("File Does Not Exist");
-				}
-				if (!tempFile.delete()) {
-					throw new Exception("Unable to Delete file");
-				}
-			}
-		} catch (SecurityException se) {
-			throw new Exception("Security Exception in cleanupMessage", se);
-		} catch (Exception e) {
-			throw new Exception("Unknown Exception in cleanupMessage", e);
-		}
+    // Post processing cleanup
+    // Delete temp attachment(s) file(s)
+    // Remove uuid-message key-value pair from messageMap
+    private void cleanupMessage(MailMessage msg) throws Exception {
+        // FIXME: techdept - codeclimate reports this class is too complex.
+        try {
+            // Delete temp attachment file(s)
+            List<String> attachmentList = msg.getAttachments();
+            for (int i = 0; i < attachmentList.size(); i++) {
+                String tempFilename = "tmp_attach_" + StringUtils.normalizeUUID(msg.getUuid()) + "_" + i + ".pdf";
+                File tempFile = new File(exchangeProperties.getTempDirectory() + tempFilename);
+                if (!tempFile.exists()) {
+                    throw new Exception("File Does Not Exist");
+                }
+                if (!tempFile.delete()) {
+                    throw new Exception("Unable to Delete file");
+                }
+            }
+        } catch (SecurityException se) {
+            throw new Exception("Security Exception in cleanupMessage", se);
+        } catch (Exception e) {
+            throw new Exception("Unknown Exception in cleanupMessage", e);
+        }
 
-	}
+    }
 
-	private File readFileFromURL(final String url, final String outFilename) throws Exception {
-		try {
-			// Open the URL and get metadata
-			URL u = new URL(url);
-			URLConnection uc = u.openConnection();
-			
-			// Open the outgoing stream and file
-			File outFile = new File(exchangeProperties.getTempDirectory() + outFilename);
-			FileOutputStream fos = new FileOutputStream(outFile);
+    private File readFileFromURL(final String url, final String outFilename) throws Exception {
+        try {
+            // Open the URL and get metadata
+            URL u = new URL(url);
+            URLConnection uc = u.openConnection();
+            
+            // Open the outgoing stream and file
+            File outFile = new File(exchangeProperties.getTempDirectory() + outFilename);
+            FileOutputStream fos = new FileOutputStream(outFile);
 
-			boolean isFlattened = pdfService.flattenPdf(url, fos);
-			
-			if (!isFlattened) {
-				try {
-					IOUtils.copy(uc.getInputStream(), fos);
-					fos.flush();
-				} finally {
-					IOUtils.closeQuietly(uc.getInputStream(), fos);
-				}
-			}
+            boolean isFlattened = pdfService.flattenPdf(url, fos);
+            
+            if (!isFlattened) {
+                try {
+                    IOUtils.copy(uc.getInputStream(), fos);
+                    fos.flush();
+                } finally {
+                    IOUtils.closeQuietly(uc.getInputStream(), fos);
+                }
+            }
 
-			return outFile;
-		} catch (MalformedURLException mue) {
-			throw new Exception("URL Exception in class readFileFromURL", mue);
-		} catch (SecurityException se) {
-			throw new Exception("Security Exception in class readFileFromURL", se);
-		} catch (IOException ie) {
-			throw new Exception("IO Exception in class readFileFromURL", ie);
-		} catch (Exception e) {
-			throw new Exception("Unknown Exception in class readFileFromURL", e);
-		} finally {
-			// NOP
-		}
-	}
+            return outFile;
+        } catch (MalformedURLException mue) {
+            throw new Exception("URL Exception in class readFileFromURL", mue);
+        } catch (SecurityException se) {
+            throw new Exception("Security Exception in class readFileFromURL", se);
+        } catch (IOException ie) {
+            throw new Exception("IO Exception in class readFileFromURL", ie);
+        } catch (Exception e) {
+            throw new Exception("Unknown Exception in class readFileFromURL", e);
+        } finally {
+            // NOP
+        }
+    }
 
-	private boolean processMessage(MailMessage m) throws Exception {
+    private boolean processMessage(MailMessage mailMessage) throws Exception {
         // FIXME: techdept - codeclimate reports this class is too complex.
         // FIXME: techdept - codeclimate reports this class is too large
-		try {
-			ExchangeWebServiceClient service;
-			try {
-				service = new ExchangeWebServiceClient(
-				        exchangeProperties.getEndpoint(),
-						exchangeProperties.getUsername(), 
-						exchangeProperties.getPassword());
-			} catch (ServiceException e) {
-			    logger.error("ServiceException: ", e);
-				throw new Exception("ServiceException Exception in method processMessage", e);
-			} catch (MalformedURLException e) {
-			    logger.error("MalformedURLException: ", e);
-				throw new Exception("MalformedURLException Exception in method processMessage", e);
-			}
-			MailboxCultureType mailboxCultureType = new MailboxCultureType("en-US");
-			ServerVersionInfoHolder serverVersion = new ServerVersionInfoHolder();
-			RequestServerVersion requestVersion = new RequestServerVersion();
-			requestVersion.setVersion(ExchangeVersionType.Exchange2013);
+        try {
+            ExchangeWebServiceClient service = exchangeServiceFactory.createClient();
+            MailboxCultureType mailboxCultureType = new MailboxCultureType("en-US");
+            ServerVersionInfoHolder serverVersion = new ServerVersionInfoHolder();
+            RequestServerVersion requestVersion = new RequestServerVersion();
+            requestVersion.setVersion(ExchangeVersionType.Exchange2013);
 
-			BodyType body = new BodyType();
-			body.setBodyType(BodyTypeType.HTML);
-			body.set_value(m.getBody());
+            BodyType body = new BodyType();
+            body.setBodyType(BodyTypeType.HTML);
+            body.set_value(mailMessage.getBody());
 
-			EmailAddressType recipientMailbox = new EmailAddressType();
-			recipientMailbox.setEmailAddress(m.getTo());
+            EmailAddressType recipientMailbox = new EmailAddressType();
+            recipientMailbox.setEmailAddress(mailMessage.getTo());
 
-			ArrayOfRecipientsType toRecipients = new ArrayOfRecipientsType();
-			toRecipients.setMailbox(recipientMailbox);
+            ArrayOfRecipientsType toRecipients = new ArrayOfRecipientsType();
+            toRecipients.setMailbox(recipientMailbox);
 
-			PathToExtendedFieldType extendedFieldURI = new PathToExtendedFieldType();
-			extendedFieldURI.setDistinguishedPropertySetId(DistinguishedPropertySetType.InternetHeaders);
-			extendedFieldURI.setPropertyName("X-Mailer");
-			extendedFieldURI.setPropertyType(MapiPropertyTypeType.String);
+            PathToExtendedFieldType extendedFieldURI = new PathToExtendedFieldType();
+            extendedFieldURI.setDistinguishedPropertySetId(DistinguishedPropertySetType.InternetHeaders);
+            extendedFieldURI.setPropertyName("X-Mailer");
+            extendedFieldURI.setPropertyType(MapiPropertyTypeType.String);
 
-			ExtendedPropertyType[] extendedProperty = new ExtendedPropertyType[1];
-			extendedProperty[0] = new ExtendedPropertyType();
-			extendedProperty[0].setExtendedFieldURI(extendedFieldURI);
-			extendedProperty[0].setValue("MailService");
+            ExtendedPropertyType[] extendedProperty = new ExtendedPropertyType[1];
+            extendedProperty[0] = new ExtendedPropertyType();
+            extendedProperty[0].setExtendedFieldURI(extendedFieldURI);
+            extendedProperty[0].setValue("MailService");
 
-			MessageType message = new MessageType();
-			message.setSubject(m.getSubject());
-			message.setBody(body);
-			message.setToRecipients(toRecipients);
-			message.setSensitivity(SensitivityChoicesType.Normal);
-			message.setExtendedProperty(extendedProperty);
+            MessageType message = new MessageType();
+            message.setSubject(mailMessage.getSubject());
+            message.setBody(body);
+            message.setToRecipients(toRecipients);
+            message.setSensitivity(SensitivityChoicesType.Normal);
+            message.setExtendedProperty(extendedProperty);
 
-			NonEmptyArrayOfAllItemsType items = new NonEmptyArrayOfAllItemsType();
-			items.setMessage(message);
+            NonEmptyArrayOfAllItemsType items = new NonEmptyArrayOfAllItemsType();
+            items.setMessage(message);
 
-			CreateItemType request = new CreateItemType();
-			request.setMessageDisposition(MessageDispositionType.SaveOnly);
-			request.setItems(items);
+            CreateItemType request = new CreateItemType();
+            request.setMessageDisposition(MessageDispositionType.SaveOnly);
+            request.setItems(items);
 
-			CreateItemResponseTypeHolder createItemResult = new CreateItemResponseTypeHolder();
-			service.getServiceStub().createItem(request, null, mailboxCultureType, requestVersion, null,
-					createItemResult, serverVersion);
+            CreateItemResponseTypeHolder createItemResult = new CreateItemResponseTypeHolder();
+            service.getServiceStub().createItem(request, null, mailboxCultureType, requestVersion, null,
+                    createItemResult, serverVersion);
 
-			ItemIdType parentItemId = new ItemIdType();
+            ItemIdType parentItemId = new ItemIdType();
 
-			ArrayOfResponseMessagesType resp = createItemResult.value.getResponseMessages();
-			ItemInfoResponseMessageType respMsg = resp.getCreateItemResponseMessage();
-			if (ResponseClassType.Success.equals(respMsg.getResponseClass())) {
-				List<String> attachmentList = m.getAttachments();
-				if (attachmentList.size() > 0) {
-					for (int i = 0; i < attachmentList.size(); i++) {
-						String attachment = (String) attachmentList.get(i);
-						String tempFilename = "tmp_attach_" + StringUtils.normalizeUUID(m.getUuid()) + "_" + i + ".pdf";
-						File attachmentFile = readFileFromURL(attachment, tempFilename);
+            ArrayOfResponseMessagesType resp = createItemResult.value.getResponseMessages();
+            ItemInfoResponseMessageType respMsg = resp.getCreateItemResponseMessage();
+            if (ResponseClassType.Success.equals(respMsg.getResponseClass())) {
+                List<String> attachmentList = mailMessage.getAttachments();
+                if (attachmentList.size() > 0) {
+                    for (int i = 0; i < attachmentList.size(); i++) {
+                        String attachment = (String) attachmentList.get(i);
+                        String tempFilename = "tmp_attach_" + StringUtils.normalizeUUID(mailMessage.getUuid()) + "_" + i + ".pdf";
+                        File attachmentFile = readFileFromURL(attachment, tempFilename);
 
-						FileAttachmentType fileAttachment = new FileAttachmentType();
-						fileAttachment.setName(tempFilename);
-						fileAttachment.setContentType("application/pdf");
-						fileAttachment.setContent(fileToByteArray(attachmentFile));
+                        FileAttachmentType fileAttachment = new FileAttachmentType();
+                        fileAttachment.setName(tempFilename);
+                        fileAttachment.setContentType("application/pdf");
+                        fileAttachment.setContent(fileToByteArray(attachmentFile));
 
-						NonEmptyArrayOfAttachmentsType attachments = new NonEmptyArrayOfAttachmentsType();
-						attachments.setFileAttachment(fileAttachment);
+                        NonEmptyArrayOfAttachmentsType attachments = new NonEmptyArrayOfAttachmentsType();
+                        attachments.setFileAttachment(fileAttachment);
 
-						CreateAttachmentType attachmentRequest = new CreateAttachmentType();
-						attachmentRequest.setAttachments(attachments);
-						attachmentRequest.setParentItemId(respMsg.getItems().getMessage().getItemId());
+                        CreateAttachmentType attachmentRequest = new CreateAttachmentType();
+                        attachmentRequest.setAttachments(attachments);
+                        attachmentRequest.setParentItemId(respMsg.getItems().getMessage().getItemId());
 
-						CreateAttachmentResponseTypeHolder createAttachmentResult = new CreateAttachmentResponseTypeHolder();
+                        CreateAttachmentResponseTypeHolder createAttachmentResult = new CreateAttachmentResponseTypeHolder();
 
-						service.getServiceStub().createAttachment(attachmentRequest, null, mailboxCultureType,
-								requestVersion, null, createAttachmentResult, serverVersion);
+                        service.getServiceStub().createAttachment(attachmentRequest, null, mailboxCultureType,
+                                requestVersion, null, createAttachmentResult, serverVersion);
 
-						ArrayOfResponseMessagesType attachmentResp = createAttachmentResult.value.getResponseMessages();
-						AttachmentInfoResponseMessageType attachRespMsg = attachmentResp
-								.getCreateAttachmentResponseMessage();
-						if (ResponseClassType.Success.equals(attachRespMsg.getResponseClass())) {
-							parentItemId.setChangeKey(attachRespMsg.getAttachments().getFileAttachment()
-									.getAttachmentId().getRootItemChangeKey());
-							parentItemId.setId(attachRespMsg.getAttachments().getFileAttachment().getAttachmentId()
-									.getRootItemId());
-						} else {
-							throw new Exception(
-									"Exception putting attachments on message. " + respMsg.getMessageText());
-						}
-					}
-				} else {
-					parentItemId.setId(respMsg.getItems().getMessage().getItemId().getId());
-					parentItemId.setChangeKey(respMsg.getItems().getMessage().getItemId().getChangeKey());
-				}
-			} else {
-				throw new Exception("Exception saving email draft. " + respMsg.getMessageText());
-			}
+                        ArrayOfResponseMessagesType attachmentResp = createAttachmentResult.value.getResponseMessages();
+                        AttachmentInfoResponseMessageType attachRespMsg = attachmentResp
+                                .getCreateAttachmentResponseMessage();
+                        if (ResponseClassType.Success.equals(attachRespMsg.getResponseClass())) {
+                            parentItemId.setChangeKey(attachRespMsg.getAttachments().getFileAttachment()
+                                    .getAttachmentId().getRootItemChangeKey());
+                            parentItemId.setId(attachRespMsg.getAttachments().getFileAttachment().getAttachmentId()
+                                    .getRootItemId());
+                        } else {
+                            throw new Exception(
+                                    "Exception putting attachments on message. " + respMsg.getMessageText());
+                        }
+                    }
+                } else {
+                    parentItemId.setId(respMsg.getItems().getMessage().getItemId().getId());
+                    parentItemId.setChangeKey(respMsg.getItems().getMessage().getItemId().getChangeKey());
+                }
+            } else {
+                throw new Exception("Exception saving email draft. " + respMsg.getMessageText());
+            }
 
-			NonEmptyArrayOfBaseItemIdsType itemIds = new NonEmptyArrayOfBaseItemIdsType();
-			itemIds.setItemId(parentItemId);
+            NonEmptyArrayOfBaseItemIdsType itemIds = new NonEmptyArrayOfBaseItemIdsType();
+            itemIds.setItemId(parentItemId);
 
-			DistinguishedFolderIdType distinguishedFolderId = new DistinguishedFolderIdType();
-			distinguishedFolderId.setId(DistinguishedFolderIdNameType.sentitems);
-			TargetFolderIdType savedItemFolderId = new TargetFolderIdType();
-			savedItemFolderId.setDistinguishedFolderId(distinguishedFolderId);
+            DistinguishedFolderIdType distinguishedFolderId = new DistinguishedFolderIdType();
+            distinguishedFolderId.setId(DistinguishedFolderIdNameType.sentitems);
+            TargetFolderIdType savedItemFolderId = new TargetFolderIdType();
+            savedItemFolderId.setDistinguishedFolderId(distinguishedFolderId);
 
-			SendItemType sendRequest = new SendItemType();
-			sendRequest.setItemIds(itemIds);
-			sendRequest.setSavedItemFolderId(savedItemFolderId);
+            SendItemType sendRequest = new SendItemType();
+            sendRequest.setItemIds(itemIds);
+            sendRequest.setSavedItemFolderId(savedItemFolderId);
 
-			if (exchangeProperties.getSaveInSent()) {
-				sendRequest.setSaveItemToFolder(true);
-			} else {
-				sendRequest.setSaveItemToFolder(false);
-			}
-			SendItemResponseTypeHolder sendItemResult = new SendItemResponseTypeHolder();
-			service.getServiceStub().sendItem(sendRequest, null, mailboxCultureType, requestVersion, sendItemResult,
-					serverVersion);
+            if (exchangeProperties.getSaveInSent()) {
+                sendRequest.setSaveItemToFolder(true);
+            } else {
+                sendRequest.setSaveItemToFolder(false);
+            }
+            SendItemResponseTypeHolder sendItemResult = new SendItemResponseTypeHolder();
+            service.getServiceStub().sendItem(sendRequest, null, mailboxCultureType, requestVersion, sendItemResult,
+                    serverVersion);
 
-			ArrayOfResponseMessagesType sentResp = sendItemResult.value.getResponseMessages();
-			ItemInfoResponseMessageType sentRespMsg = sentResp.getCreateItemResponseMessage();
-			if (ResponseClassType.Success.equals(respMsg.getResponseClass())) {
-			} else {
-				throw new Exception("Exception sending message. " + sentRespMsg.getMessageText());
-			}
-		} catch (AxisFault e) {
+            ArrayOfResponseMessagesType sentResp = sendItemResult.value.getResponseMessages();
+            ItemInfoResponseMessageType sentRespMsg = sentResp.getCreateItemResponseMessage();
+            if (ResponseClassType.Success.equals(respMsg.getResponseClass())) {
+            } else {
+                throw new Exception("Exception sending message. " + sentRespMsg.getMessageText());
+            }
+        } catch (AxisFault e) {
             throw new Exception("Invalid Exchange credentials", e);
         } catch (Exception e) {
             throw new Exception("Unknown Exception in class processMessage", e);
         } finally {
-			try {
-				cleanupMessage(m);
-			} catch (Exception e) {
-				// FIXME: techdept - this should not be an exception since it has nothing to do with whether a fax/email successfully sends or not.
-				throw new Exception("Exception Cleaning up Temporary File");
-			}
-		}
+            try {
+                cleanupMessage(mailMessage);
+            } catch (Exception e) {
+                // FIXME: techdept - this should not be an exception since it has nothing to do with whether a fax/email successfully sends or not.
+                throw new Exception("Exception Cleaning up Temporary File");
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	private byte[] fileToByteArray(File attachmentFile) throws Exception {
-		ByteArrayOutputStream ous = null;
-		InputStream ios = null;
+    private byte[] fileToByteArray(File attachmentFile) throws Exception {
+        ByteArrayOutputStream ous = null;
+        InputStream ios = null;
 
-		try {
-			byte[] buffer = new byte[4096];
-			ous = new ByteArrayOutputStream();
-			ios = new FileInputStream(attachmentFile);
-			int read = 0;
-			while ((read = ios.read(buffer)) != -1) {
-				ous.write(buffer, 0, read);
-			}
-			ous.flush();
-		} finally {
-			try {
-				if (ous != null)
-					ous.close();
-			} catch (IOException e) {
-			}
+        try {
+            byte[] buffer = new byte[4096];
+            ous = new ByteArrayOutputStream();
+            ios = new FileInputStream(attachmentFile);
+            int read = 0;
+            while ((read = ios.read(buffer)) != -1) {
+                ous.write(buffer, 0, read);
+            }
+            ous.flush();
+        } finally {
+            try {
+                if (ous != null)
+                    ous.close();
+            } catch (IOException e) {
+            }
 
-			try {
-				if (ios != null)
-					ios.close();
-			} catch (IOException e) {
-			}
-		}
-		return ous.toByteArray();
-	}
+            try {
+                if (ios != null)
+                    ios.close();
+            } catch (IOException e) {
+            }
+        }
+        return ous.toByteArray();
+    }
 }
