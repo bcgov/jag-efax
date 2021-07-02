@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import com.microsoft.schemas.exchange.services._2006.messages.ArrayOfResponseMes
 import com.microsoft.schemas.exchange.services._2006.messages.AttachmentInfoResponseMessageType;
 import com.microsoft.schemas.exchange.services._2006.messages.CreateAttachmentType;
 import com.microsoft.schemas.exchange.services._2006.messages.CreateItemType;
+import com.microsoft.schemas.exchange.services._2006.messages.ExchangeServiceBindingStub;
 import com.microsoft.schemas.exchange.services._2006.messages.ItemInfoResponseMessageType;
 import com.microsoft.schemas.exchange.services._2006.messages.SendItemType;
 import com.microsoft.schemas.exchange.services._2006.messages.holders.CreateAttachmentResponseTypeHolder;
@@ -65,6 +67,7 @@ import ca.bc.gov.jag.ews.proxy.ExchangeWebServiceClient;
 @Service
 // FIXME: techdept - codeclimate reports this class is too large.
 public class MailService {    
+    
     private Logger logger = LoggerFactory.getLogger(MailService.class);
     
     @Autowired
@@ -155,90 +158,22 @@ public class MailService {
     }
 
     private boolean processMessage(MailMessage mailMessage) throws Exception {
-        // FIXME: techdept - codeclimate reports this class is too complex.
-        // FIXME: techdept - codeclimate reports this class is too large
         try {
             ExchangeWebServiceClient service = exchangeServiceFactory.createClient();
-            MailboxCultureType mailboxCultureType = new MailboxCultureType("en-US");
-            ServerVersionInfoHolder serverVersion = new ServerVersionInfoHolder();
-            RequestServerVersion requestVersion = new RequestServerVersion();
-            requestVersion.setVersion(ExchangeVersionType.Exchange2013);
-
-            NonEmptyArrayOfAllItemsType items = new NonEmptyArrayOfAllItemsType();
-            items.setMessage(getMessageType(mailMessage));
-
-            CreateItemType request = new CreateItemType();
-            request.setMessageDisposition(MessageDispositionType.SaveOnly);
-            request.setItems(items);
-
-            CreateItemResponseTypeHolder createItemResult = new CreateItemResponseTypeHolder();
-            service.getServiceStub().createItem(request, null, mailboxCultureType, requestVersion, null,
-                    createItemResult, serverVersion);
-
-            ItemIdType parentItemId = new ItemIdType();
-
-            ArrayOfResponseMessagesType resp = createItemResult.value.getResponseMessages();
-            ItemInfoResponseMessageType respMsg = resp.getCreateItemResponseMessage();
-            if (ResponseClassType.Success.equals(respMsg.getResponseClass())) {
-                List<String> attachmentList = mailMessage.getAttachments();
-                if (attachmentList.size() > 0) {
-                    for (int i = 0; i < attachmentList.size(); i++) {
-                        String attachment = (String) attachmentList.get(i);
-                        String tempFilename = "tmp_attach_" + StringUtils.normalizeUUID(mailMessage.getUuid()) + "_" + i + ".pdf";
-                        File attachmentFile = readFileFromURL(attachment, tempFilename);
-
-                        FileAttachmentType fileAttachment = new FileAttachmentType();
-                        fileAttachment.setName(tempFilename);
-                        fileAttachment.setContentType("application/pdf");
-                        fileAttachment.setContent(fileToByteArray(attachmentFile));
-
-                        NonEmptyArrayOfAttachmentsType attachments = new NonEmptyArrayOfAttachmentsType();
-                        attachments.setFileAttachment(fileAttachment);
-
-                        CreateAttachmentType attachmentRequest = new CreateAttachmentType();
-                        attachmentRequest.setAttachments(attachments);
-                        attachmentRequest.setParentItemId(respMsg.getItems().getMessage().getItemId());
-
-                        CreateAttachmentResponseTypeHolder createAttachmentResult = new CreateAttachmentResponseTypeHolder();
-
-                        service.getServiceStub().createAttachment(attachmentRequest, null, mailboxCultureType,
-                                requestVersion, null, createAttachmentResult, serverVersion);
-
-                        ArrayOfResponseMessagesType attachmentResp = createAttachmentResult.value.getResponseMessages();
-                        AttachmentInfoResponseMessageType attachRespMsg = attachmentResp
-                                .getCreateAttachmentResponseMessage();
-                        if (ResponseClassType.Success.equals(attachRespMsg.getResponseClass())) {
-                            parentItemId.setChangeKey(attachRespMsg.getAttachments().getFileAttachment()
-                                    .getAttachmentId().getRootItemChangeKey());
-                            parentItemId.setId(attachRespMsg.getAttachments().getFileAttachment().getAttachmentId()
-                                    .getRootItemId());
-                        } else {
-                            throw new Exception(
-                                    "Exception putting attachments on message. " + respMsg.getMessageText());
-                        }
-                    }
-                } else {
-                    parentItemId.setId(respMsg.getItems().getMessage().getItemId().getId());
-                    parentItemId.setChangeKey(respMsg.getItems().getMessage().getItemId().getChangeKey());
-                }
-            } else {
-                throw new Exception("Exception saving email draft. " + respMsg.getMessageText());
-            }
-
-            NonEmptyArrayOfBaseItemIdsType itemIds = new NonEmptyArrayOfBaseItemIdsType();
-            itemIds.setItemId(parentItemId);
-
-            SendItemType sendRequest = new SendItemType();
-            sendRequest.setItemIds(itemIds);
-            sendRequest.setSavedItemFolderId(getSavedItemFolderId());
-            sendRequest.setSaveItemToFolder(exchangeProperties.getSaveInSent());
+            ExchangeServiceBindingStub serviceStub = service.getServiceStub();
             
-            SendItemResponseTypeHolder sendItemResult = new SendItemResponseTypeHolder();
-            service.getServiceStub().sendItem(sendRequest, null, mailboxCultureType, requestVersion, sendItemResult, serverVersion);
+            // Create a Microsoft Exchange email item
+            CreateItemResponseTypeHolder createItemResult = exchangeCreateItem(serviceStub, mailMessage);
+
+            // Add attachments to the Microsoft Exchange item
+            ItemIdType parentItemId = exchangeAddAttachments(serviceStub, createItemResult, mailMessage);
+           
+            // Send the Microsoft Exchange email item
+            SendItemResponseTypeHolder sendItemResult = exchangeSendItem(serviceStub, parentItemId);
 
             ArrayOfResponseMessagesType sentResp = sendItemResult.value.getResponseMessages();
             ItemInfoResponseMessageType sentRespMsg = sentResp.getCreateItemResponseMessage();
-            if (!ResponseClassType.Success.equals(respMsg.getResponseClass())) {
+            if (!ResponseClassType.Success.equals(sentRespMsg.getResponseClass())) {
                 throw new Exception("Exception sending message. " + sentRespMsg.getMessageText());
             }
         } catch (AxisFault e) {
@@ -255,6 +190,111 @@ public class MailService {
         }
 
         return true;
+    }
+
+    private CreateItemResponseTypeHolder exchangeCreateItem(ExchangeServiceBindingStub serviceStub, MailMessage mailMessage) throws RemoteException {
+                
+        NonEmptyArrayOfAllItemsType items = new NonEmptyArrayOfAllItemsType();
+        items.setMessage(getMessageType(mailMessage));
+        
+        CreateItemType request = new CreateItemType();
+        request.setMessageDisposition(MessageDispositionType.SaveOnly);
+        request.setItems(items);
+
+        MailboxCultureType mailboxCultureType = new MailboxCultureType("en-US");
+        
+        RequestServerVersion requestVersion = new RequestServerVersion();
+        requestVersion.setVersion(ExchangeVersionType.Exchange2013);
+        
+        CreateItemResponseTypeHolder createItemResult = new CreateItemResponseTypeHolder();
+        
+        ServerVersionInfoHolder serverVersion = new ServerVersionInfoHolder();
+        
+        serviceStub.createItem(request, null, mailboxCultureType, requestVersion, null, createItemResult, serverVersion);
+        
+        return createItemResult;
+    }
+
+    private ItemIdType exchangeAddAttachments(ExchangeServiceBindingStub serviceStub, CreateItemResponseTypeHolder createItemResult, MailMessage mailMessage) throws Exception {
+        ItemIdType parentItemId = new ItemIdType();
+
+        ArrayOfResponseMessagesType resp = createItemResult.value.getResponseMessages();
+        ItemInfoResponseMessageType respMsg = resp.getCreateItemResponseMessage();
+        if (ResponseClassType.Success.equals(respMsg.getResponseClass())) {
+            List<String> attachmentList = mailMessage.getAttachments();
+            if (attachmentList.size() > 0) {
+                for (int i = 0; i < attachmentList.size(); i++) {
+                    String attachment = (String) attachmentList.get(i);
+                    String tempFilename = "tmp_attach_" + StringUtils.normalizeUUID(mailMessage.getUuid()) + "_" + i + ".pdf";
+                    File attachmentFile = readFileFromURL(attachment, tempFilename);
+
+                    FileAttachmentType fileAttachment = new FileAttachmentType();
+                    fileAttachment.setName(tempFilename);
+                    fileAttachment.setContentType("application/pdf");
+                    fileAttachment.setContent(fileToByteArray(attachmentFile));
+
+                    NonEmptyArrayOfAttachmentsType attachments = new NonEmptyArrayOfAttachmentsType();
+                    attachments.setFileAttachment(fileAttachment);
+
+                    CreateAttachmentType attachmentRequest = new CreateAttachmentType();
+                    attachmentRequest.setAttachments(attachments);
+                    attachmentRequest.setParentItemId(respMsg.getItems().getMessage().getItemId());
+
+                    MailboxCultureType mailboxCultureType = new MailboxCultureType("en-US");
+
+                    RequestServerVersion requestVersion = new RequestServerVersion();
+                    requestVersion.setVersion(ExchangeVersionType.Exchange2013);
+                    
+                    CreateAttachmentResponseTypeHolder createAttachmentResult = new CreateAttachmentResponseTypeHolder();
+
+                    ServerVersionInfoHolder serverVersion = new ServerVersionInfoHolder();
+                    
+                    serviceStub.createAttachment(attachmentRequest, null, mailboxCultureType, requestVersion, null, createAttachmentResult, serverVersion);
+
+                    ArrayOfResponseMessagesType attachmentResp = createAttachmentResult.value.getResponseMessages();
+                    AttachmentInfoResponseMessageType attachRespMsg = attachmentResp
+                            .getCreateAttachmentResponseMessage();
+                    if (ResponseClassType.Success.equals(attachRespMsg.getResponseClass())) {
+                        parentItemId.setChangeKey(attachRespMsg.getAttachments().getFileAttachment()
+                                .getAttachmentId().getRootItemChangeKey());
+                        parentItemId.setId(attachRespMsg.getAttachments().getFileAttachment().getAttachmentId()
+                                .getRootItemId());
+                    } else {
+                        throw new Exception("Exception putting attachments on message. " + respMsg.getMessageText());
+                    }
+                }
+            } else {
+                parentItemId.setId(respMsg.getItems().getMessage().getItemId().getId());
+                parentItemId.setChangeKey(respMsg.getItems().getMessage().getItemId().getChangeKey());
+            }
+        } else {
+            throw new Exception("Exception saving email draft. " + respMsg.getMessageText());
+        }
+        
+        return parentItemId;
+    }
+
+    private SendItemResponseTypeHolder exchangeSendItem(ExchangeServiceBindingStub serviceStub, ItemIdType parentItemId) throws RemoteException {
+        NonEmptyArrayOfBaseItemIdsType itemIds = new NonEmptyArrayOfBaseItemIdsType();
+        itemIds.setItemId(parentItemId);
+
+        SendItemType sendRequest = new SendItemType();
+        sendRequest.setItemIds(itemIds);
+        sendRequest.setSavedItemFolderId(getSavedItemFolderId());
+        sendRequest.setSaveItemToFolder(exchangeProperties.getSaveInSent());
+
+        MailboxCultureType mailboxCultureType = new MailboxCultureType("en-US");
+
+        RequestServerVersion requestVersion = new RequestServerVersion();
+        requestVersion.setVersion(ExchangeVersionType.Exchange2013);
+
+        SendItemResponseTypeHolder sendItemResult = new SendItemResponseTypeHolder(); 
+
+        ServerVersionInfoHolder serverVersion = new ServerVersionInfoHolder();
+        
+        serviceStub.sendItem(sendRequest, null, mailboxCultureType, requestVersion, sendItemResult, serverVersion);
+        
+        return sendItemResult;
     }
 
     private TargetFolderIdType getSavedItemFolderId() {
