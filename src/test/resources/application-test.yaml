@@ -1,0 +1,12 @@
+spring:
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6370}
+    password: 
+
+exchange:
+  service:  
+    endpoint: ${EXCHANGE_ENDPOINT:http://localhost}
+    username: ${EXCHANGE_USERNAME:username}
+    password: ${EXCHANGE_PASSWORD:password}
+
