@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionRequest;
 import ca.bc.gov.ag.efax.mail.model.MailMessage;
 import ca.bc.gov.ag.efax.mail.model.RequestChannel;
-import ca.bc.gov.ag.efax.mail.service.MailService;
+import ca.bc.gov.ag.efax.mail.service.EmailService;
 import ca.bc.gov.ag.efax.mail.util.FaxUtils;
 import ca.bc.gov.ag.efax.ws.config.DocumentDistributionProperties;
 import ca.bc.gov.ag.efax.ws.config.WebServiceConfig;
@@ -36,7 +36,7 @@ public class DocumentDistributionEndpoint {
 	private DocumentDistributionProperties documentDistributionProperties;
 	
 	@Autowired
-	private MailService mailService;
+	private EmailService emailService;
 	
 	@PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "DocumentDistributionRequest")
 	public void initiate(@RequestPayload DocumentDistributionRequest request) {
@@ -70,7 +70,7 @@ public class DocumentDistributionEndpoint {
     		MailMessage mailMessage = FaxUtils.prepareFaxMessage(uuid, request);
     		
     		// DocumentDistributionMainProcess.bpel:sendFax-Synch
-    		mailService.sendMessage(mailMessage);
+    		emailService.sendMessage(mailMessage);
 
         } catch (FaxTransformationFault e) { // catch and re-throw with jobId
             throw new FaxTransformationFault(jobId, e);
