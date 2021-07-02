@@ -12,8 +12,6 @@ import java.net.URLConnection;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.rpc.ServiceException;
-
 import org.apache.axis.AxisFault;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -166,35 +164,8 @@ public class MailService {
             RequestServerVersion requestVersion = new RequestServerVersion();
             requestVersion.setVersion(ExchangeVersionType.Exchange2013);
 
-            BodyType body = new BodyType();
-            body.setBodyType(BodyTypeType.HTML);
-            body.set_value(mailMessage.getBody());
-
-            EmailAddressType recipientMailbox = new EmailAddressType();
-            recipientMailbox.setEmailAddress(mailMessage.getTo());
-
-            ArrayOfRecipientsType toRecipients = new ArrayOfRecipientsType();
-            toRecipients.setMailbox(recipientMailbox);
-
-            PathToExtendedFieldType extendedFieldURI = new PathToExtendedFieldType();
-            extendedFieldURI.setDistinguishedPropertySetId(DistinguishedPropertySetType.InternetHeaders);
-            extendedFieldURI.setPropertyName("X-Mailer");
-            extendedFieldURI.setPropertyType(MapiPropertyTypeType.String);
-
-            ExtendedPropertyType[] extendedProperty = new ExtendedPropertyType[1];
-            extendedProperty[0] = new ExtendedPropertyType();
-            extendedProperty[0].setExtendedFieldURI(extendedFieldURI);
-            extendedProperty[0].setValue("MailService");
-
-            MessageType message = new MessageType();
-            message.setSubject(mailMessage.getSubject());
-            message.setBody(body);
-            message.setToRecipients(toRecipients);
-            message.setSensitivity(SensitivityChoicesType.Normal);
-            message.setExtendedProperty(extendedProperty);
-
             NonEmptyArrayOfAllItemsType items = new NonEmptyArrayOfAllItemsType();
-            items.setMessage(message);
+            items.setMessage(getMessageType(mailMessage));
 
             CreateItemType request = new CreateItemType();
             request.setMessageDisposition(MessageDispositionType.SaveOnly);
@@ -257,28 +228,17 @@ public class MailService {
             NonEmptyArrayOfBaseItemIdsType itemIds = new NonEmptyArrayOfBaseItemIdsType();
             itemIds.setItemId(parentItemId);
 
-            DistinguishedFolderIdType distinguishedFolderId = new DistinguishedFolderIdType();
-            distinguishedFolderId.setId(DistinguishedFolderIdNameType.sentitems);
-            TargetFolderIdType savedItemFolderId = new TargetFolderIdType();
-            savedItemFolderId.setDistinguishedFolderId(distinguishedFolderId);
-
             SendItemType sendRequest = new SendItemType();
             sendRequest.setItemIds(itemIds);
-            sendRequest.setSavedItemFolderId(savedItemFolderId);
-
-            if (exchangeProperties.getSaveInSent()) {
-                sendRequest.setSaveItemToFolder(true);
-            } else {
-                sendRequest.setSaveItemToFolder(false);
-            }
+            sendRequest.setSavedItemFolderId(getSavedItemFolderId());
+            sendRequest.setSaveItemToFolder(exchangeProperties.getSaveInSent());
+            
             SendItemResponseTypeHolder sendItemResult = new SendItemResponseTypeHolder();
-            service.getServiceStub().sendItem(sendRequest, null, mailboxCultureType, requestVersion, sendItemResult,
-                    serverVersion);
+            service.getServiceStub().sendItem(sendRequest, null, mailboxCultureType, requestVersion, sendItemResult, serverVersion);
 
             ArrayOfResponseMessagesType sentResp = sendItemResult.value.getResponseMessages();
             ItemInfoResponseMessageType sentRespMsg = sentResp.getCreateItemResponseMessage();
-            if (ResponseClassType.Success.equals(respMsg.getResponseClass())) {
-            } else {
+            if (!ResponseClassType.Success.equals(respMsg.getResponseClass())) {
                 throw new Exception("Exception sending message. " + sentRespMsg.getMessageText());
             }
         } catch (AxisFault e) {
@@ -295,6 +255,45 @@ public class MailService {
         }
 
         return true;
+    }
+
+    private TargetFolderIdType getSavedItemFolderId() {
+        DistinguishedFolderIdType distinguishedFolderId = new DistinguishedFolderIdType();
+        distinguishedFolderId.setId(DistinguishedFolderIdNameType.sentitems);
+        TargetFolderIdType savedItemFolderId = new TargetFolderIdType();
+        savedItemFolderId.setDistinguishedFolderId(distinguishedFolderId);
+        return savedItemFolderId;
+    }
+
+    private MessageType getMessageType(MailMessage mailMessage) {
+        BodyType body = new BodyType();
+        body.setBodyType(BodyTypeType.HTML);
+        body.set_value(mailMessage.getBody());
+
+        EmailAddressType recipientMailbox = new EmailAddressType();
+        recipientMailbox.setEmailAddress(mailMessage.getTo());
+
+        ArrayOfRecipientsType toRecipients = new ArrayOfRecipientsType();
+        toRecipients.setMailbox(recipientMailbox);
+
+        PathToExtendedFieldType extendedFieldURI = new PathToExtendedFieldType();
+        extendedFieldURI.setDistinguishedPropertySetId(DistinguishedPropertySetType.InternetHeaders);
+        extendedFieldURI.setPropertyName("X-Mailer");
+        extendedFieldURI.setPropertyType(MapiPropertyTypeType.String);
+
+        ExtendedPropertyType[] extendedProperty = new ExtendedPropertyType[1];
+        extendedProperty[0] = new ExtendedPropertyType();
+        extendedProperty[0].setExtendedFieldURI(extendedFieldURI);
+        extendedProperty[0].setValue("MailService");
+
+        MessageType messageType = new MessageType();
+        messageType.setSubject(mailMessage.getSubject());
+        messageType.setBody(body);
+        messageType.setToRecipients(toRecipients);
+        messageType.setSensitivity(SensitivityChoicesType.Normal);
+        messageType.setExtendedProperty(extendedProperty);
+        
+        return messageType;
     }
 
     private byte[] fileToByteArray(File attachmentFile) throws Exception {
