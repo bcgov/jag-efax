@@ -13,11 +13,6 @@ import ca.bc.gov.ag.efax.mail.service.parser.UndeliverableVisitor;
 public class ExchangeConfiguration {
 
     @Bean
-    public ExchangeProperties exchangeProperties(ExchangeProperties exchangeProperties) {
-        return exchangeProperties;
-    }
-
-    @Bean
     public ExchangeServiceFactory exchangeConfig(ExchangeProperties exchangeProperties) {
         return new ExchangeServiceFactory(exchangeProperties);
     }

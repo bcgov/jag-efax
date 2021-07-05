@@ -142,7 +142,7 @@ public class EmailServiceImpl implements EmailService {
     
             ArrayOfResponseMessagesType sentResp = sendItemResult.value.getResponseMessages();
             ItemInfoResponseMessageType sentRespMsg = sentResp.getCreateItemResponseMessage();
-            if (!ResponseClassType.Success.equals(sentRespMsg.getResponseClass())) {
+            if (sentRespMsg != null && !ResponseClassType.Success.equals(sentRespMsg.getResponseClass())) {
                 throw new Exception("Exception sending message. " + sentRespMsg.getMessageText());
             }
         } catch (AxisFault e) {
@@ -190,7 +190,7 @@ public class EmailServiceImpl implements EmailService {
             List<String> attachmentList = mailMessage.getAttachments();
             if (attachmentList.size() > 0) {
                 for (int i = 0; i < attachmentList.size(); i++) {
-                    String attachment = (String) attachmentList.get(i);
+                    String attachment = attachmentList.get(i);
                     String tempFilename = FileUtils.getTempFilename(mailMessage, i);
                     File attachmentFile = readFileFromURL(attachment, tempFilename);
     
