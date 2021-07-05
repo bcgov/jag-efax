@@ -19,7 +19,9 @@ exchange:
   poller:  
     enabled: true
     # Interval (in milliseconds) of how often to poll the exchange server email inbox  
-    interval: 300000    # 5 minutes 
+    interval: 300000    # 5 minutes
+    # A search filter to apply to incoming emails. 
+    filter: "to:IMCEAFAX" # all emails that where sent to an address starting with IMCEAFAX (which is the faxformat prefix)
 
 aem: # AEM is a PDF flattening service
   endpoint: ${PDF_ENDPOINT}
@@ -35,6 +37,8 @@ ws:
   
   # Interval (in milliseconds) when to poll/check for timed-out sent faxes.
   faxTimeoutCheck: 60000 # 60 seconds
+  
+  callbackEndpoint: ${CALLBACK_ENDPOINT:}
   
   # These are the SOAP faults returned for various reasons.
   faults:
