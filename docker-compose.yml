@@ -1,7 +1,6 @@
 version: "3.7"
 services:
 
-
   #############################################################################################
   ###                           Document Distribution Webservice                            ###
   #############################################################################################
@@ -12,30 +11,9 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - MODULE=doc-distrib-ws
         - SKIP_TESTS=true
     ports:
       - "8080:8080"
-    environment:
-      - MAILAPI_URL=http://mailservice:8090/api/v1/
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - REDIS_PASSWORD=admin
-  
-  #############################################################################################
-  ###                                  Mail Service API                                     ###
-  #############################################################################################
-  mailservice:
-    container_name: mailservice
-    hostname: mailservice
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        - MODULE=mailservice-api
-        - SKIP_TESTS=true
-    ports:
-      - "8090:8090"
     environment:
       - EXCHANGE_SERVER=${EXCHANGE_SERVER}
       - EXCHANGE_ACCOUNT=${EXCHANGE_ACCOUNT}
@@ -47,25 +25,6 @@ services:
       - PDF_USERNAME=${PDF_USERNAME}
       - PDF_PASSWORD=${PDF_PASSWORD}
       - PDF_ENDPOINT=${PDF_ENDPOINT}
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - REDIS_PASSWORD=admin
-
-  #############################################################################################
-  ###                                  Fax Listener Service                                 ###
-  #############################################################################################
-  faxlistener:
-    container_name: faxlistener
-    hostname: faxlistener
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        - MODULE=fax-listener
-        - SKIP_TESTS=true
-    ports:
-      - "8083:8083"
-    environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_PASSWORD=admin
@@ -84,7 +43,7 @@ services:
     restart: always
 
   #############################################################################################
-  ###                                 REDIS COMMANDER                                       ###
+  ###                                 REDIS COMMANDER (UI for redis)                        ###
   #############################################################################################
   redis-commander:
     container_name: redis-commander
@@ -96,7 +55,7 @@ services:
       - REDIS_HOST=redis
       - REDIS_PASSWORD=admin
     ports:
-      - "8082:8081"
+      - "8081:8081"
 
 volumes:
   data-redis:
