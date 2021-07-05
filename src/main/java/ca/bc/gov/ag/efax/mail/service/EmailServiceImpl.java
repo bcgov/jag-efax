@@ -71,6 +71,7 @@ import microsoft.exchange.webservices.data.search.FindItemsResults;
 import microsoft.exchange.webservices.data.search.ItemView;
 
 @Service
+//FIXME: techdebt - codeclimate reports this class is too large (270 lines out of max 250)
 public class EmailServiceImpl implements EmailService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -170,6 +171,8 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private ItemIdType exchangeAddAttachments(ExchangeServiceBindingStub serviceStub, CreateItemResponseTypeHolder createItemResult, MailMessage mailMessage) throws Exception {
+        // FIXME: techdebt - codeclimate reports this method is too complex (complexity of 13 out of 5).
+        // FIXME: techdebt - codeclimate reports this method is too large (45 lines out of max 25).
         ItemIdType parentItemId = new ItemIdType();
     
         ArrayOfResponseMessagesType resp = createItemResult.value.getResponseMessages();
@@ -265,6 +268,8 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private File readFileFromURL(final String url, final String outFilename) throws Exception {
+        // FIXME: techdebt - codeclimate reports this method is too complex (complexity of 10 out of 5).
+        // FIXME: techdebt - codeclimate reports this method is too large (29 lines out of max 25).
         URLConnection uc = null;
         FileOutputStream fos = null;
         
