@@ -21,7 +21,7 @@ public class FaxUtils {
      * @return a formatted string Exchange Server expects to see to send faxes ie. IMCEAFAX-Somebody+402505555555@domain.com
      */
     public static String getFaxDestination(String faxFormat, String to, String faxNumber) {
-        // FIXME: techdept - codeclimate reports this method is too complicated and large (complexity of 8, max 5 allowed)
+        // FIXME: techdebt - codeclimate reports this method is too complicated and large (complexity of 8, max 5 allowed)
 
         try {
             // Left in for testing - if fax number contains an '@', it is
