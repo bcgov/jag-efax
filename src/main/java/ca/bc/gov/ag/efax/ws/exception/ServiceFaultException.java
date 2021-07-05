@@ -12,6 +12,10 @@ public abstract class ServiceFaultException extends RuntimeException {
     private String jobId;
     private FaultId faultId;
     
+    public ServiceFaultException(FaultId faultId) {
+        this(faultId, null, null);
+    }
+    
     public ServiceFaultException(FaultId faultId, String jobId, String message) {
         super(message);
         this.faultId = faultId;
@@ -31,6 +35,14 @@ public abstract class ServiceFaultException extends RuntimeException {
         fault.setFaultCode(serviceFault.getCode());
         fault.setFaultMessage(serviceFault.getMessage());
         return fault;
+    }
+    
+    public String getFaultCode() {
+        return getProcessFault().getFaultCode();
+    }
+    
+    public String getFaultMessage() {
+        return getProcessFault().getFaultMessage();
     }
 
     protected enum FaultId {
