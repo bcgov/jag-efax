@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/doc-distrib-ws/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fax-listener/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mailservice-api/src/main/java" charset="UTF-8" />
   </component>
 </project>
