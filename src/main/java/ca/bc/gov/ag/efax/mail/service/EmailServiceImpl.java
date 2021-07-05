@@ -16,6 +16,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.microsoft.schemas.exchange.services._2006.messages.ArrayOfResponseMessagesType;
@@ -62,6 +63,7 @@ import ca.bc.gov.ag.efax.pdf.service.PdfService;
 import ca.bc.gov.ag.efax.ws.exception.FAXSendFault;
 import ca.bc.gov.jag.ews.proxy.ExchangeWebServiceClient;
 import microsoft.exchange.webservices.data.core.ExchangeService;
+import microsoft.exchange.webservices.data.core.PropertySet;
 import microsoft.exchange.webservices.data.core.enumeration.property.WellKnownFolderName;
 import microsoft.exchange.webservices.data.core.enumeration.search.SortDirection;
 import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
@@ -88,6 +90,9 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private PdfService pdfService;
     
+    @Value(value = "${exchange.poller.filter}")
+    private String filter;
+   
     @Override
     public List<EmailMessage> getEfaxInboxEmails() throws Exception {    
         logger.trace("Retrieving inbox emails");
@@ -95,8 +100,12 @@ public class EmailServiceImpl implements EmailService {
         view.getOrderBy().add(ItemSchema.DateTimeReceived, SortDirection.Ascending);
         
         ExchangeService exchangeService = exchangeServiceFactory.createService();
-        FindItemsResults<Item> emails = exchangeService.findItems(WellKnownFolderName.Inbox, view);
+        FindItemsResults<Item> emails = exchangeService.findItems(WellKnownFolderName.Inbox, filter, view);
 
+        if (!emails.getItems().isEmpty()) {
+            exchangeService.loadPropertiesForItems(emails, PropertySet.FirstClassProperties);
+        }
+        
         List<EmailMessage> emailMessages = emails.getItems().stream().map(item -> (EmailMessage) item).collect(Collectors.toList());
         logger.trace("Retrieved {} emails", emailMessages.size());
         return emailMessages;
