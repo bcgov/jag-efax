@@ -48,12 +48,12 @@ public class EmailParser {
         if (!hasJobId(response)) {
             // Could not parse email. Log the email as an error rather than throwing an exception so control can flow to the next email 
             // which may not have an issue.
-            logger.error("Unrecognized email, \nsubject: [{}], \nbody: [{}]", subject, body);
+            logger.error("Unrecognized email, \nsubject: [{}]", subject);
         }
 
         // Default error to FAXListenFault if a jobId was found, but could not parse a status.
         else if (!hasStatus(response)) {
-            logger.error("Unrecognized email, could not find status, \nsubject: [{}], \nbody: [{}]", subject, body);
+            logger.error("Unrecognized email, could not find status, \nsubject: [{}]", subject);
             FAXListenFault faxListenFault = new FAXListenFault();
             response.setStatus(faxListenFault.getFaultCode());
             response.setStatus(faxListenFault.getFaultMessage());
