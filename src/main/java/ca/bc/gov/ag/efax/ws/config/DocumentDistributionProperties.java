@@ -14,26 +14,36 @@ import ca.bc.gov.ag.efax.ws.exception.ServiceFault;
 @ConfigurationProperties(prefix = "ws")
 public class DocumentDistributionProperties {
 
-	@NotEmpty
-	@Pattern(regexp = "^.*%RECIPIENT%.*%FAXNUMBER%@.*$")
-	private String faxFormat;
+    @NotEmpty
+    @Pattern(regexp = "^.*%RECIPIENT%.*%FAXNUMBER%@.*$")
+    private String faxFormat;
 
-	@NotEmpty
-	private Map<Integer, ServiceFault> faults;
+    private JustinCallbackProperties callback;
 
-	public String getFaxFormat() {
-		return faxFormat;
-	}
+    @NotEmpty
+    private Map<Integer, ServiceFault> faults;
 
-	public void setFaxFormat(String faxFormat) {
-		this.faxFormat = faxFormat;
-	}
+    public String getFaxFormat() {
+        return faxFormat;
+    }
 
-	public Map<Integer, ServiceFault> getFaults() {
-		return faults;
-	}
+    public void setFaxFormat(String faxFormat) {
+        this.faxFormat = faxFormat;
+    }
 
-	public void setFaults(Map<Integer, ServiceFault> faults) {
-		this.faults = faults;
-	}
+    public JustinCallbackProperties getCallback() {
+        return callback;
+    }
+
+    public void setCallback(JustinCallbackProperties callback) {
+        this.callback = callback;
+    }
+
+    public Map<Integer, ServiceFault> getFaults() {
+        return faults;
+    }
+
+    public void setFaults(Map<Integer, ServiceFault> faults) {
+        this.faults = faults;
+    }
 }

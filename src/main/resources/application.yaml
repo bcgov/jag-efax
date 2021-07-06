@@ -38,7 +38,9 @@ ws:
   # Interval (in milliseconds) when to poll/check for timed-out sent faxes.
   faxTimeoutCheck: 60000 # 60 seconds
   
-  callbackEndpoint: ${CALLBACK_ENDPOINT:}
+  callback:
+    enabled: true
+    endpoint: ${CALLBACK_ENDPOINT:}
   
   # These are the SOAP faults returned for various reasons.
   faults:
