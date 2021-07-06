@@ -9,4 +9,5 @@ exchange:
     endpoint: ${EXCHANGE_ENDPOINT:http://localhost}
     username: ${EXCHANGE_USERNAME:username}
     password: ${EXCHANGE_PASSWORD:password}
-
+  poller:  
+    enabled: false

@@ -13,7 +13,14 @@ public interface EmailService {
      * @return
      * @throws Exception 
      */
-    List<EmailMessage> getEfaxInboxEmails() throws Exception;
+    List<EmailMessage> getInboxEmails() throws Exception;
+
+    /**
+     * Moves the specified email to the "Deleted Items" folder
+     * @param emailMessage
+     * @throws Exception 
+     */
+    void deleteEmail(EmailMessage emailMessage) throws Exception;
     
     /**
      * Sends an email (including any attachments) using Microsoft Exchange.
