@@ -26,7 +26,7 @@ public class UndeliverableVisitor implements EmailVisitor {
                 response.setStatusMsg(fault.getFaultMessage());
                 response.setJobId(matcher.group(1));
                 response.setUuid(matcher.group(2));
-                logger.error("Undeliverable email, \nsubject: [{}], \nbody: [{}]", subject, body);
+                logger.error("Undeliverable email, \nsubject: [{}]", subject);
             }
         }
     }
