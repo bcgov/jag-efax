@@ -19,41 +19,42 @@ import ca.bc.gov.ag.efax.ws.service.DocumentDistributionService;
 public class ScheduledTasks {
 
     private Logger logger = LoggerFactory.getLogger(ScheduledTasks.class);
-    
+
     @Value(value = "${ws.faxTimeout}")
-    private long faxTimeout; 
-    
+    private long faxTimeout;
+
     @Autowired
     private SentMessageRepository sentMessageRepository;
-    
+
     @Autowired
     private DocumentDistributionService documentDistributionService;
-    
+
     @Scheduled(fixedDelayString = "${ws.faxTimeoutPoll}")
     public void sentFaxTimeout() {
-        // Every ${ws.faxTimeoutPoll} milliseconds, check if there are any queued SentMessages in redis whose createdTimestamp is older than ${ws.faxTimeout} milliseconds.
+        // Every ${ws.faxTimeoutPoll} milliseconds, check if there are any queued SentMessages in redis whose createdTimestamp is older than
+        // ${ws.faxTimeout} milliseconds.
         // If so, then remove the record from redis and send a callback to the client indicating the message timed out.
-        logger.trace("Checking for timed out fax messages");        
-        
-        for (SentMessage sentMessage : sentMessageRepository.findAll()) {
-            if (hasTimedOut(sentMessage)) {
-                logger.debug("Sent message uuid:{} timed out", sentMessage.getUuid());
+        logger.trace("Checking for timed out fax messages");
 
-                // send a callback to the client
-                try {                    
-                    documentDistributionService.sendResponseToCallback(getResponse(sentMessage.getJobId()));
-                }
-                catch (Exception e) {
-                    logger.error("Could not invoke a Justin callback for jobId: {}", sentMessage.getJobId());
-                    logger.error(e.getMessage(), e);
-                }
-                
-                // remove message from queue
-                sentMessageRepository.deleteById(sentMessage.getUuid());                
+        for (SentMessage sentMessage : sentMessageRepository.findAll()) {
+            if (!hasTimedOut(sentMessage))
+                continue;
+
+            logger.debug("Sent message uuid:{} timed out", sentMessage.getUuid());
+
+            // send a callback to the client
+            try {
+                documentDistributionService.sendResponseToCallback(getResponse(sentMessage.getJobId()));
+            } catch (Exception e) {
+                logger.error("Could not invoke a Justin callback for jobId: {}", sentMessage.getJobId());
+                logger.error(e.getMessage(), e);
             }
+
+            // remove message from queue
+            sentMessageRepository.deleteById(sentMessage.getUuid());
         }
     }
-    
+
     /**
      * Returns true of the queued redis message has timed out (ie, created > 25 minutes ago)
      */
@@ -62,7 +63,7 @@ public class ScheduledTasks {
         Date createdTs = sentMessage.getCreatedTs();
         return createdTs.getTime() + faxTimeout < now;
     }
-    
+
     /**
      * Returns the error response object to send to Justin's SOAP callback service.
      */
@@ -74,5 +75,5 @@ public class ScheduledTasks {
         response.setStatusMessage(fault.getFaultMessage());
         return response;
     }
-    
+
 }
