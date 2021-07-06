@@ -36,7 +36,7 @@ ws:
   faxTimeout: 1500000    # 25 minutes 
   
   # Interval (in milliseconds) when to poll/check for timed-out sent faxes.
-  faxTimeoutCheck: 60000 # 60 seconds
+  faxTimeoutPoll: 60000 # 60 seconds
   
   callback:
     enabled: true
