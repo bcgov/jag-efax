@@ -40,7 +40,7 @@ public class EmailPoller {
         logger.debug("Started email inbox poll.");
 
         // Retrieve all INBOX emails (that was originally sent to IMCEAFAX) 
-        for (EmailMessage emailMessage : emailService.getEfaxInboxEmails()) {
+        for (EmailMessage emailMessage : emailService.getInboxEmails()) {
             
             // Attempt to parse the email response from MS Exchange
             DocumentDistributionMainProcessProcessUpdate response = emailParser.parse(emailMessage);
@@ -52,7 +52,8 @@ public class EmailPoller {
                 documentDistributionService.sendResponseToCallback(response);
             }
             
-            // TODO: delete the email / move to a "processed" folder so we don't process this same email again.
+            // Move email to the "Deleted Items" folder so we don't process this same email again.
+            emailService.deleteEmail(emailMessage);
         }
 
         logger.debug("Finished email inbox poll.");
