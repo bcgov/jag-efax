@@ -33,14 +33,10 @@ public class ScheduledTasks {
     public void sentFaxTimeout() {
         // Every ${ws.faxTimeoutPoll} milliseconds, check if there are any queued SentMessages in redis whose createdTimestamp is older than ${ws.faxTimeout} milliseconds.
         // If so, then remove the record from redis and send a callback to the client indicating the message timed out.
-
-        logger.trace("Checking for timed out fax messages");
-        
-        long now = new Date().getTime();
+        logger.trace("Checking for timed out fax messages");        
         
         for (SentMessage sentMessage : sentMessageRepository.findAll()) {
-            Date createdTs = sentMessage.getCreatedTs();
-            if (createdTs.getTime() + faxTimeout < now) {
+            if (hasTimedOut(sentMessage)) {
                 logger.debug("Sent message uuid:{} timed out", sentMessage.getUuid());
 
                 // send a callback to the client
@@ -56,6 +52,15 @@ public class ScheduledTasks {
                 sentMessageRepository.deleteById(sentMessage.getUuid());                
             }
         }
+    }
+    
+    /**
+     * Returns true of the queued redis message has timed out (ie, created > 25 minutes ago)
+     */
+    private boolean hasTimedOut(SentMessage sentMessage) {
+        long now = new Date().getTime();
+        Date createdTs = sentMessage.getCreatedTs();
+        return createdTs.getTime() + faxTimeout < now;
     }
     
     /**
