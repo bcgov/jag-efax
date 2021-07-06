@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessUpdate;
+import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 import ca.bc.gov.ag.efax.mail.service.EmailService;
 import ca.bc.gov.ag.efax.mail.service.parser.EmailParser;
 import ca.bc.gov.ag.efax.ws.service.DocumentDistributionService;
@@ -43,7 +43,7 @@ public class EmailPoller {
         for (EmailMessage emailMessage : emailService.getInboxEmails()) {
             
             // Attempt to parse the email response from MS Exchange
-            DocumentDistributionMainProcessProcessUpdate response = emailParser.parse(emailMessage);
+            DocumentDistributionMainProcessProcessResponse response = emailParser.parse(emailMessage);
 
             // If the jobId is blank, there's nothing we can do except move on. (We can't send a message to the Justin Callback informing the user
             // that a message with a certain jobId succeeded or failed).  If so, an error message should have been logged for review so the email

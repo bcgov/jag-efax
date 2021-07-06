@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessUpdate;
+import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 import ca.bc.gov.ag.efax.ws.exception.FAXListenFault;
 
 public class UndeliverableVisitor implements EmailVisitor {
@@ -17,15 +17,14 @@ public class UndeliverableVisitor implements EmailVisitor {
     private static final String UNDELIVERABLE = "Undeliverable: <jobId>(\\d+)</jobId><uuid>(.+)</uuid>";
 
     @Override
-    public void apply(String subject, String body, DocumentDistributionMainProcessProcessUpdate response) {
+    public void apply(String subject, String body, DocumentDistributionMainProcessProcessResponse response) {
         if (Pattern.matches(UNDELIVERABLE, subject)) {
             Matcher matcher = Pattern.compile(UNDELIVERABLE).matcher(subject);
             if (matcher.find()) {
                 FAXListenFault fault = new FAXListenFault();
-                response.setStatus(fault.getFaultCode());
-                response.setStatusMsg(fault.getFaultMessage());
                 response.setJobId(matcher.group(1));
-                response.setUuid(matcher.group(2));
+                response.setStatusCode(fault.getFaultCode());
+                response.setStatusMessage(fault.getFaultMessage());
                 logger.error("Undeliverable email, \nsubject: [{}]", subject);
             }
         }

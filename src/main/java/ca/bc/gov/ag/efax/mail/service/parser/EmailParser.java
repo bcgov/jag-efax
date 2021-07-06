@@ -7,8 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessUpdate;
-import ca.bc.gov.ag.efax.mail.util.DateUtil;
+import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 import ca.bc.gov.ag.efax.ws.exception.FAXListenFault;
 import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
 import microsoft.exchange.webservices.data.property.complex.MessageBody;
@@ -31,9 +30,8 @@ public class EmailParser {
      * @return
      * @throws Exception
      */
-    public DocumentDistributionMainProcessProcessUpdate parse(EmailMessage emailMessage) throws Exception {
-        DocumentDistributionMainProcessProcessUpdate response = new DocumentDistributionMainProcessProcessUpdate();
-        response.setDateTime(DateUtil.toXMLGregorianCalendar(emailMessage.getDateTimeReceived()));
+    public DocumentDistributionMainProcessProcessResponse parse(EmailMessage emailMessage) throws Exception {
+        DocumentDistributionMainProcessProcessResponse response = new DocumentDistributionMainProcessProcessResponse();
 
         String subject = emailMessage.getSubject();
         String body = MessageBody.getStringFromMessageBody(emailMessage.getBody());
@@ -55,18 +53,18 @@ public class EmailParser {
         else if (!hasStatus(response)) {
             logger.error("Unrecognized email, could not find status, \nsubject: [{}]", subject);
             FAXListenFault faxListenFault = new FAXListenFault();
-            response.setStatus(faxListenFault.getFaultCode());
-            response.setStatus(faxListenFault.getFaultMessage());
+            response.setStatusCode(faxListenFault.getFaultCode());
+            response.setStatusMessage(faxListenFault.getFaultMessage());
         }
 
         return response;
     }
 
-    private boolean hasJobId(DocumentDistributionMainProcessProcessUpdate response) {
+    private boolean hasJobId(DocumentDistributionMainProcessProcessResponse response) {
         return !StringUtils.isEmpty(response.getJobId());
     }
 
-    private boolean hasStatus(DocumentDistributionMainProcessProcessUpdate response) {
+    private boolean hasStatus(DocumentDistributionMainProcessProcessResponse response) {
         return !StringUtils.isEmpty(response.getJobId());
     }
 
