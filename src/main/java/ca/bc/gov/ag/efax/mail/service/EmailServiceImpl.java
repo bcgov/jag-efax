@@ -66,6 +66,7 @@ import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.PropertySet;
 import microsoft.exchange.webservices.data.core.enumeration.property.WellKnownFolderName;
 import microsoft.exchange.webservices.data.core.enumeration.search.SortDirection;
+import microsoft.exchange.webservices.data.core.enumeration.service.DeleteMode;
 import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
 import microsoft.exchange.webservices.data.core.service.item.Item;
 import microsoft.exchange.webservices.data.core.service.schema.ItemSchema;
@@ -94,7 +95,7 @@ public class EmailServiceImpl implements EmailService {
     private String filter;
    
     @Override
-    public List<EmailMessage> getEfaxInboxEmails() throws Exception {    
+    public List<EmailMessage> getInboxEmails() throws Exception {    
         logger.trace("Retrieving inbox emails");
         ItemView view = new ItemView(Integer.MAX_VALUE);
         view.getOrderBy().add(ItemSchema.DateTimeReceived, SortDirection.Ascending);
@@ -109,6 +110,12 @@ public class EmailServiceImpl implements EmailService {
         List<EmailMessage> emailMessages = emails.getItems().stream().map(item -> (EmailMessage) item).collect(Collectors.toList());
         logger.trace("Retrieved {} emails", emailMessages.size());
         return emailMessages;
+    }
+    
+    @Override
+    public void deleteEmail(EmailMessage emailMessage) throws Exception {
+        ExchangeService exchangeService = exchangeServiceFactory.createService();
+        exchangeService.deleteItem(emailMessage.getId(), DeleteMode.MoveToDeletedItems, null, null);        
     }
 
     @Override
