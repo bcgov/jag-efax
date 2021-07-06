@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessUpdate;
 import ca.bc.gov.ag.efax.mail.service.EmailService;
 import ca.bc.gov.ag.efax.mail.service.parser.EmailParser;
+import ca.bc.gov.ag.efax.ws.service.DocumentDistributionService;
 import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
 
 @Component
@@ -26,6 +27,9 @@ public class EmailPoller {
 
     @Value(value = "${exchange.poller.enabled}")
     private boolean enabled;
+
+    @Autowired
+    private DocumentDistributionService documentDistributionService;
 
     @Scheduled(fixedDelayString = "${exchange.poller.interval}")
     public void pollForEmails() throws Exception {
@@ -45,8 +49,10 @@ public class EmailPoller {
             // that a message with a certain jobId succeeded or failed).  If so, an error message should have been logged for review so the email
             // parser can be improved upon.
             if (!StringUtils.isEmpty(response.getJobId())) {                     
-                // TODO: send message to Justin Callback informing user of the jobId and status.
+                documentDistributionService.sendResponseToCallback(response);
             }
+            
+            // TODO: delete the email / move to a "processed" folder so we don't process this same email again.
         }
 
         logger.debug("Finished email inbox poll.");
