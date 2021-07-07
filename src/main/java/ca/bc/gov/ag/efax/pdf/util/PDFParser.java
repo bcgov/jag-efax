@@ -1,8 +1,11 @@
 package ca.bc.gov.ag.efax.pdf.util;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
+
+import org.apache.commons.io.IOUtils;
 
 import com.adobe.pdf.PDFDocument;
 import com.adobe.pdf.PDFFactory;
@@ -14,15 +17,22 @@ public class PDFParser {
     private boolean parsed = false;
     
     public PDFParser(String urlString) {
+        InputStream inputStream = null;
         try {
             URL url = new URL(urlString);
             URLConnection conn = url.openConnection();
+            // TODO: could MIME_TYPE also be "application/octet-stream"?
             if (MIME_TYPE.equalsIgnoreCase(conn.getContentType())) {
-                pdf = PDFFactory.openDocument(conn.getInputStream());
+                inputStream = conn.getInputStream();
+                pdf = PDFFactory.openDocument(inputStream);
                 parsed = true;
             }
         } catch (Exception e) {
         	e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                IOUtils.closeQuietly(inputStream);
+            }
         }
     }
     
