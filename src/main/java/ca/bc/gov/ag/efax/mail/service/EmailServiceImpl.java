@@ -1,11 +1,11 @@
 package ca.bc.gov.ag.efax.mail.service;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
+import java.io.InputStream;
 import java.net.URL;
-import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
@@ -284,43 +284,27 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private File readFileFromURL(final String url, final String outFilename) throws Exception {
-        // FIXME: techdebt - codeclimate reports this method is too complex (complexity of 10 out of 5).
-        // FIXME: techdebt - codeclimate reports this method is too large (29 lines out of max 25).
-        URLConnection uc = null;
-        FileOutputStream fos = null;
+        InputStream inputStream = null;
         
         try {
-            // Open the URL and get metadata
-            URL u = new URL(url);
-            uc = u.openConnection();
-            
-            // Open the outgoing stream and file
-            File outFile = new File(exchangeProperties.getTempDirectory() + outFilename);
-            fos = new FileOutputStream(outFile);
+            String fileName = exchangeProperties.getTempDirectory() + outFilename;
 
-            boolean isFlattened = pdfService.flattenPdf(url, fos);
+            // try first to flatten the PDF
+            File file = pdfService.flattenPdf(url, fileName);
             
-            if (!isFlattened) {
-                try {
-                    IOUtils.copy(uc.getInputStream(), fos);
-                    fos.flush();
-                } catch (Exception e) {}
+            // if unsuccessful, simply download the file as is
+            if (file == null) {
+                // Open the URL and get metadata
+                inputStream = new URL(url).openStream();            
+                Files.copy(inputStream, Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
+                file = new File(fileName);
             }
 
-            return outFile;
-        } catch (MalformedURLException mue) {
-            throw new Exception("URL Exception in class readFileFromURL", mue);
-        } catch (SecurityException se) {
-            throw new Exception("Security Exception in class readFileFromURL", se);
-        } catch (IOException ie) {
-            throw new Exception("IO Exception in class readFileFromURL", ie);
-        } catch (Exception e) {
-            throw new Exception("Unknown Exception in class readFileFromURL", e);
-        } finally {
-            if (uc != null && uc.getInputStream() != null)
-                IOUtils.closeQuietly(uc.getInputStream());
-            if (fos != null)
-                IOUtils.closeQuietly(fos);
+            return file;
+        } 
+        finally {
+            if (inputStream != null)
+                IOUtils.closeQuietly(inputStream);
         }
     }
 
