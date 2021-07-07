@@ -1,6 +1,6 @@
 package ca.bc.gov.ag.efax.ws.service;
 
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessUpdate;
+import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionRequest;
 
 public interface DocumentDistributionService {
@@ -17,6 +17,6 @@ public interface DocumentDistributionService {
      * 
      * @param response a value object encapsulating the attempted fax response.
      */
-    public void sendResponseToCallback(DocumentDistributionMainProcessProcessUpdate response);
+    public void sendResponseToCallback(DocumentDistributionMainProcessProcessResponse response);
 
 }
