@@ -5,19 +5,22 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
+import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessUpdate;
+import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionRequest;
 import ca.bc.gov.ag.efax.mail.model.MailMessage;
 import ca.bc.gov.ag.efax.mail.model.RequestChannel;
 import ca.bc.gov.ag.efax.mail.service.EmailService;
 import ca.bc.gov.ag.efax.mail.util.FaxUtils;
+import ca.bc.gov.ag.efax.mail.util.StringUtils;
 import ca.bc.gov.ag.efax.ws.config.DocumentDistributionProperties;
 import ca.bc.gov.ag.efax.ws.exception.UnknownChannelFault;
 
 @Service
-public class DocumentDistributionServiceImpl implements DocumentDistributionService {
+public class DocumentDistributionServiceImpl extends WebServiceGatewaySupport implements DocumentDistributionService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
     
@@ -27,6 +30,11 @@ public class DocumentDistributionServiceImpl implements DocumentDistributionServ
     @Autowired
     private EmailService emailService;
 
+    public DocumentDistributionServiceImpl(DocumentDistributionProperties documentDistributionProperties, Jaxb2Marshaller marshaller) {
+        setDefaultUri(documentDistributionProperties.getCallback().getEndpoint());
+        setMarshaller(marshaller);
+    }
+    
     @Override
     public void receiveRequestToSendMessage(DocumentDistributionRequest request) {
         if (!RequestChannel.FAX.getName().equals(request.getChannel())) {
@@ -53,10 +61,16 @@ public class DocumentDistributionServiceImpl implements DocumentDistributionServ
     }
 
     @Override
-    public void sendResponseToCallback(DocumentDistributionMainProcessProcessUpdate response) {
+    public void sendResponseToCallback(DocumentDistributionMainProcessProcessResponse response) {
+        logger.trace("Justin Callback: response:{}", StringUtils.toXMLString(response));
+            
         if (documentDistributionProperties.getCallback().isEnabled()) {
-            logger.trace("Justin Callback: jobId:{}, status:{}, msg:{}", response.getJobId(), response.getStatus(), response.getStatusMsg());
-            // TODO: implement
+            try {
+                getWebServiceTemplate().marshalSendAndReceive(response);
+            }
+            catch (Exception e) {
+                logger.error("Failed to send message to Justin callback", e);
+            }
         }
     }    
     
