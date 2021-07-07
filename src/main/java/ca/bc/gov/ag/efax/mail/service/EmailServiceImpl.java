@@ -283,21 +283,21 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-    private File readFileFromURL(final String url, final String outFilename) throws Exception {
+    private File readFileFromURL(final String url, final String fileName) throws Exception {
         InputStream inputStream = null;
         
         try {
-            String fileName = exchangeProperties.getTempDirectory() + outFilename;
+            String path = exchangeProperties.getTempDirectory() + fileName;
 
             // try first to flatten the PDF
-            File file = pdfService.flattenPdf(url, fileName);
+            File file = pdfService.flattenPdf(url, path);
             
             // if unsuccessful, simply download the file as is
             if (file == null) {
                 // Open the URL and get metadata
                 inputStream = new URL(url).openStream();            
-                Files.copy(inputStream, Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
-                file = new File(fileName);
+                Files.copy(inputStream, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
+                file = new File(path);
             }
 
             return file;
