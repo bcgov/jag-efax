@@ -1,4 +1,4 @@
-package ca.bc.gov.ag.efax.ws.scheduling;
+package ca.bc.gov.ag.efax.ws.scheduled;
 
 import java.util.Date;
 
