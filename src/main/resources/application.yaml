@@ -21,7 +21,7 @@ exchange:
     # Interval (in milliseconds) of how often to poll the exchange server email inbox  
     interval: 300000    # 5 minutes
     # A search filter to apply to incoming emails. 
-    filter: "to:IMCEAFAX" # all emails that where sent to an address starting with IMCEAFAX (which is the faxformat prefix)
+    filter: "To:\"IMCEAFAX\"" # all emails that where sent to an address starting with IMCEAFAX (which is the faxformat prefix)
 
 aem: # AEM is a PDF flattening service
   endpoint: ${PDF_ENDPOINT}

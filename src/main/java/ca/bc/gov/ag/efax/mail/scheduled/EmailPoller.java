@@ -1,4 +1,4 @@
-package ca.bc.gov.ag.efax.mail.scheduler;
+package ca.bc.gov.ag.efax.mail.scheduled;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
