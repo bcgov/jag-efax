@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.config.annotation.EnableWs;
 import org.springframework.ws.config.annotation.WsConfigurerAdapter;
 import org.springframework.ws.server.EndpointInterceptor;
@@ -72,5 +73,13 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 		exceptionResolver.setOrder(1);
 		return exceptionResolver;
 	}
+
+    @Bean
+    public Jaxb2Marshaller marshaller() {
+        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+        // this package must match the package in the <generatePackage> specified in pom.xml
+        marshaller.setContextPath("ca.bc.gov.ag.dist.efax.ws.model");
+        return marshaller;
+    }
 	
 }
