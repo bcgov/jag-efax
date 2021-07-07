@@ -1,0 +1,62 @@
+version: "3.7"
+services:
+
+  #############################################################################################
+  ###                           Document Distribution Webservice                            ###
+  #############################################################################################
+  webservice:
+    container_name: webservice
+    hostname: webservice
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - SKIP_TESTS=true
+    ports:
+      - "8080:8080"
+    environment:
+      - EXCHANGE_SERVER=${EXCHANGE_SERVER}
+      - EXCHANGE_ACCOUNT=${EXCHANGE_ACCOUNT}
+      - EXCHANGE_ENDPOINT=${EXCHANGE_ENDPOINT}  
+      - EXCHANGE_USERNAME=${EXCHANGE_USERNAME}
+      - EXCHANGE_PASSWORD=${EXCHANGE_PASSWORD}
+      - EXCHANGE_FOLDER_PATH=${EXCHANGE_FOLDER_PATH}
+      - EXCHANGE_SAVE_IN_SENT=${EXCHANGE_SAVE_IN_SENT}
+      - PDF_USERNAME=${PDF_USERNAME}
+      - PDF_PASSWORD=${PDF_PASSWORD}
+      - PDF_ENDPOINT=${PDF_ENDPOINT}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=admin
+      
+  #############################################################################################
+  ###                                 REDIS SERVER                                          ###
+  #############################################################################################
+  redis:
+    container_name: redis
+    image: redis
+    command: redis-server --requirepass admin
+    ports:
+      - "6379:6379"
+    volumes:
+      - data-redis:/data
+    restart: always
+
+  #############################################################################################
+  ###                                 REDIS COMMANDER (UI for redis)                        ###
+  #############################################################################################
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      - REDIS_PORT=6379
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=admin
+    ports:
+      - "8081:8081"
+
+volumes:
+  data-redis:
+    driver: local

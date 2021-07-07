@@ -1,0 +1,81 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:admin}
+
+exchange:
+  service:  
+    endpoint: ${EXCHANGE_ENDPOINT:}
+    username: ${EXCHANGE_USERNAME:}
+    password: ${EXCHANGE_PASSWORD:}
+    saveInSent: ${EXCHANGE_SAVE_IN_SENT:true}
+    # The temporary directory used to store PDF files while they are added as attachments to an email message (fax).
+    #   May be null.  If empty, will default to the OS temp directory as specified by the "java.io.tmpdir" system property.
+    tempDirectory: ${EXCHANGE_TEMP_DIR:}
+  poller:  
+    enabled: true
+    # Interval (in milliseconds) of how often to poll the exchange server email inbox  
+    interval: 300000    # 5 minutes
+    # A search filter to apply to incoming emails. 
+    filter: "To:\"IMCEAFAX\"" # all emails that where sent to an address starting with IMCEAFAX (which is the faxformat prefix)
+
+aem: # AEM is a PDF flattening service
+  endpoint: ${PDF_ENDPOINT}
+  username: ${PDF_USERNAME}
+  password: ${PDF_PASSWORD}
+  
+ws:  
+  faxFormat: IMCEAFAX-%RECIPIENT%+40%FAXNUMBER%@Victoria1.gov.bc.ca
+  
+  # Timeout (in milliseconds) when no response has been received by exchange for a sent fax
+  #   After this timeout, the fax is considered lost and a failed status is returned to the user.  
+  faxTimeout: 1500000    # 25 minutes 
+  
+  # Interval (in milliseconds) when to poll/check for timed-out sent faxes.
+  faxTimeoutPoll: 60000 # 60 seconds
+  
+  callback:
+    enabled: true
+    endpoint: ${CALLBACK_ENDPOINT:}
+  
+  # These are the SOAP faults returned for various reasons.
+  faults:
+    100:
+      code: GFAL
+      message: Problem reading configuration properties.
+    200:
+      code: GFAL
+      message: Problem sending fax message.
+    201:
+      code: GFAL
+      message: Problem listening for fax response.
+    202:
+      code: TOUT
+      message: Timed out waiting for fax response.
+    203:
+      code: GFAL
+      message: Problem processing fax response.
+    204:
+      code: BADN
+      message: Problem transforming fax number.
+    400:
+      code: GFAL
+      message: Problem sending result to caller.
+    500:
+      code: GFAL
+      message: Unrecognized channel.
+    600:
+      code: GFAL
+      message: Runtime fault encountered.
+    700:
+      code: GFAL
+      message: Unspecified fault encountered.
+
+logging:
+  level:
+    root: INFO
+    ca.bc.gov.ag.efax: TRACE
