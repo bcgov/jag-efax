@@ -1,0 +1,207 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.5.0</version>
+	</parent>
+
+	<groupId>ca.bc.gov.ag</groupId>
+	<artifactId>jag-efax</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>jag-eFax</name>
+	<description>A BPEL eFax Replacement project.</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<main.basedir>${project.basedir}</main.basedir>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>nexus</id>
+			<url>file:${file.separator}${file.separator}${main.basedir}${file.separator}nexus</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web-services</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>axis</groupId>
+			<artifactId>axis</artifactId>
+			<version>1.2.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.activation</groupId>
+					<artifactId>activation</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.5</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.ews-java-api</groupId>
+			<artifactId>ews-java-api</artifactId>
+			<version>2.0</version>
+		</dependency>
+
+		<!-- Custom dependencies -->
+		<dependency>
+			<groupId>ca.bc.gov.ag</groupId>
+			<artifactId>ewsproxy</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>ca.bc.gov.ag</groupId>
+			<artifactId>jaxrpc</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>ca.bc.gov.ag</groupId>
+			<artifactId>outputservice</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>ca.bc.gov.ag</groupId>
+			<artifactId>xpaaj</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+		</dependency>
+
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>it.ozimov</groupId>
+			<artifactId>embedded-redis</artifactId>
+			<version>0.7.3</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>java11</id>
+			<activation>
+				<jdk>[11,)</jdk>
+			</activation>
+
+			<dependencies>
+				<dependency>
+					<groupId>org.glassfish.jaxb</groupId>
+					<artifactId>jaxb-runtime</artifactId>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<!-- tag::xsd[] -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>2.5.0</version>
+				<executions>
+					<execution>
+						<id>xjc</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<packageName>ca.bc.gov.ag.dist.efax.ws.model</packageName>
+					<sources>
+						<source>${project.basedir}/src/main/resources/DocumentDistributionMainProcess.xsd</source>
+					</sources>
+				</configuration>
+			</plugin>
+			<!-- end::xsd[] -->
+			
+			<!--jacoco code coverage -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.6</version>
+
+				<configuration>
+					<excludes>
+						<exclude>**/*/mappers/*Impl.java</exclude>
+						<exclude>**/*/efilingapi/api/**/*</exclude>
+						<exclude>org/openapitools/configuration/**/*</exclude>
+					</excludes>
+				</configuration>
+
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+
+					<!-- attached to Maven test phase -->
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
