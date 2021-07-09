@@ -9,10 +9,13 @@ import ca.bc.gov.ag.efax.ws.exception.RuntimeFault;
 
 public class FaxUtils {
 
+    public static String PLACEHOLDER_RECIPIENT = "%RECIPIENT%";
+    public static String PLACEHOLDER_FAXNUMBER = "%FAXNUMBER%";
+    
     /**
      * Attempts to construct an email recipient that Exchange Server expects based on the faxFormat, to, and faxNumber.
      * 
-     * <i>Content copied from DocumentDistributionMainProcess.bpel:constructFaxDestination</i>
+     * <i>Content copied (and simplified) from DocumentDistributionMainProcess.bpel:constructFaxDestination</i>
      * 
      * @param jobId the id of this fax to process.
      * @param faxFormat a pattern Exchange Server expects to see when sending fax messages
@@ -21,8 +24,6 @@ public class FaxUtils {
      * @return a formatted string Exchange Server expects to see to send faxes ie. IMCEAFAX-Somebody+402505555555@domain.com
      */
     public static String getFaxDestination(String faxFormat, String to, String faxNumber) {
-        // FIXME: techdebt - codeclimate reports this method is too complicated and large (complexity of 8, max 5 allowed)
-
         try {
             // Left in for testing - if fax number contains an '@', it is
             // likely an email address so just pass through the fax number unchanged.
@@ -35,38 +36,15 @@ public class FaxUtils {
             to = to.replaceAll(replacable, "_");
 
             // Normalize to - set spaces to %20
-            String newTo = "";
-            for (int i = 0; i < to.length(); i++) {
-                if (to.charAt(i) == ' ') {
-                    newTo += "+20";
-                } else {
-                    newTo += to.charAt(i);
-                }
-            }
+            String newTo = to.replaceAll(" ", "+20");
 
             // Normalize fax number - strip out all non-digits
-            String newFaxNumber = "";
-            for (int i = 0; i < faxNumber.length(); i++) {
-                char c = faxNumber.charAt(i);
-                if (Character.isDigit(c)) {
-                    newFaxNumber += c;
-                }
-            }
+            String newFaxNumber = faxNumber.replaceAll("\\D", "");
 
-            // Construct new fax destination
-            String toPlaceholder = "%RECIPIENT%";
-            String faxPlaceholder = "%FAXNUMBER%";
+            String recipient = faxFormat.replace(PLACEHOLDER_RECIPIENT, newTo);
+            recipient = recipient.replace(PLACEHOLDER_FAXNUMBER, newFaxNumber);
 
-            int i1 = faxFormat.indexOf(toPlaceholder);
-            int i2 = i1 + toPlaceholder.length();
-            int i3 = faxFormat.indexOf(faxPlaceholder);
-            int i4 = i3 + faxPlaceholder.length();
-
-            String s1 = faxFormat.substring(0, i1);
-            String s2 = faxFormat.substring(i2, i3);
-            String s3 = faxFormat.substring(i4, faxFormat.length());
-
-            return s1 + newTo + s2 + newFaxNumber + s3;
+            return recipient;
         } catch (Exception e) {
             throw new FaxTransformationFault("Could not format fax destination");
         }
