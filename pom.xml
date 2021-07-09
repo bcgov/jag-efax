@@ -50,66 +50,34 @@
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>axis</groupId>
-			<artifactId>axis</artifactId>
-			<version>1.2.1</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.activation</groupId>
-					<artifactId>activation</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4.5</version>
-		</dependency>
-		<dependency>
+			<!-- Adobe PDF dependency -->
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.9.0</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-collections4</artifactId>
-			<version>4.4</version>
-		</dependency>
-		<dependency>
+			<!-- Microsoft ExchangeService client -->
 			<groupId>com.microsoft.ews-java-api</groupId>
 			<artifactId>ews-java-api</artifactId>
 			<version>2.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+		</dependency>
 
 		<!-- Custom dependencies -->
 		<dependency>
-			<groupId>ca.bc.gov.ag</groupId>
-			<artifactId>ewsproxy</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>ca.bc.gov.ag</groupId>
-			<artifactId>jaxrpc</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		<dependency>
+			<!-- Custom PDF flattening client jar -->
 			<groupId>ca.bc.gov.ag</groupId>
 			<artifactId>outputservice</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 		<dependency>
+			<!-- Adobe PDF jar -->
 			<groupId>ca.bc.gov.ag</groupId>
 			<artifactId>xpaaj</artifactId>
 			<version>0.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
 
 		<!-- Test dependencies -->
@@ -169,7 +137,7 @@
 				</configuration>
 			</plugin>
 			<!-- end::xsd[] -->
-			
+
 			<!--jacoco code coverage -->
 			<plugin>
 				<groupId>org.jacoco</groupId>

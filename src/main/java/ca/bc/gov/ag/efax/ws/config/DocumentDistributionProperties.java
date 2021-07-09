@@ -15,7 +15,7 @@ import ca.bc.gov.ag.efax.ws.exception.ServiceFault;
 public class DocumentDistributionProperties {
 
     @NotEmpty
-    @Pattern(regexp = "^.*%RECIPIENT%.*%FAXNUMBER%@.*$")
+    @Pattern(regexp = "^.*%FAXNUMBER%@.*$")
     private String faxFormat;
 
     private JustinCallbackProperties callback;
