@@ -6,7 +6,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,39 +51,36 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private SentMessageRepository sentMessageRepository;
-    
+
     @Autowired
     private PdfService pdfService;
-    
+
     @Value(value = "${exchange.poller.filter}")
     private String filter;
-   
+
     @Override
-    public List<EmailMessage> getInboxEmails() throws Exception {    
+    public List<EmailMessage> getInboxEmails() throws Exception {
         logger.trace("Retrieving inbox emails");
-        if (true) 
-            return new ArrayList<EmailMessage>();
-        
+
         ItemView view = new ItemView(Integer.MAX_VALUE);
         view.getOrderBy().add(ItemSchema.DateTimeReceived, SortDirection.Ascending);
-        
+
         ExchangeService exchangeService = exchangeServiceFactory.createService();
-//      FindItemsResults<Item> emails = exchangeService.findItems(WellKnownFolderName.Inbox, filter, view);
-        FindItemsResults<Item> emails = exchangeService.findItems(WellKnownFolderName.Drafts, view);
+        FindItemsResults<Item> emails = exchangeService.findItems(WellKnownFolderName.Inbox, filter, view);
 
         if (!emails.getItems().isEmpty()) {
             exchangeService.loadPropertiesForItems(emails, PropertySet.FirstClassProperties);
         }
-        
+
         List<EmailMessage> emailMessages = emails.getItems().stream().map(item -> (EmailMessage) item).collect(Collectors.toList());
         logger.trace("Retrieved {} emails", emailMessages.size());
         return emailMessages;
     }
-    
+
     @Override
     public void deleteEmail(EmailMessage emailMessage) throws Exception {
         ExchangeService exchangeService = exchangeServiceFactory.createService();
-        exchangeService.deleteItem(emailMessage.getId(), DeleteMode.MoveToDeletedItems, null, null);        
+        exchangeService.deleteItem(emailMessage.getId(), DeleteMode.MoveToDeletedItems, null, null);
     }
 
     @Override
@@ -105,7 +101,7 @@ public class EmailServiceImpl implements EmailService {
     private boolean processMessage(MailMessage mailMessage) throws Exception {
         try {
             ExchangeService service = exchangeServiceFactory.createService();
-            
+
             EmailMessage message = new EmailMessage(service);
             message.getToRecipients().add(new EmailAddress(mailMessage.getTo()));
             message.setSubject(mailMessage.getSubject());
@@ -118,12 +114,12 @@ public class EmailServiceImpl implements EmailService {
                 File file = readFileFromURL(url, fileName);
                 message.getAttachments().addFileAttachment(fileName, FileUtils.fileToByteArray(file));
             }
-            
-            message.sendAndSaveCopy(WellKnownFolderName.SentItems);            
+
+            message.sendAndSaveCopy(WellKnownFolderName.SentItems);
         } finally {
             cleanupMessage(mailMessage);
         }
-    
+
         return true;
     }
 
@@ -142,27 +138,26 @@ public class EmailServiceImpl implements EmailService {
 
     private File readFileFromURL(final String url, final String fileName) throws Exception {
         InputStream inputStream = null;
-        
+
         try {
             String path = exchangeProperties.getTempDirectory() + fileName;
 
             // try first to flatten the PDF
             File file = pdfService.flattenPdf(url, path);
-            
+
             // if unsuccessful, simply download the file as is
             if (file == null) {
                 // Open the URL and get metadata
-                inputStream = new URL(url).openStream();            
+                inputStream = new URL(url).openStream();
                 Files.copy(inputStream, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
                 file = new File(path);
             }
 
             return file;
-        } 
-        finally {
+        } finally {
             if (inputStream != null)
                 IOUtils.closeQuietly(inputStream);
         }
     }
-    
+
 }
