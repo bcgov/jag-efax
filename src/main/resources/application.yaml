@@ -17,7 +17,7 @@ exchange:
     #   May be null.  If empty, will default to the OS temp directory as specified by the "java.io.tmpdir" system property.
     tempDirectory: ${EXCHANGE_TEMP_DIR:}
   poller:  
-    enabled: true
+    enabled: false
     # Interval (in milliseconds) of how often to poll the exchange server email inbox  
     interval: 300000    # 5 minutes
     # A search filter to apply to incoming emails. 
@@ -29,7 +29,7 @@ aem: # AEM is a PDF flattening service
   password: ${PDF_PASSWORD}
   
 ws:  
-  faxFormat: IMCEAFAX-%RECIPIENT%+40%FAXNUMBER%@Victoria1.gov.bc.ca
+  faxFormat: "%FAXNUMBER%@squadron.extest.gov.bc.ca"
   
   # Timeout (in milliseconds) when no response has been received by exchange for a sent fax
   #   After this timeout, the fax is considered lost and a failed status is returned to the user.  
@@ -39,7 +39,7 @@ ws:
   faxTimeoutPoll: 60000 # 60 seconds
   
   callback:
-    enabled: true
+    enabled: false
     endpoint: ${CALLBACK_ENDPOINT:}
   
   # These are the SOAP faults returned for various reasons.
