@@ -90,7 +90,7 @@ public class EmailServiceImpl implements EmailService {
             // message) and removed if there is an error.
             SentMessage sentMessage = new SentMessage(mailMessage.getUuid(), mailMessage.getJobId(), new Date());
             sentMessageRepository.save(sentMessage);
-
+            
             processMessage(mailMessage);
         } catch (Exception e) {
             sentMessageRepository.deleteById(mailMessage.getUuid());
@@ -108,13 +108,15 @@ public class EmailServiceImpl implements EmailService {
             message.setBody(MessageBody.getMessageBodyFromText(mailMessage.getBody()));
 
             List<String> attachmentURLs = mailMessage.getAttachments();
-            for (int i = 0; i < attachmentURLs.size(); i++) {
-                String url = attachmentURLs.get(i);
-                String fileName = FileUtils.getTempFilename(mailMessage, i);
-                File file = readFileFromURL(url, fileName);
-                message.getAttachments().addFileAttachment(fileName, FileUtils.fileToByteArray(file));
+            if (attachmentURLs != null) {
+                for (int i = 0; i < attachmentURLs.size(); i++) {
+                    String url = attachmentURLs.get(i);
+                    String fileName = FileUtils.getTempFilename(mailMessage, i);
+                    File file = readFileFromURL(url, fileName);
+                    message.getAttachments().addFileAttachment(fileName, FileUtils.fileToByteArray(file));
+                }
             }
-
+            
             message.sendAndSaveCopy(WellKnownFolderName.SentItems);
         } finally {
             cleanupMessage(mailMessage);
@@ -127,8 +129,10 @@ public class EmailServiceImpl implements EmailService {
     private void cleanupMessage(MailMessage msg) {
         try {
             List<String> attachments = msg.getAttachments();
-            for (int i = 0; i < attachments.size(); i++) {
-                FileUtils.deleteTempFile(msg, i);
+            if (attachments != null) {
+                for (int i = 0; i < attachments.size(); i++) {
+                    FileUtils.deleteTempFile(msg, i);
+                }
             }
         } catch (Exception e) {
             // suppress exception propagation to quietly clean - just log the error.

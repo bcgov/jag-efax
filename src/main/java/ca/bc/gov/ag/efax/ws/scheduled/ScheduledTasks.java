@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +17,15 @@ import ca.bc.gov.ag.efax.ws.exception.FAXTimeoutFault;
 import ca.bc.gov.ag.efax.ws.service.DocumentDistributionService;
 
 @Component
+@ConditionalOnProperty(
+        name = "ws.timeout.enabled",
+        havingValue = "true",
+        matchIfMissing = true)
 public class ScheduledTasks {
 
     private Logger logger = LoggerFactory.getLogger(ScheduledTasks.class);
 
-    @Value(value = "${ws.faxTimeout}")
+    @Value(value = "${ws.timeout.duration}")
     private long faxTimeout;
 
     @Autowired
@@ -29,10 +34,10 @@ public class ScheduledTasks {
     @Autowired
     private DocumentDistributionService documentDistributionService;
 
-    @Scheduled(fixedDelayString = "${ws.faxTimeoutPoll}")
+    @Scheduled(fixedDelayString = "${ws.timeout.pollInterval}")
     public void sentFaxTimeout() {
-        // Every ${ws.faxTimeoutPoll} milliseconds, check if there are any queued SentMessages in redis whose createdTimestamp is older than
-        // ${ws.faxTimeout} milliseconds.
+        // Every ${ws.timeout.pollInterval} milliseconds, check if there are any queued SentMessages in redis whose createdTimestamp is older than
+        // ${ws.timeout.duration} milliseconds.
         // If so, then remove the record from redis and send a callback to the client indicating the message timed out.
         logger.trace("Checking for timed out fax messages");
 

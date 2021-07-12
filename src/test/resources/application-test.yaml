@@ -1,7 +1,7 @@
 spring:
   redis:
     host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6370}
+    port: ${REDIS_PORT:6371}
     password: 
 
 exchange:
@@ -10,4 +10,8 @@ exchange:
     username: ${EXCHANGE_USERNAME:username}
     password: ${EXCHANGE_PASSWORD:password}
   poller:  
+    enabled: false
+
+ws:
+  timeout:
     enabled: false

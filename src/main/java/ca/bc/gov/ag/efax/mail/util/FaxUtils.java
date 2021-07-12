@@ -70,7 +70,8 @@ public class FaxUtils {
             mailMessage.setTo(request.getTransport());
             mailMessage.setSubject(subject.toString());
             mailMessage.setBody(request.getBody());
-            mailMessage.setAttachments(request.getAttachments().getUri());
+            if (request.getAttachments() != null)
+                mailMessage.setAttachments(request.getAttachments().getUri());
             return mailMessage;        
         } catch (Exception e) {
             throw new RuntimeFault(e.getMessage());
