@@ -51,11 +51,22 @@ public class ExchangeProperties {
 		this.saveInSent = saveInSent;
 	}
 
+	/**
+	 * Returns the temporary directory ending with the OS file path separator (ie. \)
+	 */
 	public String getTempDirectory() {
+	    String path = "";
 		if (StringUtils.hasLength(tempDirectory))
-			return tempDirectory;
+		    path = tempDirectory;
 		else
-			return System.getProperty("java.io.tmpdir");
+			path = System.getProperty("java.io.tmpdir");
+		
+        String separator = System.getProperty("file.separator");
+		if (!path.endsWith(separator)) {
+		    path += separator;
+		}
+		
+		return path;
 	}
 
 	public void setTempDirectory(String tempDirectory) {

@@ -37,7 +37,7 @@ public class DocumentDistributionServiceImpl extends WebServiceGatewaySupport im
     
     @Override
     public void receiveRequestToSendMessage(DocumentDistributionRequest request) {
-        if (!RequestChannel.FAX.getName().equals(request.getChannel())) {
+        if (!RequestChannel.FAX.getName().equalsIgnoreCase(request.getChannel())) {
             throw new UnknownChannelFault(request.getJobId(), "Unrecognized channel - only 'fax' is implemented.");
         }
         
