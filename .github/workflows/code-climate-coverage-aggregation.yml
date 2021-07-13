@@ -63,7 +63,12 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-        
+
+      # Java Version
+      - name: What JDK Version am I?
+        run: |
+          java -version
+
       # Where am I?
       - name: Where am I before Maven?
         run: |
