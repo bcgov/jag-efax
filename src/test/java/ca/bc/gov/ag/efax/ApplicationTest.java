@@ -10,19 +10,13 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.core.io.ClassPathResource;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-import ca.bc.gov.ag.efax.mail.repository.SentMessageRepository;
-
 public class ApplicationTest extends BaseTestSuite {
-
-    @Autowired
-    private SentMessageRepository sentMessageRepository;
 	
 	@Test
 	public void contextLoads() {

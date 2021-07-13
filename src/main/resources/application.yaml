@@ -24,6 +24,7 @@ exchange:
     filter: "To:\"IMCEAFAX\"" # all emails that where sent to an address starting with IMCEAFAX (which is the faxformat prefix)
 
 aem: # AEM is a PDF flattening service
+  enabled: false
   endpoint: ${PDF_ENDPOINT}
   username: ${PDF_USERNAME}
   password: ${PDF_PASSWORD}
@@ -31,12 +32,13 @@ aem: # AEM is a PDF flattening service
 ws:  
   faxFormat: "%FAXNUMBER%@squadron.extest.gov.bc.ca"
   
-  # Timeout (in milliseconds) when no response has been received by exchange for a sent fax
-  #   After this timeout, the fax is considered lost and a failed status is returned to the user.  
-  faxTimeout: 1500000    # 25 minutes 
-  
-  # Interval (in milliseconds) when to poll/check for timed-out sent faxes.
-  faxTimeoutPoll: 60000 # 60 seconds
+  timeout:
+    enabled: true   
+    # Timeout (in milliseconds) when no response has been received by exchange for a sent fax
+    #   After this timeout, the fax is considered lost and a failed status is returned to the user.  
+    duration: 1500000    # 25 minutes
+    # Interval (in milliseconds) when to poll/check for timed-out sent faxes.
+    pollInterval: 60000 # 60 seconds
   
   callback:
     enabled: false
