@@ -10,7 +10,7 @@ public interface DocumentDistributionService {
      * 
      * @param request a value object wrapping the fax request to send.
      */
-    public void receiveRequestToSendMessage(DocumentDistributionRequest request);
+    public void initiateRequestToSendMessage(DocumentDistributionRequest request);
 
     /**
      * Sends the specified response object to Justin's SOAP callback, notifying the client of the jobId and status of the attempted fax.
