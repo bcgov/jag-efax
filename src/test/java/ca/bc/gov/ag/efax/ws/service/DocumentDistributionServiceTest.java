@@ -59,7 +59,7 @@ public class DocumentDistributionServiceTest extends BaseTestSuite {
         assertEquals(0, emails.size());
         assertEquals(0, sentMessageRepository.count());       
         
-        documentDistributionService.receiveRequestToSendMessage(createBaseRequest());
+        documentDistributionService.initiateRequestToSendMessage(createBaseRequest());
 
         // assert emails and redis now have 1 record each.
         assertEquals(1, emails.size());
@@ -76,7 +76,7 @@ public class DocumentDistributionServiceTest extends BaseTestSuite {
         DocumentDistributionRequest request = createBaseRequest();
         request.setChannel("email");
         try {
-            documentDistributionService.receiveRequestToSendMessage(request);
+            documentDistributionService.initiateRequestToSendMessage(request);
             fail("Channel must be set to fax and only fax.");
         } catch (UnknownChannelFault e) {
         }
