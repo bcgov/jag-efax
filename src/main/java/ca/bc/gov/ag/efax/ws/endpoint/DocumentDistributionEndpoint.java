@@ -11,13 +11,13 @@ import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionRequest;
 import ca.bc.gov.ag.efax.ws.config.DocumentDistributionProperties;
 import ca.bc.gov.ag.efax.ws.config.WebServiceConfig;
 import ca.bc.gov.ag.efax.ws.exception.CatchAllFault;
 import ca.bc.gov.ag.efax.ws.exception.FAXSendFault;
 import ca.bc.gov.ag.efax.ws.exception.FaxTransformationFault;
 import ca.bc.gov.ag.efax.ws.exception.RuntimeFault;
+import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
 import ca.bc.gov.ag.efax.ws.service.DocumentDistributionService;
 
 @Endpoint

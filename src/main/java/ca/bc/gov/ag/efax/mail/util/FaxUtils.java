@@ -2,10 +2,10 @@ package ca.bc.gov.ag.efax.mail.util;
 
 import java.util.UUID;
 
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionRequest;
 import ca.bc.gov.ag.efax.mail.model.MailMessage;
 import ca.bc.gov.ag.efax.ws.exception.FaxTransformationFault;
 import ca.bc.gov.ag.efax.ws.exception.RuntimeFault;
+import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
 
 public class FaxUtils {
 

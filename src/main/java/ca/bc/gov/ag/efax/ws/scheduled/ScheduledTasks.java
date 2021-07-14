@@ -10,10 +10,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 import ca.bc.gov.ag.efax.mail.model.SentMessage;
 import ca.bc.gov.ag.efax.mail.repository.SentMessageRepository;
 import ca.bc.gov.ag.efax.ws.exception.FAXTimeoutFault;
+import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 import ca.bc.gov.ag.efax.ws.service.DocumentDistributionService;
 
 @Component

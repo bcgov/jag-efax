@@ -130,7 +130,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<packageName>ca.bc.gov.ag.dist.efax.ws.model</packageName>
+					<packageName>ca.bc.gov.ag.efax.ws.model</packageName>
 					<sources>
 						<source>${project.basedir}/src/main/resources/DocumentDistributionMainProcess.xsd</source>
 					</sources>
