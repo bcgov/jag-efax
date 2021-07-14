@@ -146,7 +146,7 @@ public class DocumentDistributionServiceTest extends BaseTestSuite {
         response.setStatusCode("AAA");
         response.setStatusMessage("Some status message");
 
-        // invalid webservice payload (missing namespace)
+        // correct webservice payload, but respond with an exception.
         StringBuffer sb = new StringBuffer();
         sb.append("<ns2:DocumentDistributionMainProcessProcessResponse xmlns:ns2=\"http://ag.gov.bc.ca/DocumentDistributionMainProcess\">");
         sb.append("<ns2:jobId>12345</ns2:jobId>");
