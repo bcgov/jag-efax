@@ -23,4 +23,5 @@ ws:
 logging:
   level:
     root: INFO
+    ca.bc.gov.ag.efax.ws.exception: OFF
     ca.bc.gov.ag.efax.ws.service: OFF
