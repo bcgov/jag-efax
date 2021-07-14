@@ -15,3 +15,12 @@ exchange:
 ws:
   timeout:
     enabled: false
+
+  callback:
+    enabled: true
+    endpoint: ${CALLBACK_ENDPOINT:http://localhost}
+
+logging:
+  level:
+    root: INFO
+    ca.bc.gov.ag.efax.ws.service: OFF
