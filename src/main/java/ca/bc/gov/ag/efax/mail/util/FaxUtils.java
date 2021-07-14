@@ -57,8 +57,6 @@ public class FaxUtils {
     /**
      * Copies and maps request parameters to MailMessage properties. <i>Based on the logic found in
      * DocumentDistributionMainProcess.bpel:prepareFaxMessage and SendFaxService/bpel/transformSendMessage.xsl</i>
-     * 
-     * @throws RuntimeFault if there was an error populating MailMessage.
      */
     public static MailMessage prepareFaxMessage(UUID uuid, DocumentDistributionRequest request) {
         StringBuffer subject = new StringBuffer();
