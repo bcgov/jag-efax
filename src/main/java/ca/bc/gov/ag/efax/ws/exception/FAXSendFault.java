@@ -8,10 +8,6 @@ public class FAXSendFault extends ServiceFaultException {
         super(FaultId.FAX_SEND_FAULT, message);
     }
 
-    public FAXSendFault(String jobId, String message) {
-        super(FaultId.FAX_SEND_FAULT, jobId, message);
-    }
-
     public FAXSendFault(String jobId, Throwable throwable) {
         super(FaultId.FAX_SEND_FAULT, jobId, throwable.toString());
     }
