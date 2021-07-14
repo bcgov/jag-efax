@@ -1,8 +1,8 @@
 package ca.bc.gov.ag.efax.ws.exception;
 
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessFault;
 import ca.bc.gov.ag.efax.ws.config.DocumentDistributionProperties;
 import ca.bc.gov.ag.efax.ws.config.SpringContext;
+import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessFault;
 
 public abstract class ServiceFaultException extends RuntimeException {
 

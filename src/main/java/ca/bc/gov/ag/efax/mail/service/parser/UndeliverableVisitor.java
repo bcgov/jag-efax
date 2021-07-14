@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 import ca.bc.gov.ag.efax.ws.exception.FAXListenFault;
+import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 
 public class UndeliverableVisitor implements EmailVisitor {
 
