@@ -38,7 +38,7 @@ public class DocumentDistributionEndpoint {
 
         try {
 
-            documentDistributionService.receiveRequestToSendMessage(request);
+            documentDistributionService.initiateRequestToSendMessage(request);
 
         } catch (FaxTransformationFault e) { // catch and re-throw with jobId
             throw new FaxTransformationFault(jobId, e);
