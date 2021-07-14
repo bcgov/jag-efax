@@ -9,8 +9,6 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionRequest;
 import ca.bc.gov.ag.efax.mail.model.MailMessage;
 import ca.bc.gov.ag.efax.mail.model.RequestChannel;
 import ca.bc.gov.ag.efax.mail.service.EmailService;
@@ -18,6 +16,8 @@ import ca.bc.gov.ag.efax.mail.util.FaxUtils;
 import ca.bc.gov.ag.efax.mail.util.StringUtils;
 import ca.bc.gov.ag.efax.ws.config.DocumentDistributionProperties;
 import ca.bc.gov.ag.efax.ws.exception.UnknownChannelFault;
+import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
+import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
 
 @Service
 public class DocumentDistributionServiceImpl extends WebServiceGatewaySupport implements DocumentDistributionService {
