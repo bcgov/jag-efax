@@ -146,9 +146,7 @@
 
 				<configuration>
 					<excludes>
-						<exclude>**/*/mappers/*Impl.java</exclude>
-						<exclude>**/*/efilingapi/api/**/*</exclude>
-						<exclude>org/openapitools/configuration/**/*</exclude>
+						<exclude>ca/bc/gov/ag/efax/ws/model/*</exclude>
 					</excludes>
 				</configuration>
 
