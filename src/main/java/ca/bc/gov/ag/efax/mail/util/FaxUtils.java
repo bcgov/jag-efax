@@ -21,7 +21,8 @@ public class FaxUtils {
      * @param faxFormat a pattern Exchange Server expects to see when sending fax messages
      * @param to        the recipient's name in an email
      * @param faxNumber the recipient's fax number in an email
-     * @return a formatted string Exchange Server expects to see to send faxes ie. IMCEAFAX-Somebody+402505555555@domain.com
+     * @return a formatted string Exchange Server expects to see to send faxes ie. IMCEAFAX-Somebody+20at+20The+20Office+402505555555@domain.com
+     * @throws FaxTransformationFault if the faxNumber could not be properly parsed.
      */
     public static String getFaxDestination(String faxFormat, String to, String faxNumber) {
         try {
@@ -53,6 +54,8 @@ public class FaxUtils {
     /**
      * Copies and maps request parameters to MailMessage properties. <i>Based on the logic found in
      * DocumentDistributionMainProcess.bpel:prepareFaxMessage and SendFaxService/bpel/transformSendMessage.xsl</i>
+     * 
+     * @throws RuntimeFault if there was an error populating MailMessage.
      */
     public static MailMessage prepareFaxMessage(UUID uuid, DocumentDistributionRequest request) {
         try {
