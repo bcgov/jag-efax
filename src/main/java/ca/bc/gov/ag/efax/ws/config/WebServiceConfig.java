@@ -78,7 +78,7 @@ public class WebServiceConfig extends WsConfigurerAdapter {
     public Jaxb2Marshaller marshaller() {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
         // this package must match the package in the <generatePackage> specified in pom.xml
-        marshaller.setContextPath("ca.bc.gov.ag.dist.efax.ws.model");
+        marshaller.setContextPath("ca.bc.gov.ag.efax.ws.model");
         return marshaller;
     }
 	

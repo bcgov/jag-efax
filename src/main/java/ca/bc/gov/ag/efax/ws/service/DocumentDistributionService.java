@@ -1,7 +1,7 @@
 package ca.bc.gov.ag.efax.ws.service;
 
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionRequest;
+import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
+import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
 
 public interface DocumentDistributionService {
 

@@ -16,11 +16,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionRequest;
-import ca.bc.gov.ag.dist.efax.ws.model.DocumentDistributionRequest.Attachments;
 import ca.bc.gov.ag.efax.BaseTestSuite;
 import ca.bc.gov.ag.efax.mail.util.DateUtil;
 import ca.bc.gov.ag.efax.ws.exception.UnknownChannelFault;
+import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
+import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest.Attachments;
 import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
 
 public class DocumentDistributionServiceTest extends BaseTestSuite {
