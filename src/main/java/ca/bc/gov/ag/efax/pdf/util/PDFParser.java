@@ -6,12 +6,16 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.adobe.pdf.PDFDocument;
 import com.adobe.pdf.PDFFactory;
 
 
 public class PDFParser {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    
     private final static String MIME_TYPE = "application/pdf";
     private PDFDocument pdf;
     private boolean parsed = false;
@@ -28,7 +32,7 @@ public class PDFParser {
                 parsed = true;
             }
         } catch (Exception e) {
-        	e.printStackTrace();
+            logger.error(e.getMessage(), e);
         } finally {
             if (inputStream != null) {
                 IOUtils.closeQuietly(inputStream);
