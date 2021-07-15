@@ -38,6 +38,7 @@ public class EmailServiceTest extends BaseTestSuite {
         EmailMessage email1 = new EmailMessage(exchangeService);
         EmailMessage email2 = new EmailMessage(exchangeService);
 
+        // creates a UUID in the emailMessage
         exchangeService.createItem(email1, null, null, null);
         exchangeService.createItem(email2, null, null, null);
 
@@ -49,6 +50,7 @@ public class EmailServiceTest extends BaseTestSuite {
         ReflectionTestUtils.setField(items, "items", emails);
         when(exchangeService.findItems(eq(WellKnownFolderName.Inbox), anyString(), any())).thenReturn(items);
         
+        // Stub out Exchange Server to delete an email when deleteItem is called.
         doAnswer(invocation -> {
             ItemId itemId = invocation.getArgument(0);
             for (Iterator<EmailMessage> iter = emails.iterator(); iter.hasNext();) {
