@@ -21,6 +21,7 @@ import ca.bc.gov.ag.efax.mail.repository.SentMessageRepository;
 import ca.bc.gov.ag.efax.mail.service.ExchangeServiceFactory;
 import ca.bc.gov.ag.efax.pdf.service.PdfService;
 import ca.bc.gov.ag.efax.redis.TestRedisConfiguration;
+import ca.bc.gov.ag.outputservice.OutputServiceUtils;
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.enumeration.misc.ExchangeVersion;
 import microsoft.exchange.webservices.data.core.response.CreateAttachmentResponse;
@@ -50,8 +51,11 @@ public abstract class BaseTestSuite {
     @MockBean
     private ExchangeServiceFactory exchangeServiceFactory;
 
-    @MockBean
+    @Autowired
     protected PdfService pdfService;
+    
+    @MockBean
+    protected OutputServiceUtils outputServiceUtils;
 
     protected MockWebServiceClient mockClient;
     
