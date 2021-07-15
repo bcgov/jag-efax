@@ -58,8 +58,6 @@ public class DocumentDistributionServiceTest extends BaseTestSuite {
         when(pdfService.flattenPdf(any(), any())).thenReturn(null);
 
         mockServer = MockWebServiceServer.createServer((WebServiceGatewaySupport) documentDistributionService);
-        
-        sentMessageRepository.deleteAll();
     }
 
     @Test
