@@ -58,6 +58,8 @@ public class DocumentDistributionServiceTest extends BaseTestSuite {
         when(pdfService.flattenPdf(any(), any())).thenReturn(null);
 
         mockServer = MockWebServiceServer.createServer((WebServiceGatewaySupport) documentDistributionService);
+        
+        sentMessageRepository.deleteAll();
     }
 
     @Test
@@ -100,7 +102,7 @@ public class DocumentDistributionServiceTest extends BaseTestSuite {
     public void testInitiateFaxSendFault() throws Exception {
         // Attempt to send a message to a broken or offline exchange server - should result in a FAXSendFault
 
-        // exchangeService - add the email to the List<EmailMessage> when "sending" an email.
+        // pretend exchangeServer is offline
         doAnswer(invocation -> {
             throw new FAXSendFault("Offline");
         }).when(exchangeService).sendItem(any(), any());
@@ -146,7 +148,7 @@ public class DocumentDistributionServiceTest extends BaseTestSuite {
         response.setStatusCode("AAA");
         response.setStatusMessage("Some status message");
 
-        // invalid webservice payload (missing namespace)
+        // correct webservice payload, but respond with an exception.
         StringBuffer sb = new StringBuffer();
         sb.append("<ns2:DocumentDistributionMainProcessProcessResponse xmlns:ns2=\"http://ag.gov.bc.ca/DocumentDistributionMainProcess\">");
         sb.append("<ns2:jobId>12345</ns2:jobId>");

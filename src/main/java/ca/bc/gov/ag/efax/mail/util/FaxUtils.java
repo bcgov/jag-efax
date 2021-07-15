@@ -2,9 +2,10 @@ package ca.bc.gov.ag.efax.mail.util;
 
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ca.bc.gov.ag.efax.mail.model.MailMessage;
 import ca.bc.gov.ag.efax.ws.exception.FaxTransformationFault;
-import ca.bc.gov.ag.efax.ws.exception.RuntimeFault;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
 
 public class FaxUtils {
@@ -41,44 +42,40 @@ public class FaxUtils {
 
             // Normalize fax number - strip out all non-digits
             String newFaxNumber = faxNumber.replaceAll("\\D", "");
+            if (StringUtils.isEmpty(newFaxNumber))
+                throw new FaxTransformationFault("No digits in fax number.");
 
             String recipient = faxFormat.replace(PLACEHOLDER_RECIPIENT, newTo);
             recipient = recipient.replace(PLACEHOLDER_FAXNUMBER, newFaxNumber);
 
             return recipient;
         } catch (Exception e) {
-            throw new FaxTransformationFault("Could not format fax destination");
+            throw new FaxTransformationFault(e.getMessage());
         }
     }
 
     /**
      * Copies and maps request parameters to MailMessage properties. <i>Based on the logic found in
      * DocumentDistributionMainProcess.bpel:prepareFaxMessage and SendFaxService/bpel/transformSendMessage.xsl</i>
-     * 
-     * @throws RuntimeFault if there was an error populating MailMessage.
      */
     public static MailMessage prepareFaxMessage(UUID uuid, DocumentDistributionRequest request) {
-        try {
-            StringBuffer subject = new StringBuffer();
-            subject.append("<jobId>");
-            subject.append(request.getJobId());
-            subject.append("</jobId>");
-            subject.append("<uuid>");
-            subject.append(uuid.toString());
-            subject.append("</uuid>");
-    
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.setUuid(uuid.toString());
-            mailMessage.setJobId(request.getJobId());
-            mailMessage.setTo(request.getTransport());
-            mailMessage.setSubject(subject.toString());
-            mailMessage.setBody(request.getBody());
-            if (request.getAttachments() != null)
-                mailMessage.setAttachments(request.getAttachments().getUri());
-            return mailMessage;        
-        } catch (Exception e) {
-            throw new RuntimeFault(e.getMessage());
-        }
+        StringBuffer subject = new StringBuffer();
+        subject.append("<jobId>");
+        subject.append(request.getJobId());
+        subject.append("</jobId>");
+        subject.append("<uuid>");
+        subject.append(uuid.toString());
+        subject.append("</uuid>");
+
+        MailMessage mailMessage = new MailMessage();
+        mailMessage.setUuid(uuid.toString());
+        mailMessage.setJobId(request.getJobId());
+        mailMessage.setTo(request.getTransport());
+        mailMessage.setSubject(subject.toString());
+        mailMessage.setBody(request.getBody());
+        if (request.getAttachments() != null)
+            mailMessage.setAttachments(request.getAttachments().getUri());
+        return mailMessage;
     }
 
 }
