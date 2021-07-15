@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.event.annotation.AfterTestExecution;
+import org.springframework.ws.test.server.MockWebServiceClient;
 
 import ca.bc.gov.ag.efax.mail.repository.SentMessageRepository;
 import ca.bc.gov.ag.efax.mail.service.ExchangeServiceFactory;
@@ -51,12 +52,19 @@ public abstract class BaseTestSuite {
 
     @MockBean
     protected PdfService pdfService;
+
+    protected MockWebServiceClient mockClient;
     
     @BeforeEach
     protected void beforeEach() throws Exception {
         if (!redisServer.isActive()) {
-            logger.info("Redis is starting...");
-            redisServer.start();
+            try {
+                logger.info("Redis is starting...");
+                redisServer.start();
+            }
+            catch (Exception e) {
+                // already running.
+            }
         }
         
         when(exchangeServiceFactory.createService()).thenReturn(exchangeService);
@@ -71,6 +79,9 @@ public abstract class BaseTestSuite {
             emailMessage.getPropertyBag().getProperties().put(emailMessage.getIdPropertyDefinition(), new ItemId(UUID.randomUUID().toString()));
             return null;
         }).when(exchangeService).createItem(any(), any(), any(), any());
+
+        // clearout redis from any previous test data
+        sentMessageRepository.deleteAll();
     }
 
     @AfterTestExecution
