@@ -65,7 +65,7 @@ public class EmailParser {
     }
 
     private boolean hasStatus(DocumentDistributionMainProcessProcessResponse response) {
-        return !StringUtils.isEmpty(response.getJobId());
+        return !StringUtils.isEmpty(response.getStatusCode());
     }
 
 }
