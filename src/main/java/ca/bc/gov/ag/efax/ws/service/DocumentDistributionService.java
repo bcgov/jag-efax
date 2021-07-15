@@ -3,7 +3,6 @@ package ca.bc.gov.ag.efax.ws.service;
 import ca.bc.gov.ag.efax.mail.model.SentMessage;
 import ca.bc.gov.ag.efax.ws.exception.FAXSendFault;
 import ca.bc.gov.ag.efax.ws.exception.FaxTransformationFault;
-import ca.bc.gov.ag.efax.ws.exception.RuntimeFault;
 import ca.bc.gov.ag.efax.ws.exception.UnknownChannelFault;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
@@ -25,7 +24,6 @@ public interface DocumentDistributionService {
      * @param request a value object wrapping the fax request to send.
      * @throws UnknownChannelFault if the request channel is not "fax" (only fax is implemented)
      * @throws FaxTransformationFault if the faxNumber (DocumentDistributionRequest#setTransport(String value)) could not be processed.
-     * @throws RuntimeFault if there was an error generating a message to send to MS Exchange
      * @throws FAXSendFault if there was an error using MS Exchange
      */
     public void initiateRequestToSendMessage(DocumentDistributionRequest request);

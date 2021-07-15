@@ -16,7 +16,6 @@ import ca.bc.gov.ag.efax.ws.config.WebServiceConfig;
 import ca.bc.gov.ag.efax.ws.exception.CatchAllFault;
 import ca.bc.gov.ag.efax.ws.exception.FAXSendFault;
 import ca.bc.gov.ag.efax.ws.exception.FaxTransformationFault;
-import ca.bc.gov.ag.efax.ws.exception.RuntimeFault;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
 import ca.bc.gov.ag.efax.ws.service.DocumentDistributionService;
 
@@ -42,8 +41,6 @@ public class DocumentDistributionEndpoint {
 
         } catch (FaxTransformationFault e) { // catch and re-throw with jobId
             throw new FaxTransformationFault(jobId, e);
-        } catch (RuntimeFault e) {
-            throw new RuntimeFault(jobId, e);
         } catch (FAXSendFault e) {
             throw new FAXSendFault(jobId, e);
         } catch (Exception e) {
