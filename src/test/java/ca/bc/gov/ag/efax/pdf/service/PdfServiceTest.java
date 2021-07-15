@@ -10,18 +10,13 @@ import java.net.URL;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import ca.bc.gov.ag.efax.BaseTestSuite;
-import ca.bc.gov.ag.outputservice.OutputServiceUtils;
 
 public class PdfServiceTest extends BaseTestSuite {
-
-    @Mock
-    private OutputServiceUtils outputServiceUtils;
     
-    @InjectMocks
+    @Autowired
     private PdfService pdfService;
 
     @BeforeEach
