@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
 import static org.springframework.ws.test.client.RequestMatchers.payload;
 import static org.springframework.ws.test.client.ResponseCreators.withException;
 
@@ -53,9 +52,6 @@ public class DocumentDistributionServiceTest extends BaseTestSuite {
             emails.add(emailMessage);
             return null;
         }).when(exchangeService).sendItem(any(), any());
-
-        // disable flattening service, return null
-        when(pdfService.flattenPdf(any(), any())).thenReturn(null);
 
         mockServer = MockWebServiceServer.createServer((WebServiceGatewaySupport) documentDistributionService);
     }
