@@ -36,7 +36,7 @@ public class DocumentDistributionEndpointTest extends BaseTestSuite {
     @Autowired
     private ApplicationContext applicationContext;
 
-    private MockWebServiceClient mockClient;
+    protected MockWebServiceClient mockClient;
     private List<EmailMessage> emails;
 
     @BeforeEach
@@ -60,7 +60,7 @@ public class DocumentDistributionEndpointTest extends BaseTestSuite {
     }
 
     @Test
-    void testInitiateEndpoint() throws Exception {        
+    public void testInitiateEndpoint() throws Exception {        
         DocumentDistributionRequest request = getBaseRequest();
         
         assertEquals(0, emails.size());
@@ -71,7 +71,7 @@ public class DocumentDistributionEndpointTest extends BaseTestSuite {
     }
 
     @Test
-    void testInitiateEndpoint_FaxTransformationFault() throws Exception {        
+    public void testInitiateEndpoint_FaxTransformationFault() throws Exception {        
         DocumentDistributionRequest request = getBaseRequest();
         request.setTransport("");
         
@@ -83,7 +83,7 @@ public class DocumentDistributionEndpointTest extends BaseTestSuite {
     }
 
     @Test
-    void testInitiateEndpoint_FAXSendFault() throws Exception {    
+    public void testInitiateEndpoint_FAXSendFault() throws Exception {    
         // pretend exchangeServer is offline
         doAnswer(invocation -> {
             throw new FAXSendFault("Offline");

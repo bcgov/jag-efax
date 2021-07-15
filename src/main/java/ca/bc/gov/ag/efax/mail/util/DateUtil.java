@@ -1,5 +1,6 @@
 package ca.bc.gov.ag.efax.mail.util;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -20,6 +21,17 @@ public class DateUtil {
         GregorianCalendar gc = new GregorianCalendar();
         gc.setTime(date);
         return DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
+    }
+
+    /** Returns a new date with the specified number of minutes added or subtracted (if negative). */
+    public static Date addMinutes(Date date, int amount) {
+        if (date == null) {
+            return null;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, amount);
+        return calendar.getTime();
     }
 
 }
