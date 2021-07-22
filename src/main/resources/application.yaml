@@ -79,7 +79,7 @@ ws:
 
 logging:
   level:
-    root: INFO
-    ca.bc.gov.ag.efax: TRACE
-    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    root: ${LOGLEVEL_ROOT:INFO}
+    ca.bc.gov.ag.efax: ${LOGLEVEL_EFAX:TRACE}
+    org.springframework.web.servlet.DispatcherServlet: ${LOGLEVEL_DISPATCHERSERVLET:DEBUG}
 
