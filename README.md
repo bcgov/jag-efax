@@ -7,7 +7,7 @@ GitHub repository for the BPEL eFax Replacement project
 | ------- | ------------ |
 | Presentation | none |
 | Business Logic | Java |
-| Web Server | SringBoot, Microsoft Exchange |
+| Web Server | SpringBoot, Microsoft Exchange |
 
 ## Deployment (Local Development)
 
@@ -39,7 +39,6 @@ From Docker or OpenShift, these environment variables can be used to configure t
 | REDIS_HOST | Required. Hostname of a Redis instance to use as a queuing service. |
 | REDIS_PORT | Required. Port of the Redis instance. |
 | REDIS_PASSWORD | Required. Password to use to log into the Redis instance.. |
-
 
 
 
