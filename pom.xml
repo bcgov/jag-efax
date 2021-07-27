@@ -113,6 +113,23 @@
 				</dependency>
 			</dependencies>
 		</profile>
+        <profile>
+            <id>splunk</id>
+            <repositories>
+                <repository>
+                    <id>splunk-artifactory</id>
+                    <name>Splunk Releases</name>
+                    <url>https://splunk.jfrog.io/splunk/ext-releases-local</url>
+                </repository>
+            </repositories>
+            <dependencies>
+                <dependency>
+                    <groupId>com.splunk.logging</groupId>
+                    <artifactId>splunk-library-javalogging</artifactId>
+                    <version>1.8.0</version>
+                </dependency>
+            </dependencies>
+        </profile>
 	</profiles>
 
 	<build>
