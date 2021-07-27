@@ -8,6 +8,7 @@ GitHub repository for the BPEL eFax Replacement project
 | Presentation | none |
 | Business Logic | Java |
 | Web Server | SpringBoot, Microsoft Exchange |
+| Message Queue | Redis |
 
 ## Deployment (Local Development)
 
