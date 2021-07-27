@@ -26,19 +26,19 @@ GitHub repository for the BPEL eFax Replacement project
 
 From Docker or OpenShift, these environment variables can be used to configure the Webservice.
 
-| Env Variable | Description |
-| --- | --- |
-| EXCHANGE_ENDPOINT | Required. URL to the Microsoft Exchange Server instance. |
-| EXCHANGE_USERNAME | Required. Username to use to log into Microsoft Exchange Server. |
-| EXCHANGE_PASSWORD | Required. Password to use to log into Microsoft Exchange Server. |
-| EXCHANGE_SAVE_IN_SENT | Optional. Set to true if emails/faxes should be saved in the Exchange SentItems folder. |
-| CALLBACK_ENDPOINT | Required. Callback to the Justin SOAP callback service. |
-| PDF_ENDPOINT | Required. URL to a PDF flattening service (used on PDFs with a version > 1.5) |
-| PDF_USERNAME | Required. Username to use to log into the PDF flattening service. |
-| PDF_PASSWORD | Required. Password to use to log into the PDF flattening service. |
-| REDIS_HOST | Required. Hostname of a Redis instance to use as a queuing service. |
-| REDIS_PORT | Required. Port of the Redis instance. |
-| REDIS_PASSWORD | Required. Password to use to log into the Redis instance.. |
+| Env Variable | Required | Description |
+| --- | --- | --- |
+| EXCHANGE_ENDPOINT | Y | URL to the Microsoft Exchange Server instance. |
+| EXCHANGE_USERNAME | Y |  Username to use to log into Microsoft Exchange Server. |
+| EXCHANGE_PASSWORD | Y | Password to use to log into Microsoft Exchange Server. |
+| EXCHANGE_SAVE_IN_SENT | N | Set to true if emails/faxes should be saved in the Exchange SentItems folder. |
+| CALLBACK_ENDPOINT | Y | Callback to the Justin SOAP callback service. |
+| PDF_ENDPOINT | Y | URL to a PDF flattening service (used on PDFs with a version > 1.5) |
+| PDF_USERNAME | Y | Username to use to log into the PDF flattening service. |
+| PDF_PASSWORD | Y | Password to use to log into the PDF flattening service. |
+| REDIS_HOST | Y | Hostname of a Redis instance to use as a queuing service. |
+| REDIS_PORT | Y | Port of the Redis instance. |
+| REDIS_PASSWORD | Y | Password to use to log into the Redis instance.. |
 
 
 
