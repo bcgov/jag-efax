@@ -117,7 +117,12 @@ public class EmailServiceImpl implements EmailService {
                 }
             }
             
-            message.sendAndSaveCopy(WellKnownFolderName.SentItems);
+            if (exchangeProperties.getSaveInSent()) {
+                message.sendAndSaveCopy(WellKnownFolderName.SentItems);
+            }
+            else {
+                message.send();
+            }
         } finally {
             cleanupMessage(mailMessage);
         }
