@@ -36,9 +36,15 @@ jobs:
       - name: Build the Docker image
         run: |          
           
+          echo "MAVEN_PROJECT_VERSION=${{ mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | sed -n -e '/^\[.*\]/ !{ /^[0-9]/ { p; q } }' }}" >> $GITHUB_ENV 
+    
+          echo '-------------------------------------------'
+          echo $MAVEN_PROJECT_VERSION
+          echo '-------------------------------------------'
+    
           docker-compose build webservice
           
           docker image ls
           
-          docker tag jag-efax_webservice ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:latest
-          docker push ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:latest
+          docker tag jag-efax_webservice ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:latest-$MAVEN_PROJECT_VERSION
+          docker push ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:latest-$MAVEN_PROJECT_VERSION
