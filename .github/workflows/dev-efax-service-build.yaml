@@ -35,19 +35,12 @@ jobs:
             
       - name: Build the Docker image
         run: |  
-          echo "WHERE AM I?"
-          echo "--------------------------"
-          pwd
-          echo "--------------------------"
-          ls -al
-          echo "--------------------------"
 
-              
           _version=$(.github/helpers/latest_java_version.sh)
           echo "LATEST_VERSION=$_version" >> $GITHUB_ENV
 
           echo "--------------------------"
-          echo $LATEST_VERSION
+          echo env.LATEST_VERSION
           echo "--------------------------"
     
           docker-compose build webservice
