@@ -36,7 +36,7 @@ jobs:
       - name: Build the Docker image
         run: |          
           
-          mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version
+          mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | sed -n -e '/^\[.*\]/ !{ /^[0-9]/ { p; q } }'
     
           docker-compose build webservice
           
