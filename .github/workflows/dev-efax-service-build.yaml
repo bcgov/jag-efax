@@ -34,9 +34,15 @@ jobs:
             ${{ runner.os }}-maven-
             
       - name: Build the Docker image
-        env: 
-          JAVA_PROJECT_VERSION: blank
-        run: |          
+        run: |  
+          echo "WHERE AM I?"
+          echo "--------------------------"
+          pwd
+          echo "--------------------------"
+          ls
+          echo "--------------------------"
+
+              
           _version=$(.github/helpers/latest_java_version.sh)
           echo "LATEST_VERSION=$_version" >> $GITHUB_ENV
 
