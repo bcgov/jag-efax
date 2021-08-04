@@ -43,12 +43,5 @@ jobs:
           
           docker image ls
           
-          docker tag jag-efax_webservice ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:latest-$MAVEN_PROJECT_VERSION
-          docker push ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:latest-$MAVEN_PROJECT_VERSION
-          
-      - name: Check Version
-        if: env.LATEST_VERSION == '0.0.1-SNAPSHOT'
-        run: |  
-
-          echo "Version IS 0.0.1-SNAPSHOT'
-          
+          docker tag jag-efax_webservice ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:${{ env.LATEST_VERSION }}
+          docker push ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:${{ env.LATEST_VERSION }}    
