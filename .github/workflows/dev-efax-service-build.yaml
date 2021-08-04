@@ -33,15 +33,24 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
             
-      - name: Build the Docker image
+      - name: Get Java Project Version 
         run: |  
-
           _version=$(.github/helpers/latest_java_version.sh)
           echo "LATEST_VERSION=$_version" >> $GITHUB_ENV
-    
+            
+      - name: Build the Docker image
+        run: |            
           docker-compose build webservice
+
+      - name: Check Version
+        if: env.LATEST_VERSION == '0.0.1-SNAPSHOT'
+        run: |  
+          echo "Version IS 0.0.1-SNAPSHOT"
           
-          docker image ls
-          
+      - name: Docker Tag Version
+        run: |  
           docker tag jag-efax_webservice ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:${{ env.LATEST_VERSION }}
+          
+      - name: Docker Push Version
+        run: |  
           docker push ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:${{ env.LATEST_VERSION }}    
