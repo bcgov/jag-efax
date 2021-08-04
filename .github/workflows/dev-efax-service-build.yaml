@@ -35,9 +35,9 @@ jobs:
             
       - name: Build the Docker image
         env: 
-          JAVA_PROJECT_VERSION: $(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | sed -n -e '/^\[.*\]/ !{ /^[0-9]/ { p; q } }')
+          JAVA_PROJECT_VERSION: blank
         run: |          
-          
+          echo "JAVA_PROJECT_VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | sed -n -e '/^\[.*\]/ !{ /^[0-9]/ { p; q } }')" >> GITHUB_ENV
           echo "-----------------------------------"
           echo $JAVA_PROJECT_VERSION
           echo "-----------------------------------"
