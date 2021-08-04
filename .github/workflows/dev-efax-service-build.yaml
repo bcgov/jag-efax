@@ -38,10 +38,6 @@ jobs:
 
           _version=$(.github/helpers/latest_java_version.sh)
           echo "LATEST_VERSION=$_version" >> $GITHUB_ENV
-
-          echo "--------------------------"
-          echo env.LATEST_VERSION
-          echo "--------------------------"
     
           docker-compose build webservice
           
@@ -49,3 +45,10 @@ jobs:
           
           docker tag jag-efax_webservice ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:latest-$MAVEN_PROJECT_VERSION
           docker push ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:latest-$MAVEN_PROJECT_VERSION
+          
+      - name: Check Version
+        if: env.LATEST_VERSION != '0.0.1-SNAPSHOT'
+        run: |  
+
+          echo "Version not 0.0.1-SNAPSHOT'
+          
