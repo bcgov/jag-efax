@@ -1,0 +1,122 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: ${APPNAME}
+labels:
+  template: ${APPNAME}-template
+objects:
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    name: ${APPNAME}
+    namespace: ${LICENSE_PLATE}-${ENVIRONMENT}
+    labels:
+      app: ${APPNAME}
+      app.kubernetes.io/component: ${APPNAME}
+      app.kubernetes.io/instance: ${APPNAME}
+      app.kubernetes.io/name: ${APPNAME}
+      app.kubernetes.io/part-of: ${APPNAME}-app
+      app.openshift.io/runtime: spring-boot
+      app.openshift.io/runtime-namespace: ${LICENSE_PLATE}-tools
+      app.openshift.io/runtime-version: latest
+  spec:
+    strategy:
+      type: Rolling
+      rollingParams:
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 600
+        maxUnavailable: 25%
+        maxSurge: 25%
+      resources: {}
+      activeDeadlineSeconds: 21600
+    triggers:
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${APPNAME}
+          from:
+            kind: ImageStreamTag
+            namespace: ${LICENSE_PLATE}-tools
+            name: 'jag-efax-webservice:latest'
+      - type: ConfigChange
+    replicas: 1
+    revisionHistoryLimit: 10
+    test: false
+    selector:
+      app: ${APPNAME}
+      deploymentconfig: ${APPNAME}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: ${APPNAME}
+          deploymentconfig: ${APPNAME}
+        annotations:
+          openshift.io/generated-by: OpenShiftWebConsole
+      spec:
+        containers:
+          - resources: {}
+            readinessProbe:
+              httpGet:
+                path: /actuator/health
+                port: 8080
+                scheme: HTTP
+              initialDelaySeconds: 60
+              timeoutSeconds: 10
+              periodSeconds: 10
+              successThreshold: 1
+              failureThreshold: 3
+            terminationMessagePath: /dev/termination-log
+            name: ${APPNAME}
+            livenessProbe:
+              httpGet:
+                path: /actuator/health
+                port: 8080
+                scheme: HTTP
+              initialDelaySeconds: 70
+              timeoutSeconds: 10
+              periodSeconds: 10
+              successThreshold: 1
+              failureThreshold: 3
+            ports:
+              - containerPort: 8080
+                protocol: TCP
+            imagePullPolicy: IfNotPresent
+            terminationMessagePolicy: File
+            envFrom:
+              - secretRef:
+                  name: bpel-exchange
+              - secretRef:
+                  name: bpel-pdf
+              - secretRef:
+                  name: bpel-redis
+              - secretRef:
+                  name: bpel-callback
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/ddea46-tools/jag-efax-webservice@sha256:19e84808c9778ef4b0d119958b04b5cc73ec77b0d75f2985515a9fd86684dc46
+        restartPolicy: Always
+        terminationGracePeriodSeconds: 30
+        dnsPolicy: ClusterFirst
+        securityContext: {}
+        schedulerName: default-scheduler
+parameters:
+- description: Application Name
+  displayName: AppName
+  name: APPNAME
+  required: true
+  value: jag-efax-webservice
+- description: License Plate
+  displayName: License Plate
+  name: LICENSE_PLATE
+  required: true
+  value: ddea46
+- description: Environment
+  displayName: Environment
+  name: ENVIRONMENT
+  required: true
+  value: dev
