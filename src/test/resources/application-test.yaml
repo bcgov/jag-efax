@@ -13,6 +13,8 @@ exchange:
     enabled: false
 
 ws:
+  faxFormat: ${FAX_FORMAT:%FAXNUMBER%@somewhere.com}
+  
   timeout:
     enabled: false
 
