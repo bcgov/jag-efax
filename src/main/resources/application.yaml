@@ -17,11 +17,11 @@ exchange:
     #   May be null.  If empty, will default to the OS temp directory as specified by the "java.io.tmpdir" system property.
     tempDirectory: ${EXCHANGE_TEMP_DIR:}
   poller:  
-    enabled: false
+    enabled: true
     # Interval (in milliseconds) of how often to poll the exchange server email inbox  
     interval: 300000    # 5 minutes
     # A search filter to apply to incoming emails. 
-    filter: "To:\"IMCEAFAX\"" # all emails that where sent to an address starting with IMCEAFAX (which is the faxformat prefix)
+    filter: "To:" # filter emails in the INBOX by this search filter
 
 aem: # AEM is a PDF flattening service
   enabled: false
@@ -30,7 +30,7 @@ aem: # AEM is a PDF flattening service
   password: ${PDF_PASSWORD}
   
 ws:  
-  faxFormat: "%FAXNUMBER%@squadron.extest.gov.bc.ca"
+  faxFormat: ${FAX_FORMAT:}
   
   timeout:
     enabled: true   
