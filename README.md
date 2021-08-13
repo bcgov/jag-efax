@@ -33,6 +33,7 @@ From Docker or OpenShift, these environment variables can be used to configure t
 | EXCHANGE_USERNAME | Y |  Username to use to log into Microsoft Exchange Server. |
 | EXCHANGE_PASSWORD | Y | Password to use to log into Microsoft Exchange Server. |
 | EXCHANGE_SAVE_IN_SENT | N | Set to true if emails/faxes should be saved in the Exchange SentItems folder. |
+| FAX_FORMAT | Y | The matching recipient format used by MS Exchange when converting emails to faxes. |
 | CALLBACK_ENDPOINT | Y | Callback to the Justin SOAP callback service. |
 | PDF_ENDPOINT | Y | URL to a PDF flattening service (used on PDFs with a version > 1.5) |
 | PDF_USERNAME | Y | Username to use to log into the PDF flattening service. |
