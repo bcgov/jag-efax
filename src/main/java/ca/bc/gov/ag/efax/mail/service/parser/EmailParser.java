@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ca.bc.gov.ag.efax.mail.model.DocumentDistributionMainProcessProcessResponseDecorator;
 import ca.bc.gov.ag.efax.ws.exception.FAXSendFault;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
@@ -30,8 +31,8 @@ public class EmailParser {
      * @return
      * @throws Exception
      */
-    public DocumentDistributionMainProcessProcessResponse parse(EmailMessage emailMessage) throws Exception {
-        DocumentDistributionMainProcessProcessResponse response = new DocumentDistributionMainProcessProcessResponse();
+    public DocumentDistributionMainProcessProcessResponseDecorator parse(EmailMessage emailMessage) throws Exception {
+        DocumentDistributionMainProcessProcessResponseDecorator response = new DocumentDistributionMainProcessProcessResponseDecorator();
 
         String subject = emailMessage.getSubject();
         String body = MessageBody.getStringFromMessageBody(emailMessage.getBody());
@@ -44,8 +45,8 @@ public class EmailParser {
         }
 
         if (!hasJobId(response)) {
-            // Could not parse email. Log the email as an error rather than throwing an exception so control can flow to the next email 
-            // which may not have an issue.
+            // Could not parse email (could not find jobId). Log the email as an error rather than throwing an exception so 
+            // control can flow to the next email which may not have an issue.
             logger.error("Unrecognized email, \nsubject: [{}]", subject);
         }
 

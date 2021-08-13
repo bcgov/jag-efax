@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 
 import ca.bc.gov.ag.efax.BaseTestSuite;
+import ca.bc.gov.ag.efax.mail.model.DocumentDistributionMainProcessProcessResponseDecorator;
 import ca.bc.gov.ag.efax.ws.exception.FAXSendFault;
-import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 
 public class UndeliverableVisitorTest extends BaseTestSuite {
 
@@ -15,7 +15,7 @@ public class UndeliverableVisitorTest extends BaseTestSuite {
     void testApply_Success() throws Exception {
         UndeliverableVisitor visitor = new UndeliverableVisitor();
         String subject = "Success: <jobId>1234</jobId><uuid>aabb</uuid>";
-        DocumentDistributionMainProcessProcessResponse response = new DocumentDistributionMainProcessProcessResponse();
+        DocumentDistributionMainProcessProcessResponseDecorator response = new DocumentDistributionMainProcessProcessResponseDecorator();
         visitor.apply(subject, "", response);
 
         // this Undeliverable matcher should not match
@@ -28,10 +28,10 @@ public class UndeliverableVisitorTest extends BaseTestSuite {
     void testApply_Undeliverable() throws Exception {
         UndeliverableVisitor visitor = new UndeliverableVisitor();
         String subject = "Undeliverable: <jobId>1234</jobId><uuid>aabb</uuid>";
-        DocumentDistributionMainProcessProcessResponse response = new DocumentDistributionMainProcessProcessResponse();
+        DocumentDistributionMainProcessProcessResponseDecorator response = new DocumentDistributionMainProcessProcessResponseDecorator();
         visitor.apply(subject, "", response);
 
-        // should match FAXListenFault
+        // should match FAXSendFault
         FAXSendFault fault = new FAXSendFault();
         assertEquals("1234", response.getJobId()); // should have extracted the jobId from the subject
         assertEquals(fault.getFaultCode(), response.getStatusCode());
@@ -42,7 +42,7 @@ public class UndeliverableVisitorTest extends BaseTestSuite {
     void testApply_Mismatch() throws Exception {
         UndeliverableVisitor visitor = new UndeliverableVisitor();
         String subject = "Undeliverable: <jobId>1234</jobId>";
-        DocumentDistributionMainProcessProcessResponse response = new DocumentDistributionMainProcessProcessResponse();
+        DocumentDistributionMainProcessProcessResponseDecorator response = new DocumentDistributionMainProcessProcessResponseDecorator();
         visitor.apply(subject, "", response);
 
         // should not match regex
