@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ca.bc.gov.ag.efax.ws.exception.FAXListenFault;
+import ca.bc.gov.ag.efax.ws.exception.FAXSendFault;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
 import microsoft.exchange.webservices.data.property.complex.MessageBody;
@@ -49,10 +49,10 @@ public class EmailParser {
             logger.error("Unrecognized email, \nsubject: [{}]", subject);
         }
 
-        // Default error to FAXListenFault if a jobId was found, but could not parse a status.
+        // Default error to FAXSendFault if a jobId was found, but could not parse a status.
         else if (!hasStatus(response)) {
             logger.error("Unrecognized email, could not find status, \nsubject: [{}]", subject);
-            FAXListenFault faxListenFault = new FAXListenFault();
+            FAXSendFault faxListenFault = new FAXSendFault();
             response.setStatusCode(faxListenFault.getFaultCode());
             response.setStatusMessage(faxListenFault.getFaultMessage());
         }
