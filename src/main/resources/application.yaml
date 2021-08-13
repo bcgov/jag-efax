@@ -20,8 +20,6 @@ exchange:
     enabled: true
     # Interval (in milliseconds) of how often to poll the exchange server email inbox  
     interval: 300000    # 5 minutes
-    # A search filter to apply to incoming emails. 
-    filter: "To:" # filter emails in the INBOX by this search filter
 
 aem: # AEM is a PDF flattening service
   enabled: false
@@ -30,6 +28,7 @@ aem: # AEM is a PDF flattening service
   password: ${PDF_PASSWORD}
   
 ws:  
+  # A regular expression pattern that matches the email recipent (To:) to enable faxing by Exchange.
   faxFormat: ${FAX_FORMAT:}
   
   timeout:

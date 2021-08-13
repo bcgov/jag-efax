@@ -14,7 +14,6 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import ca.bc.gov.ag.efax.mail.config.ExchangeProperties;
@@ -55,9 +54,6 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private PdfService pdfService;
 
-    @Value(value = "${exchange.poller.filter}")
-    private String filter;
-
     @Override
     public List<EmailMessage> getInboxEmails() throws Exception {
         logger.trace("Retrieving inbox emails");
@@ -66,7 +62,7 @@ public class EmailServiceImpl implements EmailService {
         view.getOrderBy().add(ItemSchema.DateTimeReceived, SortDirection.Ascending);
 
         ExchangeService exchangeService = exchangeServiceFactory.createService();
-        FindItemsResults<Item> emails = exchangeService.findItems(WellKnownFolderName.Inbox, filter, view);
+        FindItemsResults<Item> emails = exchangeService.findItems(WellKnownFolderName.Inbox, view);
 
         if (!emails.getItems().isEmpty()) {
             exchangeService.loadPropertiesForItems(emails, PropertySet.FirstClassProperties);
