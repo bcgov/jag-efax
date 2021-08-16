@@ -2,7 +2,6 @@ package ca.bc.gov.ag.efax.mail.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
@@ -48,7 +47,7 @@ public class EmailServiceTest extends BaseTestSuite {
         emails.add(email1);
         emails.add(email2);
         ReflectionTestUtils.setField(items, "items", emails);
-        when(exchangeService.findItems(eq(WellKnownFolderName.Inbox), anyString(), any())).thenReturn(items);
+        when(exchangeService.findItems(eq(WellKnownFolderName.Inbox), any())).thenReturn(items);
         
         // Stub out Exchange Server to delete an email when deleteItem is called.
         doAnswer(invocation -> {
