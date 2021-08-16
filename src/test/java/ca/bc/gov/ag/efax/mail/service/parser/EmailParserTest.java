@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import ca.bc.gov.ag.efax.BaseTestSuite;
-import ca.bc.gov.ag.efax.ws.exception.FAXListenFault;
+import ca.bc.gov.ag.efax.ws.exception.FAXSendFault;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
 import microsoft.exchange.webservices.data.property.complex.MessageBody;
@@ -37,7 +37,7 @@ public class EmailParserTest extends BaseTestSuite {
                 
         DocumentDistributionMainProcessProcessResponse response = emailParser.parse(emailMessage);
 
-        FAXListenFault fault = new FAXListenFault();
+        FAXSendFault fault = new FAXSendFault();
         assertEquals("1234", response.getJobId()); // should have extracted the jobId from the subject
         assertEquals(fault.getFaultCode(), response.getStatusCode());
         assertEquals(fault.getFaultMessage(), response.getStatusMessage());

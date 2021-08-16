@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ca.bc.gov.ag.efax.ws.exception.FAXListenFault;
+import ca.bc.gov.ag.efax.ws.exception.FAXSendFault;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 
 public class UndeliverableVisitor implements EmailVisitor {
@@ -21,7 +21,7 @@ public class UndeliverableVisitor implements EmailVisitor {
         if (Pattern.matches(UNDELIVERABLE, subject)) {
             Matcher matcher = Pattern.compile(UNDELIVERABLE).matcher(subject);
             if (matcher.find()) {
-                FAXListenFault fault = new FAXListenFault();
+                FAXSendFault fault = new FAXSendFault();
                 response.setJobId(matcher.group(1));
                 response.setStatusCode(fault.getFaultCode());
                 response.setStatusMessage(fault.getFaultMessage());
