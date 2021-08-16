@@ -20,5 +20,18 @@ public class StringUtils {
             return obj.toString();
         }
 	}
+	
+	/**
+	 * A helper method to remove all carriage returns and replace all escaped < > symbols.
+	 * @param str
+	 */
+	public static String decodeString(String str) {
+	    if (str == null) {
+	        str = "";
+	    }
+	    return str
+            .replaceAll("\\r", "").replaceAll("\\n", "")
+            .replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+	}
 
 }
