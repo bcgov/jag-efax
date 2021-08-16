@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 
 import ca.bc.gov.ag.efax.BaseTestSuite;
-import ca.bc.gov.ag.efax.ws.exception.FAXListenFault;
+import ca.bc.gov.ag.efax.ws.exception.FAXSendFault;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 
 public class UndeliverableVisitorTest extends BaseTestSuite {
@@ -32,7 +32,7 @@ public class UndeliverableVisitorTest extends BaseTestSuite {
         visitor.apply(subject, "", response);
 
         // should match FAXListenFault
-        FAXListenFault fault = new FAXListenFault();
+        FAXSendFault fault = new FAXSendFault();
         assertEquals("1234", response.getJobId()); // should have extracted the jobId from the subject
         assertEquals(fault.getFaultCode(), response.getStatusCode());
         assertEquals(fault.getFaultMessage(), response.getStatusMessage());
