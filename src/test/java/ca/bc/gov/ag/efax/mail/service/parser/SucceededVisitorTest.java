@@ -20,7 +20,7 @@ public class SucceededVisitorTest extends BaseTestSuite {
         
         // should match FAXSendFault
         assertEquals("1234", response.getJobId()); // should have extracted the jobId from the body
-        assertEquals("8e3b47c4-60b6-43e7-81ee- c9ac5930e49d", response.getUuid()); // should have extracted the jobId from the body
+        assertEquals("8e3b47c4-60b6-43e7-81ee-c9ac5930e49d", response.getUuid()); // should have extracted the jobId from the body
         assertEquals(SucceededVisitor.STATUS_CODE, response.getStatusCode());
         assertEquals(SucceededVisitor.STATUS_MESSAGE, response.getStatusMessage());            
     }
