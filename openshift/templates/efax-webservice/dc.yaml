@@ -2,23 +2,23 @@ apiVersion: v1
 kind: Template
 metadata:
   creationTimestamp: null
-  name: ${APPNAME}
+  name: ${APPLICATION_NAME}
 labels:
-  template: ${APPNAME}-template
+  template: ${APPLICATION_NAME}-template
 objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   metadata:
     annotations:
       openshift.io/generated-by: OpenShiftWebConsole
-    name: ${APPNAME}
+    name: ${APPLICATION_NAME}
     namespace: ${LICENSE_PLATE}-${ENVIRONMENT}
     labels:
-      app: ${APPNAME}
-      app.kubernetes.io/component: ${APPNAME}
-      app.kubernetes.io/instance: ${APPNAME}
-      app.kubernetes.io/name: ${APPNAME}
-      app.kubernetes.io/part-of: ${APPNAME}-app
+      app: ${APPLICATION_NAME}
+      app.kubernetes.io/component: ${APPLICATION_NAME}
+      app.kubernetes.io/instance: ${APPLICATION_NAME}
+      app.kubernetes.io/name: ${APPLICATION_NAME}
+      app.kubernetes.io/part-of: ${APPLICATION_NAME}-app
       app.openshift.io/runtime: spring-boot
       app.openshift.io/runtime-namespace: ${LICENSE_PLATE}-tools
       app.openshift.io/runtime-version: latest
@@ -38,7 +38,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${APPNAME}
+            - ${APPLICATION_NAME}
           from:
             kind: ImageStreamTag
             namespace: ${LICENSE_PLATE}-tools
@@ -48,14 +48,14 @@ objects:
     revisionHistoryLimit: 10
     test: false
     selector:
-      app: ${APPNAME}
-      deploymentconfig: ${APPNAME}
+      app: ${APPLICATION_NAME}
+      deploymentconfig: ${APPLICATION_NAME}
     template:
       metadata:
         creationTimestamp: null
         labels:
-          app: ${APPNAME}
-          deploymentconfig: ${APPNAME}
+          app: ${APPLICATION_NAME}
+          deploymentconfig: ${APPLICATION_NAME}
         annotations:
           openshift.io/generated-by: OpenShiftWebConsole
       spec:
@@ -72,7 +72,7 @@ objects:
               successThreshold: 1
               failureThreshold: 3
             terminationMessagePath: /dev/termination-log
-            name: ${APPNAME}
+            name: ${APPLICATION_NAME}
             livenessProbe:
               httpGet:
                 path: /actuator/health
@@ -107,7 +107,7 @@ objects:
 parameters:
 - description: Application Name
   displayName: AppName
-  name: APPNAME
+  name: APPLICATION_NAME
   required: true
   value: jag-efax-webservice
 - description: License Plate
