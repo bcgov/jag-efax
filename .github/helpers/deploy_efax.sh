@@ -1,12 +1,10 @@
 #!/bin/bash
 
-echo "NAMESPACE: $1"
-echo "LATEST VERSION: $5"
+echo "LATEST VERSION: $1"
 
-
-oc process -f /home/runner/work/jag-efax/jag-efax/openshift/templates/efax-webservice/dc.yaml -n $1 \
-    -p APPLICATION_NAME=$2 \
-    -p LICENSE_PLATE=$3 \
-    -p ENVIRONMENT=$4 \
-    -p EFAX_IMAGE_VERSION=$5 | \
+oc process -f /home/runner/work/jag-efax/jag-efax/openshift/templates/efax-webservice/dc.yaml -n $NAMESPACE \
+    -p APPLICATION_NAME=$APPLICATION_NAME \
+    -p LICENSE_PLATE=$LICENSE_PLATE \
+    -p ENVIRONMENT=$ENVIRONMENT \
+    -p EFAX_IMAGE_VERSION=$1 | \
     oc apply -f -
