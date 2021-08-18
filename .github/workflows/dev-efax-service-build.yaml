@@ -64,5 +64,5 @@ jobs:
           APPLICATION_NAME=${{ secrets.APPLICATION_NAME }}
           LICENSE_PLATE=${{ secrets.LICENSE_PLATE }}
           DEV_ENVIRONMENT=${{ secrets.DEV_ENVIRONMENT }}
-          ./.github/helpers/deploy_efax.sh NAMESPACE APPLICATION_NAME LICENSE_PLATE DEV_ENVIRONMENT ${{ env.LATEST_VERSION }}
+          ./.github/helpers/deploy_efax.sh $NAMESPACE $APPLICATION_NAME $LICENSE_PLATE $DEV_ENVIRONMENT ${{ env.LATEST_VERSION }}
 
