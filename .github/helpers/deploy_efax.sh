@@ -5,4 +5,4 @@ oc process -f dc.yaml -n $1 \
     -p LICENSE_PLATE=$3 \
     -p ENVIRONMENT=$4 \
     -p EFAX_IMAGE_VERSION=$5 | \
-    oc4 apply -f -
+    oc apply -f -
