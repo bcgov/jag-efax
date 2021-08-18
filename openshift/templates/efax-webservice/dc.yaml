@@ -42,7 +42,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: ${LICENSE_PLATE}-tools
-            name: ${EFAX_IMAGE_VERSION}
+            name: jag-efax-webservice:${EFAX_IMAGE_VERSION}
       - type: ConfigChange
     replicas: 1
     revisionHistoryLimit: 10
