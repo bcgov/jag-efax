@@ -60,6 +60,9 @@ jobs:
           echo "-----------------------"
           echo "LATEST VERSION: ${{ env.LATEST_VERSION }}"
           echo "-----------------------"
-          TEST='test'
-          ./.github/helpers/deploy_efax.sh TEST ${{ secrets.OPENSHIFT_DEV_NAMESPACE }} $${{ secrets.APPLICATION_NAME }} ${{ secrets.LICENSE_PLATE }} ${{ secrets.DEV_ENVIRONMENT }} ${{ env.LATEST_VERSION }}
+          NAMESPACE=${{ secrets.OPENSHIFT_DEV_NAMESPACE }}
+          APPLICATION_NAME=${{ secrets.APPLICATION_NAME }}
+          LICENSE_PLATE=${{ secrets.LICENSE_PLATE }}
+          DEV_ENVIRONMENT=${{ secrets.DEV_ENVIRONMENT }}
+          ./.github/helpers/deploy_efax.sh NAMESPACE APPLICATION_NAME LICENSE_PLATE DEV_ENVIRONMENT ${{ env.LATEST_VERSION }}
 
