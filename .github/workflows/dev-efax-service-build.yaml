@@ -56,13 +56,14 @@ jobs:
           docker push ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:${{ env.LATEST_VERSION }}    
       
       - name: Deploy to DEV
+        env:
+          NAMESPACE: "${{ secrets.OPENSHIFT_DEV_NAMESPACE }}"
+          APPLICATION_NAME: "${{ secrets.APPLICATION_NAME }}"
+          LICENSE_PLATE: "${{ secrets.LICENSE_PLATE }}"
+          DEV_ENVIRONMENT: "${{ secrets.DEV_ENVIRONMENT }}"
         run: |  
           echo "-----------------------"
           echo "LATEST VERSION: ${{ env.LATEST_VERSION }}"
           echo "-----------------------"
-          NAMESPACE=${{ secrets.OPENSHIFT_DEV_NAMESPACE }}
-          APPLICATION_NAME=${{ secrets.APPLICATION_NAME }}
-          LICENSE_PLATE=${{ secrets.LICENSE_PLATE }}
-          DEV_ENVIRONMENT=${{ secrets.DEV_ENVIRONMENT }}
-          ./.github/helpers/deploy_efax.sh $NAMESPACE $APPLICATION_NAME $LICENSE_PLATE $DEV_ENVIRONMENT ${{ env.LATEST_VERSION }}
+          ./.github/helpers/deploy_efax.sh
 
