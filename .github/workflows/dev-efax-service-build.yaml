@@ -57,5 +57,5 @@ jobs:
       
       - name: Deploy to DEV
         run: |  
-          .github/helpers/deploy_efax.sh
+          ./.github/helpers/deploy_efax.sh
 
