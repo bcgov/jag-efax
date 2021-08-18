@@ -1,8 +1,8 @@
 #!/bin/bash
 
-oc process -f dc.yaml -n ${{ secrets.OPENSHIFT_DEV_NAMESPACE }} \
-    -p APPLICATION_NAME=${{ secrets.APPLICATION_NAME }} \
-    -p LICENSE_PLATE=${{ secrets.LICENSE_PLATE }} \
-    -p ENVIRONMENT=${{ secrets.DEV_ENVIRONMENT }} \
-    -p EFAX_IMAGE_VERSION=${{ env.LATEST_VERSION }} | \
+oc process -f dc.yaml -n $1 \
+    -p APPLICATION_NAME=$2 \
+    -p LICENSE_PLATE=$3 \
+    -p ENVIRONMENT=$4 \
+    -p EFAX_IMAGE_VERSION=$5 | \
     oc4 apply -f -
