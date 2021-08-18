@@ -54,3 +54,8 @@ jobs:
       - name: Docker Push Version
         run: |  
           docker push ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:${{ env.LATEST_VERSION }}    
+      
+      - name: Deploy to DEV
+        run: |  
+          .github/helpers/deploy_efax.sh
+
