@@ -57,5 +57,5 @@ jobs:
       
       - name: Deploy to DEV
         run: |  
-          ./.github/helpers/deploy_efax.sh
+          ./.github/helpers/deploy_efax.sh ${{ secrets.OPENSHIFT_DEV_NAMESPACE }} $${{ secrets.APPLICATION_NAME }} ${{ secrents.LICENSE_PLATE }} ${{ secrets.DEV_ENVIRONMENT }} ${{ env.LATEST_VERSION }}
 
