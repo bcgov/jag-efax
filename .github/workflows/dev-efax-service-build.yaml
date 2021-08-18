@@ -60,5 +60,6 @@ jobs:
           echo "-----------------------"
           echo "LATEST VERSION: ${{ env.LATEST_VERSION }}"
           echo "-----------------------"
-          ./.github/helpers/deploy_efax.sh ${{ secrets.OPENSHIFT_DEV_NAMESPACE }} $${{ secrets.APPLICATION_NAME }} ${{ secrets.LICENSE_PLATE }} ${{ secrets.DEV_ENVIRONMENT }}
+          VERSION_ARG=${{ env.LATEST_VERSION }}
+          ./.github/helpers/deploy_efax.sh ${{ secrets.OPENSHIFT_DEV_NAMESPACE }} $${{ secrets.APPLICATION_NAME }} ${{ secrets.LICENSE_PLATE }} ${{ secrets.DEV_ENVIRONMENT }} VERSION_ARG
 
