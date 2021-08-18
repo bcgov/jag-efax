@@ -1,6 +1,8 @@
 #!/bin/bash
 
+echo "NAMESPACE: $1"
 echo "LATEST VERSION: $5"
+
 
 oc process -f /home/runner/work/jag-efax/jag-efax/openshift/templates/efax-webservice/dc.yaml -n $1 \
     -p APPLICATION_NAME=$2 \
