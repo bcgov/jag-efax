@@ -60,7 +60,7 @@ jobs:
           NAMESPACE: "${{ secrets.OPENSHIFT_DEV_NAMESPACE }}"
           APPLICATION_NAME: "${{ secrets.APPLICATION_NAME }}"
           LICENSE_PLATE: "${{ secrets.LICENSE_PLATE }}"
-          DEV_ENVIRONMENT: "${{ secrets.DEV_ENVIRONMENT }}"
+          ENVIRONMENT: "${{ secrets.ENVIRONMENT }}"
         run: |  
           echo "-----------------------"
           echo "LATEST VERSION: ${{ env.LATEST_VERSION }}"
