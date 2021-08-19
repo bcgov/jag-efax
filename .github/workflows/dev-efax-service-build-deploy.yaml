@@ -41,11 +41,6 @@ jobs:
       - name: Build the Docker image
         run: |            
           docker-compose build webservice
-
-      - name: Check Version
-        if: env.LATEST_VERSION == '0.0.1-SNAPSHOT'
-        run: |  
-          echo "Version IS 0.0.1-SNAPSHOT"
           
       - name: Docker Tag Version
         run: |  
@@ -63,7 +58,19 @@ jobs:
           ENVIRONMENT: "${{ secrets.ENVIRONMENT }}"
         run: |  
           echo "-----------------------"
-          echo "LATEST VERSION: ${{ env.LATEST_VERSION }}"
+          echo "Starting Application Deployment"
           echo "-----------------------"
           ./.github/helpers/deploy_efax.sh ${{ env.LATEST_VERSION }}
+          
+      - name: Health Check DEV deployment
+        env:
+          NAMESPACE: "${{ secrets.OPENSHIFT_DEV_NAMESPACE }}"
+          APPLICATION_NAME: "${{ secrets.APPLICATION_NAME }}"
+          LICENSE_PLATE: "${{ secrets.LICENSE_PLATE }}"
+          ENVIRONMENT: "${{ secrets.ENVIRONMENT }}"
+        run: |  
+          echo "-----------------------"
+          echo "Starting Application Health Check"
+          echo "-----------------------"
+          ./.github/helpers/application_health.sh
 
