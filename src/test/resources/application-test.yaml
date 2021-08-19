@@ -12,6 +12,10 @@ exchange:
   poller:  
     enabled: false
 
+aem:
+  enabled: true
+  endpoint: ${PDF_ENDPOINT:http://localhost}
+  
 ws:
   faxFormat: ${FAX_FORMAT:%FAXNUMBER%@somewhere.com}
   

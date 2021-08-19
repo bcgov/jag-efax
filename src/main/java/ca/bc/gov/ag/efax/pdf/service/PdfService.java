@@ -1,64 +1,82 @@
 package ca.bc.gov.ag.efax.pdf.service;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.math.BigDecimal;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Base64;
 
-import org.apache.commons.io.IOUtils;
+import javax.xml.bind.JAXBElement;
+
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
+import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 
-import ca.bc.gov.ag.efax.pdf.util.PDFParser;
-import ca.bc.gov.ag.outputservice.OutputServiceUtils;
+import ca.bc.gov.ag.efax.pdf.config.PdfProperties;
+import ca.bc.gov.ag.efax.pdf.model.ObjectFactory;
+import ca.bc.gov.ag.efax.pdf.model.PDFTransformations;
+import ca.bc.gov.ag.efax.pdf.model.PDFTransformationsResponse;
+import ca.bc.gov.ag.efax.pdf.util.PdfUtils;
 
 @Service
-public class PdfService {
+@ConditionalOnProperty(
+        name = "aem.enabled",
+        havingValue = "true",
+        matchIfMissing = true)
+public class PdfService extends WebServiceGatewaySupport {
+        
+    private Logger logger = LoggerFactory.getLogger(PdfService.class);
 
-    private static Logger logger = LoggerFactory.getLogger(PdfService.class);
-
-    @Autowired
-    private OutputServiceUtils outputServiceUtils;
-
-    public File flattenPdf(String urlString, String fileName) {
-        FileOutputStream fos = null;
-        try {
-            if (isFlattenable(urlString)) {
-                byte[] bytes = outputServiceUtils.flattenPdfAsBytes(urlString);
-                if (bytes != null) {
-                    File file = new File(fileName);
-                    
-                    fos = new FileOutputStream(file);
-                    fos.write(bytes);
-                    fos.flush();
-                    
-                    return file;
-                }
-            }
-        } catch (Exception e) {
-            logger.error("Error flattening PDF", e);
-        } finally {
-            if (fos != null)
-                IOUtils.closeQuietly(fos);
-        }
-        return null;
+    public PdfService(Jaxb2Marshaller pdfMarshaller, PdfProperties pdfProperties) {        
+        setDefaultUri(pdfProperties.getEndpoint());
+        setMarshaller(pdfMarshaller);
+        setUnmarshaller(pdfMarshaller);
     }
 
     /**
-     * Returns <code>true</code> if the supplied url (that references a valid PDF) has a mime_type of "application/pdf", the pdf is parsable and has a
-     * version > 1.5, <code>false</code> otherwise.
-     * 
-     * @param urlString
-     * @return
+     * Attempts to flatten (aka normalize/simplify) a PDF by delegating the call to a web service.
+     * @param url a URL to a PDF to flatten
+     * @param path the full fileName for the name of file to return.
+     * @return a flattened PDF, or null if an error occurred.
      */
-    private boolean isFlattenable(String urlString) {
-        boolean flatten = false;
-        PDFParser parser = new PDFParser(urlString);
-        if (parser.pdfParsed() && parser.isPDFVersionGreaterThan(new BigDecimal("1.5"))) {
-            flatten = true;
+    @SuppressWarnings("unchecked")
+    public File flattenPdf(URL url, String path) {
+        try {
+            byte[] data = PdfUtils.readUrl(url);
+            if (data != null) {
+                // convert a url to a pdf file to that of a base64 encoded string.
+                String encoded = Base64.getEncoder().encodeToString(data);
+    
+                PDFTransformations request = new PDFTransformations();
+                request.setFlags(3);
+                request.setInputFile(encoded);
+                
+                JAXBElement<PDFTransformationsResponse> jaxbResponse = (JAXBElement<PDFTransformationsResponse>) getWebServiceTemplate()
+                        .marshalSendAndReceive(new ObjectFactory().createPDFTransformations(request));
+
+                return extractResults(jaxbResponse, path);
+            }
         }
-        return flatten;
+        catch (Exception e) {
+            logger.error("Error calling LiveCycleGateway's PDFTransformations service", e);
+        }
+
+        return null;
+    }
+    
+    private File extractResults(JAXBElement<PDFTransformationsResponse> jaxbResponse, String path) throws IOException {
+        if (jaxbResponse != null) {
+            PDFTransformationsResponse response = jaxbResponse.getValue();
+            if (response != null && response.getPDFTransformationsReturn() != null) {
+                File file = new File(path);
+                FileUtils.writeByteArrayToFile(file, response.getPDFTransformationsReturn());
+                return file;
+            }
+        }  
+        return null;
     }
 
 }
