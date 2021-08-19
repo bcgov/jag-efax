@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
@@ -68,12 +67,6 @@
 
 		<!-- Custom dependencies -->
 		<dependency>
-			<!-- Custom PDF flattening client jar -->
-			<groupId>ca.bc.gov.ag</groupId>
-			<artifactId>outputservice</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		<dependency>
 			<!-- Adobe PDF jar -->
 			<groupId>ca.bc.gov.ag</groupId>
 			<artifactId>xpaaj</artifactId>
@@ -113,23 +106,23 @@
 				</dependency>
 			</dependencies>
 		</profile>
-        <profile>
-            <id>splunk</id>
-            <repositories>
-                <repository>
-                    <id>splunk-artifactory</id>
-                    <name>Splunk Releases</name>
-                    <url>https://splunk.jfrog.io/splunk/ext-releases-local</url>
-                </repository>
-            </repositories>
-            <dependencies>
-                <dependency>
-                    <groupId>com.splunk.logging</groupId>
-                    <artifactId>splunk-library-javalogging</artifactId>
-                    <version>1.8.0</version>
-                </dependency>
-            </dependencies>
-        </profile>
+		<profile>
+			<id>splunk</id>
+			<repositories>
+				<repository>
+					<id>splunk-artifactory</id>
+					<name>Splunk Releases</name>
+					<url>https://splunk.jfrog.io/splunk/ext-releases-local</url>
+				</repository>
+			</repositories>
+			<dependencies>
+				<dependency>
+					<groupId>com.splunk.logging</groupId>
+					<artifactId>splunk-library-javalogging</artifactId>
+					<version>1.8.0</version>
+				</dependency>
+			</dependencies>
+		</profile>
 	</profiles>
 
 	<build>
@@ -145,18 +138,34 @@
 				<version>2.5.0</version>
 				<executions>
 					<execution>
-						<id>xjc</id>
+						<id>xjc1</id>
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>xjc</goal>
 						</goals>
+						<configuration>
+							<packageName>ca.bc.gov.ag.efax.ws.model</packageName>
+							<sources>
+								<source>${project.basedir}/src/main/resources/DocumentDistributionMainProcess.xsd</source>
+							</sources>
+							<outputDirectory>${project.build.directory}/generated-sources/jaxb1</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>xjc2</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+						<configuration>
+							<packageName>ca.bc.gov.ag.efax.pdf.model</packageName>
+							<sources>
+								<source>${project.basedir}/src/main/resources/PdfTransformations.xsd</source>
+							</sources>
+							<outputDirectory>${project.build.directory}/generated-sources/jaxb2</outputDirectory>
+						</configuration>
 					</execution>
 				</executions>
-				<configuration>
-					<packageName>ca.bc.gov.ag.efax.ws.model</packageName>
-					<sources>
-						<source>${project.basedir}/src/main/resources/DocumentDistributionMainProcess.xsd</source>
-					</sources>
-				</configuration>
 			</plugin>
 			<!-- end::xsd[] -->
 
