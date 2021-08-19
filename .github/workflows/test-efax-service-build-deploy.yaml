@@ -1,4 +1,4 @@
-name: Build Efax Webservice Image and Push to Openshift 4 Registry
+name: TEST Deploy of Efax Webservice Image 
 
 on:
   workflow_dispatch:
