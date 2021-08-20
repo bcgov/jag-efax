@@ -62,15 +62,17 @@ public class DocumentDistributionServiceImpl extends WebServiceGatewaySupport im
 
     @Override
     public void sendResponseToCallback(DocumentDistributionMainProcessProcessResponse response) {
-        logger.trace("Justin Callback: response:{}", StringUtils.toXMLString(response));
-            
         if (documentDistributionProperties.getCallback().isEnabled()) {
             try {
+                logger.trace("Justin callback: attempting to send response:{}", StringUtils.toXMLString(response));
                 getWebServiceTemplate().marshalSendAndReceive(response);
             }
             catch (Exception e) {
-                logger.error("Failed to send message to Justin callback", e);
+                logger.error("Justin callback error, failed to send response: ", e);
             }
+        }
+        else {
+            logger.trace("Justin callback skipped: disabled.");            
         }
     }    
     

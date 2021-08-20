@@ -40,7 +40,7 @@ ws:
     pollInterval: 60000 # 60 seconds
   
   callback:
-    enabled: false
+    enabled: true
     endpoint: ${CALLBACK_ENDPOINT:}
   
   # These are the SOAP faults returned for various reasons.
