@@ -55,5 +55,29 @@ jobs:
         run: |  
           docker push ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:${{ env.RELEASE_VERSION }}   
           
+      - name: Deploy to PROD
+        env:
+          NAMESPACE: "${{ secrets.OPENSHIFT_PROD_NAMESPACE }}"
+          APPLICATION_NAME: "${{ secrets.APPLICATION_NAME }}"
+          LICENSE_PLATE: "${{ secrets.LICENSE_PLATE }}"
+          ENVIRONMENT: "${{ secrets._PROD_ENVIRONMENT }}"
+        run: |  
+          echo "-----------------------"
+          echo "Starting Application Deployment"
+          echo "-----------------------"
+          ./.github/helpers/deploy_efax.sh ${{ env.RELEASE_VERSION }}
+          
+      - name: Health Check PROD deployment
+        env:
+          NAMESPACE: "${{ secrets.OPENSHIFT_PROD_NAMESPACE }}"
+          APPLICATION_NAME: "${{ secrets.APPLICATION_NAME }}"
+          LICENSE_PLATE: "${{ secrets.LICENSE_PLATE }}"
+          ENVIRONMENT: "${{ secrets.PROD_ENVIRONMENT }}"
+        run: |  
+          echo "-----------------------"
+          echo "Starting Application Health Check"
+          echo "-----------------------"
+          ./.github/helpers/application_health.sh
+          
           
             
