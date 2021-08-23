@@ -1,0 +1,80 @@
+name: PROD Deploy of Efax Webservice Image 
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cluster Login
+        uses: redhat-developer/openshift-actions@v1.1
+        with:
+          openshift_server_url: ${{ secrets.OPENSHIFT4_SERVER_URL }}
+          parameters: '{"apitoken": "${{ secrets.OPENSHIFT4_SA_PASSWORD }}"}'
+          cmd: |
+            'version'
+            
+      - name: Login to Openshift Docker
+        run : |
+          docker login ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }} -u ${{ secrets.OPENSHIFT4_SA_USERNAME }} -p ${{ secrets.OPENSHIFT4_SA_PASSWORD }}
+          
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+            
+      - name: Get Trimmed Java Project Version 
+        run: |  
+          _version=$(.github/helpers/trim_java_version.sh)
+          echo "TRIMMED_VERSION=$_version" >> $GITHUB_ENV
+      
+      - name: Update Java Project Version to Non-Snapshot tag
+        run: |  
+          _version=$(.github/helpers/update_java_version.sh)
+          echo "RELEASE_VERSION=$_version" >> $GITHUB_ENV
+      
+      - name: Build the Docker image
+        run: |            
+          docker-compose build webservice
+      
+      - name: Docker Tag Version
+        run: |  
+          docker tag jag-efax_webservice ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:${{ env.RELEASE_VERSION }}
+          
+      - name: Docker Push Version
+        run: |  
+          docker push ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:${{ env.RELEASE_VERSION }}   
+          
+      - name: Deploy to PROD
+        env:
+          NAMESPACE: "${{ secrets.OPENSHIFT_PROD_NAMESPACE }}"
+          APPLICATION_NAME: "${{ secrets.APPLICATION_NAME }}"
+          LICENSE_PLATE: "${{ secrets.LICENSE_PLATE }}"
+          ENVIRONMENT: "${{ secrets._PROD_ENVIRONMENT }}"
+        run: |  
+          echo "-----------------------"
+          echo "Starting Application Deployment"
+          echo "-----------------------"
+          ./.github/helpers/deploy_efax.sh ${{ env.RELEASE_VERSION }}
+          
+      - name: Health Check PROD deployment
+        env:
+          NAMESPACE: "${{ secrets.OPENSHIFT_PROD_NAMESPACE }}"
+          APPLICATION_NAME: "${{ secrets.APPLICATION_NAME }}"
+          LICENSE_PLATE: "${{ secrets.LICENSE_PLATE }}"
+          ENVIRONMENT: "${{ secrets.PROD_ENVIRONMENT }}"
+        run: |  
+          echo "-----------------------"
+          echo "Starting Application Health Check"
+          echo "-----------------------"
+          ./.github/helpers/application_health.sh          
