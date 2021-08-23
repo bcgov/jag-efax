@@ -42,6 +42,18 @@ jobs:
         run: |  
           _version=$(.github/helpers/update_java_version.sh)
           echo "RELEASE_VERSION=$_version" >> $GITHUB_ENV
+      
+      - name: Build the Docker image
+        run: |            
+          docker-compose build webservice
+      
+      - name: Docker Tag Version
+        run: |  
+          docker tag jag-efax_webservice ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:${{ env.RELEASE_VERSION }}
+          
+      - name: Docker Push Version
+        run: |  
+          docker push ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:${{ env.RELEASE_VERSION }}   
           
           
             
