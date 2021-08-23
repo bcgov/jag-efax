@@ -22,10 +22,8 @@ exchange:
     interval: 300000    # 5 minutes
 
 aem: # AEM is a PDF flattening service
-  enabled: false
-  endpoint: ${PDF_ENDPOINT}
-  username: ${PDF_USERNAME}
-  password: ${PDF_PASSWORD}
+  enabled: true
+  endpoint: ${PDF_ENDPOINT:}
   
 ws:  
   # A regular expression pattern that matches the email recipent (To:) to enable faxing by Exchange.
