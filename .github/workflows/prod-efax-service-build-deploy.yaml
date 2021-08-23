@@ -33,3 +33,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
             
+      - name: Get Trimmed Java Project Version 
+        run: |  
+          _version=$(.github/helpers/trim_java_version.sh)
+          echo "TRIMMED_VERSION=$_version" >> $GITHUB_ENV
+      
+      - name: Update Java Project Version to Non-Snapshot tag
+        run: |  
+          _version=$(.github/helpers/update_java_version.sh)
+          echo "RELEASE_VERSION=$_version" >> $GITHUB_ENV
+          
+          
+            
