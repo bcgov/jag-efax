@@ -77,7 +77,4 @@ jobs:
           echo "-----------------------"
           echo "Starting Application Health Check"
           echo "-----------------------"
-          ./.github/helpers/application_health.sh
-          
-          
-            
+          ./.github/helpers/application_health.sh          
