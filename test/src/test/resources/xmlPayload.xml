@@ -1,0 +1,23 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:ns2="http://ag.gov.bc.ca/DocumentDistributionMainProcess">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <ns2:DocumentDistributionRequest>
+            <ns2:from>Someone</ns2:from>
+            <ns2:to>Myself</ns2:to>
+            <ns2:jobId>9998</ns2:jobId>
+            <ns2:dateTime>2021-07-21T09:01:53.801-07:00</ns2:dateTime>
+            <ns2:timeout>PT25M</ns2:timeout>
+            <ns2:channel>fax</ns2:channel>
+            <ns2:transport>7785720693@fax.gov.bc.ca</ns2:transport>
+            <ns2:subject>Test subject</ns2:subject>
+            <ns2:body>This is a test fax with a pdf file</ns2:body>
+            <ns2:numPages>1</ns2:numPages>
+            <ns2:attachments>
+                <ns2:uri>https://github.com/bcgov/jag-efax/raw/main/src/test/resources/sample_v1.6.pdf</ns2:uri>
+            </ns2:attachments>
+            <ns2:extension1>a</ns2:extension1>
+            <ns2:extension2>b</ns2:extension2>
+        </ns2:DocumentDistributionRequest>
+    </soapenv:Body>
+</soapenv:Envelope>
