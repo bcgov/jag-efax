@@ -60,7 +60,7 @@ jobs:
           NAMESPACE: "${{ secrets.OPENSHIFT_PROD_NAMESPACE }}"
           APPLICATION_NAME: "${{ secrets.APPLICATION_NAME }}"
           LICENSE_PLATE: "${{ secrets.LICENSE_PLATE }}"
-          ENVIRONMENT: "${{ secrets._PROD_ENVIRONMENT }}"
+          ENVIRONMENT: "${{ secrets.PROD_ENVIRONMENT }}"
         run: |  
           echo "-----------------------"
           echo "Starting Application Deployment"
