@@ -41,7 +41,6 @@ jobs:
       - name: Update Java Project Version to Non-Snapshot tag
         run: |  
           _version=$(.github/helpers/update_java_version.sh)
-          echo "RELEASE_VERSION=$_version" >> $GITHUB_ENV
       
       - name: Build the Docker image
         run: |            
@@ -49,11 +48,11 @@ jobs:
       
       - name: Docker Tag Version
         run: |  
-          docker tag jag-efax_webservice ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:${{ env.RELEASE_VERSION }}
+          docker tag jag-efax_webservice ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:${{ env.TRIMMED_VERSION }}
           
       - name: Docker Push Version
         run: |  
-          docker push ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:${{ env.RELEASE_VERSION }}   
+          docker push ${{ secrets.OPENSHIFT4_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT4_TOOLS_NAMESPACE }}/jag-efax-webservice:${{ env.TRIMMED_VERSION }}   
           
       - name: Deploy to PROD
         env:
@@ -65,7 +64,7 @@ jobs:
           echo "-----------------------"
           echo "Starting Application Deployment"
           echo "-----------------------"
-          ./.github/helpers/deploy_efax.sh ${{ env.RELEASE_VERSION }}
+          ./.github/helpers/deploy_efax.sh ${{ env.TRIMMED_VERSION }}
           
       - name: Health Check PROD deployment
         env:
