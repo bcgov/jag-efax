@@ -64,6 +64,10 @@ public class ScheduledTasks {
      * Returns true of the queued redis message has timed out (ie, created > 25 minutes ago)
      */
     private boolean hasTimedOut(SentMessage sentMessage) {
+        // NPE fix.  For some reason under heavy load redis can return null records.
+        if (sentMessage == null) {            
+            return false;
+        }
         long now = new Date().getTime();
         Date createdTs = sentMessage.getCreatedTs();
         return createdTs.getTime() + faxTimeout < now;
