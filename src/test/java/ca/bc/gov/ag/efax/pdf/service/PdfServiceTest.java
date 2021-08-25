@@ -39,7 +39,7 @@ public class PdfServiceTest extends BaseTestSuite {
 
         // Attempt to flatten a PDF doc.
         String filePath = exchangeProperties.getTempDirectory() + "sample_v1.6.flat.pdf";
-        File file = pdfService.flattenPdf(url, filePath);
+        File file = pdfService.flattenPdf(url, filePath, "1234");
         
         assertNotNull(file);
         
@@ -59,7 +59,7 @@ public class PdfServiceTest extends BaseTestSuite {
 
         // Attempt to flatten a PDF doc.
         String filePath = exchangeProperties.getTempDirectory() + "sample_v1.6.flat.pdf";
-        File file = pdfService.flattenPdf(url, filePath);
+        File file = pdfService.flattenPdf(url, filePath, "1234");
         
         // On exception, quietly catch exception and return null
         assertNull(file);

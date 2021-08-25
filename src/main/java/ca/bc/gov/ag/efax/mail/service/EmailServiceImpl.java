@@ -108,7 +108,7 @@ public class EmailServiceImpl implements EmailService {
                 for (int i = 0; i < attachmentURLs.size(); i++) {
                     String url = attachmentURLs.get(i);
                     String fileName = FileUtils.getTempFilename(mailMessage, i);
-                    File file = readFileFromURL(new URL(url), fileName);
+                    File file = readFileFromURL(new URL(url), fileName, mailMessage.getJobId());
                     message.getAttachments().addFileAttachment(fileName, FileUtils.fileToByteArray(file));
                 }
             }
@@ -141,17 +141,18 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-    private File readFileFromURL(final URL url, final String fileName) throws Exception {
+    private File readFileFromURL(final URL url, final String fileName, String jobId) throws Exception {
         InputStream inputStream = null;
 
         try {
             String path = exchangeProperties.getTempDirectory() + fileName;
             
             // try first to flatten the PDF
-            File file = pdfService.flattenPdf(url, path);
+            File file = pdfService.flattenPdf(url, path, jobId);
 
             // if unsuccessful, simply download the file as is
             if (file == null) {
+                logger.debug("PDF Flattening: jobId {} not flattened, using original file.", jobId);
                 // Open the URL and get metadata
                 inputStream = url.openStream();
                 Files.copy(inputStream, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);

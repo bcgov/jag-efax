@@ -40,13 +40,16 @@ public class PdfService extends WebServiceGatewaySupport {
      * Attempts to flatten (aka normalize/simplify) a PDF by delegating the call to a web service.
      * @param url a URL to a PDF to flatten
      * @param path the full fileName for the name of file to return.
+     * @param jobId for logging purposes, the jobId for this transaction.
      * @return a flattened PDF, or null if an error occurred.
      */
     @SuppressWarnings("unchecked")
-    public File flattenPdf(URL url, String path) {
+    public File flattenPdf(URL url, String path, String jobId) {
         try {
             byte[] data = PdfUtils.readUrl(url);
             if (data != null) {
+                logger.debug("PDF Flattening: jobId {} attempting flattening.", jobId);
+                
                 // convert a url to a pdf file to that of a base64 encoded string.
                 String encoded = Base64.getEncoder().encodeToString(data);
     
@@ -57,6 +60,8 @@ public class PdfService extends WebServiceGatewaySupport {
                 JAXBElement<PDFTransformationsResponse> jaxbResponse = (JAXBElement<PDFTransformationsResponse>) getWebServiceTemplate()
                         .marshalSendAndReceive(new ObjectFactory().createPDFTransformations(request));
 
+                logger.debug("PDF Flattening: jobId {} flattening successful.", jobId);
+                
                 return extractResults(jaxbResponse, path);
             }
         }
