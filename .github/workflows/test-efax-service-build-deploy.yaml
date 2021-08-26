@@ -43,9 +43,6 @@ jobs:
           LICENSE_PLATE: "${{ secrets.LICENSE_PLATE }}"
           ENVIRONMENT: "${{ secrets.TEST_ENVIRONMENT }}"
         run: |  
-          echo "-----------------------"
-          echo "Starting Application Deployment"
-          echo "-----------------------"
           ./.github/helpers/deploy_efax.sh ${{ env.LATEST_VERSION }}
           
       - name: Health Check TEST deployment
@@ -55,7 +52,4 @@ jobs:
           LICENSE_PLATE: "${{ secrets.LICENSE_PLATE }}"
           ENVIRONMENT: "${{ secrets.TEST_ENVIRONMENT }}"
         run: |  
-          echo "-----------------------"
-          echo "Starting Application Health Check"
-          echo "-----------------------"
           ./.github/helpers/application_health.sh
