@@ -101,7 +101,7 @@ objects:
               - secretRef:
                   name: bpel-callback
               - secretRef:
-                name: splunk-hec
+                  name: splunk-hec
             image: >-
               image-registry.openshift-image-registry.svc:5000/ddea46-tools/jag-efax-webservice@sha256:19e84808c9778ef4b0d119958b04b5cc73ec77b0d75f2985515a9fd86684dc46
         restartPolicy: Always
