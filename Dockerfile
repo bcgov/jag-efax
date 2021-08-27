@@ -4,13 +4,17 @@
 FROM maven:3.8.1-openjdk-11 as build
 
 ARG SKIP_TESTS=false
+ARG ENABLE_SPLUNK=false
 
 WORKDIR /
 
 COPY . .
 
+RUN echo ENABLE_SPLUNK=${ENABLE_SPLUNK}
+
 RUN mvn -B clean package \
-        -Dmaven.test.skip=${SKIP_TESTS}
+        -Dmaven.test.skip=${SKIP_TESTS} \
+        -Denable-splunk=${ENABLE_SPLUNK}
 
 
 #############################################################################################
