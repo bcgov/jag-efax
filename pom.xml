@@ -108,6 +108,12 @@
 		</profile>
 		<profile>
 			<id>splunk</id>
+			<activation>
+				<property>
+					<name>enable-splunk</name>
+					<value>true</value>
+				</property>
+			</activation>
 			<repositories>
 				<repository>
 					<id>splunk-artifactory</id>

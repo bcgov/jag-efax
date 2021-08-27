@@ -12,6 +12,7 @@ services:
       dockerfile: Dockerfile
       args:
         - SKIP_TESTS=true
+        - ENABLE_SPLUNK=${ENABLE_SPLUNK:-false}
     ports:
       - "8080:8080"
     environment:
