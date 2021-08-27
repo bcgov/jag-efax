@@ -90,6 +90,7 @@
 			<version>0.7.3</version>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<profiles>
