@@ -35,7 +35,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -90,20 +89,6 @@
 			<artifactId>embedded-redis</artifactId>
 			<version>0.7.3</version>
 			<scope>test</scope>
-		</dependency>
-
-		<!-- Logging -->
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-access</artifactId>
 		</dependency>
 
 	</dependencies>
