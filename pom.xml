@@ -119,7 +119,7 @@
 				<repository>
 					<id>splunk-artifactory</id>
 					<name>Splunk Releases</name>
-					<url>https://splunk.jfrog.io/splunk/ext-releases-local</url>
+					<url>https://splunk.jfrog.io/splunk/ext-releases-locals</url>
 				</repository>
 			</repositories>
 			<dependencies>
