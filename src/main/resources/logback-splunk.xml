@@ -5,7 +5,7 @@
     ​
     <!-- You can override this to have a custom pattern -->
     <property name="CONSOLE_LOG_PATTERN"
-              value="%d [%t] [%t] %-5p %c - %m%n"/>
+              value="%d [%t] %-5p %c - %m%n"/>
 
     <appender name="http" class="com.splunk.logging.HttpEventCollectorLogbackAppender">
         <url>${SPLUNK_URL}</url>
