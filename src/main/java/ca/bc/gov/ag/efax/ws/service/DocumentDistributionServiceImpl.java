@@ -33,6 +33,7 @@ public class DocumentDistributionServiceImpl extends WebServiceGatewaySupport im
     public DocumentDistributionServiceImpl(DocumentDistributionProperties documentDistributionProperties, Jaxb2Marshaller marshaller) {
         setDefaultUri(documentDistributionProperties.getCallback().getEndpoint());
         setMarshaller(marshaller);
+        setUnmarshaller(marshaller);
     }
     
     @Override
