@@ -25,6 +25,9 @@
     <message name="DocumentDistributionMainProcessResponseMessage">
         <part name="payload" element="client:DocumentDistributionMainProcessProcessResponse"/>
     </message>
+    <message name="DocumentDistributionMainProcessResponseResponseMessage">
+        <part name="payload" element="client:DocumentDistributionMainProcessProcessResponseResponse"/>
+    </message>
     <message name="DocumentDistributionMainProcessUpdateMessage">
         <part name="payload" element="client:DocumentDistributionMainProcessProcessUpdate"/>
     </message>
@@ -40,6 +43,7 @@
     <portType name="DocumentDistributionMainProcessCallback">
         <operation name="onResult">
             <input message="client:DocumentDistributionMainProcessResponseMessage"/>
+            <output message="client:DocumentDistributionMainProcessResponseResponseMessage"/>
         </operation>
     </portType>
     <portType name="DocumentDistributionMainProcess">

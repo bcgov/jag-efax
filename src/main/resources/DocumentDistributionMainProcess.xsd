@@ -44,14 +44,17 @@
 	</element>
         	
         <element name="DocumentDistributionMainProcessProcessResponse">
-		<complexType>
-			<sequence>
-				<element name="jobId" type="string"/>
-                <element name="statusCode" type="string"/>
-                <element name="statusMessage" type="string"/>
-			</sequence>
-		</complexType>
-	</element>
+			<complexType>
+				<sequence>
+					<element name="jobId" type="string"/>
+	                <element name="statusCode" type="string"/>
+	                <element name="statusMessage" type="string"/>
+				</sequence>
+			</complexType>
+	    </element>
+        
+        <element name="DocumentDistributionMainProcessProcessResponseResponse">
+        </element>
         
         <element name="DocumentDistributionMainProcessProcessFault">
             <complexType>
