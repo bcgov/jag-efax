@@ -152,7 +152,7 @@ public class EmailServiceImpl implements EmailService {
 
             // if unsuccessful, simply download the file as is
             if (file == null) {
-                logger.debug("PDF Flattening: jobId {} not flattened, using original file.", jobId);
+                logger.info("PDF Flattening: jobId {} not flattened, using original file.", jobId);
                 // Open the URL and get metadata
                 inputStream = url.openStream();
                 Files.copy(inputStream, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
