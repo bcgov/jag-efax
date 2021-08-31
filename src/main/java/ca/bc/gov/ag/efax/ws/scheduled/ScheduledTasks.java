@@ -45,7 +45,7 @@ public class ScheduledTasks {
             if (!hasTimedOut(sentMessage))
                 continue;
 
-            logger.debug("Sent message uuid:{} timed out", sentMessage.getUuid());
+            logger.info("Sent message uuid:{} timed out", sentMessage.getUuid());
 
             // send a callback to the client
             try {

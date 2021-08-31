@@ -28,7 +28,7 @@ public class PdfUtils {
                 return IOUtils.toByteArray(inputStream);
             }
             else {
-                logger.debug("Mimetype of PDF URL is not 'application/pdf', but rather '{}'. Not flattening doc.", contentType);
+                logger.info("Mimetype of PDF URL is not 'application/pdf', but rather '{}'. Not flattening doc.", contentType);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

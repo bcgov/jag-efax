@@ -32,7 +32,7 @@ public class DocumentDistributionEndpoint {
     public void initiate(@RequestPayload DocumentDistributionRequest request) {
 
         String jobId = request.getJobId();
-        logger.debug("Request to initiate soap message, jobId: {}", jobId);
+        logger.info("Request to initiate soap message, jobId: {}", jobId);
         logRequest(request);
 
         try {
@@ -47,7 +47,7 @@ public class DocumentDistributionEndpoint {
             throw new CatchAllFault(jobId, e);
         }
 
-        logger.debug("Fax sent, jobId: {}", jobId);
+        logger.info("Fax sent, jobId: {}", jobId);
     }
 
     /** Logs the request for debugging purposes. */
