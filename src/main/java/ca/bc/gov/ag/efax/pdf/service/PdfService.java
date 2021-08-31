@@ -48,7 +48,7 @@ public class PdfService extends WebServiceGatewaySupport {
         try {
             byte[] data = PdfUtils.readUrl(url);
             if (data != null) {
-                logger.debug("PDF Flattening: jobId {} attempting flattening.", jobId);
+                logger.info("PDF Flattening: jobId {} attempting flattening.", jobId);
                 
                 // convert a url to a pdf file to that of a base64 encoded string.
                 String encoded = Base64.getEncoder().encodeToString(data);
@@ -60,7 +60,7 @@ public class PdfService extends WebServiceGatewaySupport {
                 JAXBElement<PDFTransformationsResponse> jaxbResponse = (JAXBElement<PDFTransformationsResponse>) getWebServiceTemplate()
                         .marshalSendAndReceive(new ObjectFactory().createPDFTransformations(request));
 
-                logger.debug("PDF Flattening: jobId {} flattening successful.", jobId);
+                logger.info("PDF Flattening: jobId {} flattening successful.", jobId);
                 
                 return extractResults(jaxbResponse, path);
             }
