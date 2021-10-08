@@ -83,7 +83,21 @@ jobs:
       # Formatting the BACKEND coverage reports generated (dynamically)
       - name: Format BACKEND coverage reports
         run: |
-          JACOCO_SOURCE_PATH=${{ github.workspace }}/src/main/java ./cc-test-reporter format-coverage ${{github.workspace}}/target/site/jacoco/jacoco.xml --input-type jacoco --output coverage/efax-codeclimate.json;
+          JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter format-coverage target/site/jacoco/jacoco.xml --input-type jacoco --output coverage/efax-codeclimate.json;
+               
+      # Count of all total coverage files available
+      - name: Debug Count files present
+        run: |
+          echo "FILE_COUNTER=$(ls -1q ./coverage | wc -l )" >> $GITHUB_ENV
+          #echo "::set-env name=FILE_COUNTER::$(ls -1q ./coverage | wc -l )"
+    
+      # Upload JSON for debugging purposes
+      - name: Upload JSON for debugging purposes
+        uses: actions/upload-artifact@v2
+        with:
+          name: summed-java-coverage-report
+          path: coverage/efax-codeclimate.json
+    
       # Upload total coverage report to Code Climate
       - name: Upload coverage report to Code Climate
         run: ./cc-test-reporter upload-coverage -i coverage/efax-codeclimate.json
