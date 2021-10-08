@@ -15,7 +15,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
+      - name: Print GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "The event name is ${{ github.event_name }}"
+          echo "$GITHUB_CONTEXT"
+      
       # Checkout Project
       - name: Checkout File Submission Repository
         uses: actions/checkout@v2
