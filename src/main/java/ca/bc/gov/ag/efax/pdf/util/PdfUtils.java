@@ -9,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 public class PdfUtils {
 
     private final static String MIME_TYPE = "application/pdf";
@@ -21,8 +22,10 @@ public class PdfUtils {
     public static byte[] readUrl(URL url) throws IOException {
         InputStream inputStream = null;
         try {
+            logger.debug("PDFUtils.readUrl(), Attempting to open url: '" + (url == null ? "" : url.toString()) + "'");
             URLConnection conn = url.openConnection();
             String contentType = conn.getContentType();
+            logger.debug("PDFUtils.readUrl(), contentType of url: " + contentType);
             if (contentType != null && contentType.contains(MIME_TYPE)) {
                 inputStream = conn.getInputStream();
                 return IOUtils.toByteArray(inputStream);
