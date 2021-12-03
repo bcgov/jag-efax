@@ -36,7 +36,7 @@ public class FailedVisitorTest extends BaseTestSuite {
         // should match FAXSendFault
         FAXSendFault fault = new FAXSendFault();
         assertEquals("1234", response.getJobId()); // should have extracted the jobId from the body
-        assertEquals("070d08c0-8704-4232-b5e2- cc23b377433f", response.getUuid()); // should have extracted the jobId from the body
+        assertEquals("070d08c0-8704-4232-b5e2-cc23b377433f", response.getUuid()); // should have extracted the jobId from the body
         assertEquals(fault.getFaultCode(), response.getStatusCode());
         assertEquals(fault.getFaultMessage(), response.getStatusMessage());              
     }

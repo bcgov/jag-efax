@@ -56,6 +56,7 @@ public class ScheduledTasks {
             }
 
             // remove message from queue
+            logger.debug("Removing message from redis queue: " + sentMessage.getUuid());
             sentMessageRepository.deleteById(sentMessage.getUuid());
         }
     }

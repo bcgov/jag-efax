@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ca.bc.gov.ag.efax.mail.model.DocumentDistributionMainProcessProcessResponseDecorator;
+import ca.bc.gov.ag.efax.mail.util.StringUtils;
 import ca.bc.gov.ag.efax.ws.exception.FAXSendFault;
 
 public abstract class EmailVisitor {
@@ -25,7 +26,9 @@ public abstract class EmailVisitor {
      */
     protected void apply(Matcher matcher, FAXSendFault fault, DocumentDistributionMainProcessProcessResponseDecorator response) {
         response.setJobId(matcher.group(1));
-        response.setUuid(matcher.group(2));
+        // There shouldn't be any whitespace in the uuid.  This uuid was extracted from the subject line in an Exchange email.  
+        // It seems Exchange will sometimes inject spaces into the uuid string 
+        response.setUuid(StringUtils.removeWhiteSpace(matcher.group(2)));
         response.setStatusCode(fault.getFaultCode());
         response.setStatusMessage(fault.getFaultMessage());
     }
@@ -35,7 +38,9 @@ public abstract class EmailVisitor {
      */
     protected void apply(Matcher matcher, String statusCode, String statusMessage, DocumentDistributionMainProcessProcessResponseDecorator response) {
         response.setJobId(matcher.group(1));
-        response.setUuid(matcher.group(2));
+        // There shouldn't be any whitespace in the uuid.  This uuid was extracted from the subject line in an Exchange email.  
+        // It seems Exchange will sometimes inject spaces into the uuid string 
+        response.setUuid(StringUtils.removeWhiteSpace(matcher.group(2)));
         response.setStatusCode(statusCode);
         response.setStatusMessage(statusMessage);
     }
