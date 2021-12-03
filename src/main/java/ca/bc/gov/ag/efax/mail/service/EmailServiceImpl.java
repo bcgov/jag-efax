@@ -85,10 +85,12 @@ public class EmailServiceImpl implements EmailService {
             // Store the UUID of this message in the redis queue. To avoid race conditions, this is stored now (before the actual sending of the
             // message) and removed if there is an error.
             SentMessage sentMessage = new SentMessage(mailMessage.getUuid(), mailMessage.getJobId(), new Date());
+            logger.debug("Adding message to redis queue: " + sentMessage.getUuid());
             sentMessageRepository.save(sentMessage);
             
             processMessage(mailMessage);
         } catch (Exception e) {
+            logger.debug("Removing message from redis queue: " + mailMessage.getUuid());
             sentMessageRepository.deleteById(mailMessage.getUuid());
             throw new FAXSendFault("Unknown Exception in class sendMessage", e);
         }

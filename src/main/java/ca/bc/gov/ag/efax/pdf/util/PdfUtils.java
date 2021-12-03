@@ -22,10 +22,10 @@ public class PdfUtils {
     public static byte[] readUrl(URL url) throws IOException {
         InputStream inputStream = null;
         try {
-            logger.debug("PDFUtils.readUrl(), Attempting to open url: '" + (url == null ? "" : url.toString()) + "'");
+            logger.debug("Attempting to open url: '" + (url == null ? "" : url.toString()) + "'");
             URLConnection conn = url.openConnection();
             String contentType = conn.getContentType();
-            logger.debug("PDFUtils.readUrl(), contentType of url: " + contentType);
+            logger.debug("contentType of url: " + contentType);
             if (contentType != null && contentType.contains(MIME_TYPE)) {
                 inputStream = conn.getInputStream();
                 return IOUtils.toByteArray(inputStream);
