@@ -54,7 +54,7 @@ public class PdfService extends WebServiceGatewaySupport {
                 String encoded = Base64.getEncoder().encodeToString(data);
     
                 PDFTransformations request = new PDFTransformations();
-                request.setFlags(3);
+                request.setFlags(96);
                 request.setInputFile(encoded);
                 
                 JAXBElement<PDFTransformationsResponse> jaxbResponse = (JAXBElement<PDFTransformationsResponse>) getWebServiceTemplate()
