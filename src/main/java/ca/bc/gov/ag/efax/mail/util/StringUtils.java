@@ -33,5 +33,12 @@ public class StringUtils {
             .replaceAll("\\r", "").replaceAll("\\n", "")
             .replaceAll("&lt;", "<").replaceAll("&gt;", ">");
 	}
+	
+	/**
+	 * A helper method to remove all whitespace characters from a given string.
+	 */
+	public static String removeWhiteSpace(String str) {
+        return org.apache.commons.lang3.StringUtils.defaultString(str).replaceAll("\\s", "");     
+	}
 
 }
