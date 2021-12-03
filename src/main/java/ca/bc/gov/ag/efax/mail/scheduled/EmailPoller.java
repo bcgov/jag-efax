@@ -69,6 +69,7 @@ public class EmailPoller {
      */
     private void removeFromQueue(String uuid) {
         try {
+            logger.debug("Removing message from redis queue: " + uuid);
             sentMessageRepository.deleteById(uuid);
         } catch (Exception e) {
             logger.error("Could not remove message with uuid '{}' from queue", uuid);
