@@ -42,5 +42,3 @@ From Docker or OpenShift, these environment variables can be used to configure t
 | REDIS_PORT | Y | Port of the Redis instance. |
 | REDIS_PASSWORD | Y | Password to use to log into the Redis instance.. |
 
-
-
