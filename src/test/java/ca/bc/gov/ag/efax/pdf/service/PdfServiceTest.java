@@ -65,4 +65,24 @@ public class PdfServiceTest extends BaseTestSuite {
         assertNull(file);
     }
     
+//    public static void main(String[] args) {
+//        // Useful to test the PDF flattening service.
+//        // This static method will call the actual LCGatewayService
+//        
+//        Jaxb2Marshaller pdfMarshaller = new Jaxb2Marshaller();
+//        pdfMarshaller.setContextPath("ca.bc.gov.ag.efax.pdf.model");
+//        
+//        PdfProperties pdfProperties = new PdfProperties();
+//        pdfProperties.setEndpoint("<URL to gateway>");
+//        
+//        // source file is located in src/test/resources
+//        URL url = new PdfServiceTest().getClass().getClassLoader().getResource("sample_v1.4.pdf");
+//               
+//        // target file is located in target
+//        String targetFilePath = "target/sample_v1.4.flat.pdf";
+//        
+//        PdfService pdfService = new PdfService(pdfMarshaller, pdfProperties );
+//        pdfService.flattenPdf(url, targetFilePath, "1234");
+//    }
+    
 }
