@@ -24,7 +24,7 @@ FROM openjdk:8-jdk-slim
 
 ARG MODULE=
 
-COPY --from=build ./target/jag-efax-1.0.0.jar /app/service.jar
+COPY --from=build ./target/jag-efax-1.1.0-SNAPSHOT.jar /app/service.jar
 
 CMD ["java", "-jar", "/app/service.jar"]
 #############################################################################################
