@@ -2,7 +2,6 @@ name: PROD Deploy of Efax Webservice Image
 
 on:
   workflow_dispatch:
-    branches: [main]
     inputs:
       tag:
         description: "Image tag to be deployed"
