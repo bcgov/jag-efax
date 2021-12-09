@@ -42,12 +42,6 @@ jobs:
           _version=$(.github/helpers/latest_java_version.sh)
           echo "LATEST_VERSION=$_version" >> $GITHUB_ENV
 
-      - name: Fail workflow if version in POM differs from tag
-        if: ${{ github.event.inputs.tag }} != ${{ env.LATEST_VERSION }}
-        uses: actions/github-script@v5
-        with:
-          script: core.setFailed('The tag ${{ github.event.inputs.tag }} given as input does not match the version ${{ env.LATEST_VERSION }} in the pom.xml file')
-
       - name: Deploy to TEST
         env:
           NAMESPACE: "${{ secrets.OPENSHIFT_TEST_NAMESPACE }}"
