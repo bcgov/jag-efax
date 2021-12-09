@@ -2,7 +2,10 @@ name: PROD Deploy of Efax Webservice Image
 
 on:
   workflow_dispatch:
-    branches: [main]
+    inputs:
+      tag:
+        description: "Image tag to be deployed"
+        required: true
 
 jobs:
   build:
@@ -10,6 +13,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.tag }}
 
       - name: Cluster Login
         uses: redhat-developer/openshift-actions@v1.1
