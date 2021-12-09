@@ -46,7 +46,7 @@ jobs:
         if: ${{ github.event.inputs.tag }} != ${{ env.LATEST_VERSION }}
         uses: actions/github-script@v5
         with:
-          script: core.setFailed('The tag ${{ github.event.inputs.tag }} given as input does not match the version ${{ LATEST_VERSION }} in the pom.xml file')
+          script: core.setFailed('The tag ${{ github.event.inputs.tag }} given as input does not match the version ${{ env.LATEST_VERSION }} in the pom.xml file')
 
       - name: Deploy to TEST
         env:
