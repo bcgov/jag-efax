@@ -14,6 +14,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.tag }}
 
       - name: Cluster Login
         uses: redhat-developer/openshift-actions@v1.1
