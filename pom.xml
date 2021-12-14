@@ -10,7 +10,7 @@
 
 	<groupId>ca.bc.gov.ag</groupId>
 	<artifactId>jag-efax</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 
 	<name>jag-eFax</name>
 	<description>A BPEL eFax Replacement project.</description>
@@ -18,7 +18,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<main.basedir>${project.basedir}</main.basedir>
-		<log4j2.version>2.15.0</log4j2.version>
+		<log4j2.version>2.16.0</log4j2.version>
 	</properties>
 
 	<repositories>
