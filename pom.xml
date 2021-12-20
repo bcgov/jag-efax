@@ -10,7 +10,7 @@
 
 	<groupId>ca.bc.gov.ag</groupId>
 	<artifactId>jag-efax</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 
 	<name>jag-eFax</name>
 	<description>A BPEL eFax Replacement project.</description>
@@ -19,7 +19,7 @@
 		<target.fileName>${project.artifactId}-${project.version}</target.fileName>
 		<java.version>1.8</java.version>
 		<main.basedir>${project.basedir}</main.basedir>
-		<log4j2.version>2.16.0</log4j2.version>
+		<log4j2.version>2.17.0</log4j2.version>
 	</properties>
 
 	<repositories>
@@ -128,7 +128,7 @@
 				<dependency>
 					<groupId>com.splunk.logging</groupId>
 					<artifactId>splunk-library-javalogging</artifactId>
-					<version>1.11.1</version>
+					<version>1.11.2</version>
 				</dependency>
 			</dependencies>
 		</profile>
