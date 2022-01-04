@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.0</version>
+		<version>2.5.1</version>
 	</parent>
 
 	<groupId>ca.bc.gov.ag</groupId>
@@ -19,7 +19,7 @@
 		<target.fileName>${project.artifactId}-${project.version}</target.fileName>
 		<java.version>1.8</java.version>
 		<main.basedir>${project.basedir}</main.basedir>
-		<log4j2.version>2.17.0</log4j2.version>
+		<log4j2.version>2.17.1</log4j2.version>
 	</properties>
 
 	<repositories>
@@ -128,7 +128,7 @@
 				<dependency>
 					<groupId>com.splunk.logging</groupId>
 					<artifactId>splunk-library-javalogging</artifactId>
-					<version>1.11.2</version>
+					<version>1.11.4</version>
 				</dependency>
 			</dependencies>
 		</profile>
