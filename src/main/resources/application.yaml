@@ -22,8 +22,14 @@ exchange:
     interval: 300000    # 5 minutes
 
 aem: # AEM is a PDF flattening service
-  enabled: true
-  endpoint: ${PDF_ENDPOINT:}
+  livecycle:
+    enabled: false
+    endpoint: ${PDF_ENDPOINT:-}
+  output:
+    enabled: true
+    endpoint: ${PDF_ENDPOINT:-}
+    username: ${PDF_USERNAME:-}
+    password: ${PDF_PASSWORD:-}
   
 ws:  
   # A regular expression pattern that matches the email recipent (To:) to enable faxing by Exchange.
@@ -33,7 +39,7 @@ ws:
     enabled: true   
     # Timeout (in milliseconds) when no response has been received by exchange for a sent fax
     #   After this timeout, the fax is considered lost and a failed status is returned to the user.  
-    duration: 1500000    # 25 minutes
+    duration: 1500000   # 25 minutes
     # Interval (in milliseconds) when to poll/check for timed-out sent faxes.
     pollInterval: 60000 # 60 seconds
   
