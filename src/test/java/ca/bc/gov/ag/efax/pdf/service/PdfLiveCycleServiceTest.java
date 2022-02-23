@@ -7,24 +7,39 @@ import java.io.File;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
 import ca.bc.gov.ag.efax.BaseTestSuite;
 import ca.bc.gov.ag.efax.mail.config.ExchangeProperties;
-import ca.bc.gov.ag.efax.pdf.model.ObjectFactory;
-import ca.bc.gov.ag.efax.pdf.model.PDFTransformationsResponse;
+import ca.bc.gov.ag.efax.pdf.config.PdfProperties;
+import ca.bc.gov.ag.efax.pdf.livecycle.model.ObjectFactory;
+import ca.bc.gov.ag.efax.pdf.livecycle.model.PDFTransformationsResponse;
 import ca.bc.gov.ag.efax.pdf.util.PdfUtils;
 
-public class PdfServiceTest extends BaseTestSuite {
+public class PdfLiveCycleServiceTest extends BaseTestSuite {
 
-    @Autowired
-    protected PdfService pdfService;
+    private PdfLiveCycleService pdfService;
 
     @Autowired
     private ExchangeProperties exchangeProperties;
+    
+    @Autowired
+    private Jaxb2Marshaller pdfMarshaller;
+    
+    @Autowired
+    private PdfProperties pdfProperties;
+
+    @BeforeEach
+    @Override
+    protected void beforeEach() throws Exception {
+        super.beforeEach();
+        pdfService = new PdfLiveCycleService(pdfMarshaller, pdfProperties);
+    }
     
     @Test
     void testFlattenPdf() throws Exception {

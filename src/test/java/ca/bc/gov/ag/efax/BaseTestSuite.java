@@ -6,6 +6,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.UUID;
 
+import javax.xml.ws.Dispatch;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +50,9 @@ public abstract class BaseTestSuite {
 
     @MockBean
     private ExchangeServiceFactory exchangeServiceFactory;
+
+    @MockBean
+    protected Dispatch<Object> outputServiceDispatch;
 
     protected MockWebServiceClient mockClient;
     
