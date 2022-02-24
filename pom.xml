@@ -50,14 +50,40 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
+
+		<!-- OutputService dependencies -->
 		<dependency>
-			<!-- Adobe PDF dependency -->
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.ws</groupId>
+			<artifactId>jaxws-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>rt</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.jws</groupId>
+			<artifactId>javax.jws-api</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+		<!-- Adobe PDF dependency -->
+		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.9.0</version>
 		</dependency>
+
+		<!-- Microsoft ExchangeService client -->
 		<dependency>
-			<!-- Microsoft ExchangeService client -->
 			<groupId>com.microsoft.ews-java-api</groupId>
 			<artifactId>ews-java-api</artifactId>
 			<version>2.0</version>
@@ -141,6 +167,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
 			<!-- tag::xsd[] -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -168,7 +195,7 @@
 							<goal>xjc</goal>
 						</goals>
 						<configuration>
-							<packageName>ca.bc.gov.ag.efax.pdf.model</packageName>
+							<packageName>ca.bc.gov.ag.efax.pdf.livecycle.model</packageName>
 							<sources>
 								<source>${project.basedir}/src/main/resources/PdfTransformations.xsd</source>
 							</sources>
@@ -178,6 +205,30 @@
 				</executions>
 			</plugin>
 			<!-- end::xsd[] -->
+
+			<!-- tag::wsdl[] -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxws-maven-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<id>xjc</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>wsimport</goal>
+						</goals>
+						<configuration>
+							<packageName>ca.bc.gov.ag.efax.pdf.outputservice.model</packageName>
+							<wsdlDirectory>${project.basedir}/src/main/resources/wsdl</wsdlDirectory>
+							<wsdlFiles>
+								<wsdlFile>OutputService.wsdl</wsdlFile>
+							</wsdlFiles>
+							<sourceDestDir>${project.build.directory}/generated-sources/jaxb3</sourceDestDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
 			<!--jacoco code coverage -->
 			<plugin>
