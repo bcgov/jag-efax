@@ -12,7 +12,7 @@ COPY . .
 
 RUN echo ENABLE_SPLUNK=${ENABLE_SPLUNK}
 
-RUN mvn -B clean package \
+RUN mvn -B --non-recursive clean package \
         -Dtarget.fileName=jag-efax \
         -Dmaven.test.skip=${SKIP_TESTS} \
         -Denable-splunk=${ENABLE_SPLUNK}
