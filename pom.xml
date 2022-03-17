@@ -2,6 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
+	<packaging>pom</packaging>
+	<modules>
+		<module>distribution-client-proxy</module>
+	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -173,6 +177,7 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxb2-maven-plugin</artifactId>
 				<version>2.5.0</version>
+				<inherited>false</inherited>
 				<executions>
 					<execution>
 						<id>xjc1</id>
@@ -211,6 +216,7 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxws-maven-plugin</artifactId>
 				<version>2.6</version>
+				<inherited>false</inherited>
 				<executions>
 					<execution>
 						<id>xjc</id>
@@ -235,7 +241,7 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.6</version>
-
+				<inherited>false</inherited>
 				<configuration>
 					<excludes>
 						<exclude>ca/bc/gov/ag/efax/ws/model/*</exclude>
