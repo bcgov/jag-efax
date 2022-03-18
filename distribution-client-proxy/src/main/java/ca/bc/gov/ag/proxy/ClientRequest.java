@@ -16,7 +16,7 @@ public class ClientRequest {
     private String transport;
     private String subject;
     private String fileNumber;
-    private String snumPages;
+    private int snumPages;
     private String attachment;
     private String extension1;
     private String extension2;
@@ -25,33 +25,13 @@ public class ClientRequest {
     private String documentStatus;
     private String documentStatusDate;
     private String receiveFaxCoverPageYn = "Y";
+    private String endpoint;
+    private String username;
+    private String password;
+    private String faxCoverSheetHtml;
+    private String documentStatusHtmlFragment;
 
-    public ClientRequest(String wsdlEndpoint, String wsdlUsername, String wsdlPassword, String callbackEndpoint, String callbackUsername, String callbackPassword, String from, String to, String jobId, String sdateTime, String timeout, String schannel, String transport, String subject, String fileNumber, String snumPages, String attachment, String extension1, String extension2, String fromFaxNumber, String fromPhoneNumber, String documentStatus, String documentStatusDate, String receiveFaxCoverPageYn) {
-        this.wsdlEndpoint = wsdlEndpoint;
-        this.wsdlUsername = wsdlUsername;
-        this.wsdlPassword = wsdlPassword;
-        this.callbackEndpoint = callbackEndpoint;
-        this.callbackUsername = callbackUsername;
-        this.callbackPassword = callbackPassword;
-        this.from = from;
-        this.to = to;
-        this.jobId = jobId;
-        this.sdateTime = sdateTime;
-        this.timeout = timeout;
-        this.schannel = schannel;
-        this.transport = transport;
-        this.subject = subject;
-        this.fileNumber = fileNumber;
-        this.snumPages = snumPages;
-        this.attachment = attachment;
-        this.extension1 = extension1;
-        this.extension2 = extension2;
-        this.fromFaxNumber = fromFaxNumber;
-        this.fromPhoneNumber = fromPhoneNumber;
-        this.documentStatus = documentStatus;
-        this.documentStatusDate = documentStatusDate;
-        this.receiveFaxCoverPageYn = receiveFaxCoverPageYn;
-
+    protected ClientRequest() {
     }
 
     public String getWsdlEndpoint() {
@@ -114,7 +94,7 @@ public class ClientRequest {
         return fileNumber;
     }
 
-    public String getSnumPages() {
+    public int getSnumPages() {
         return snumPages;
     }
 
@@ -148,5 +128,133 @@ public class ClientRequest {
 
     public String getReceiveFaxCoverPageYn() {
         return receiveFaxCoverPageYn;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setWsdlEndpoint(String wsdlEndpoint) {
+        this.wsdlEndpoint = wsdlEndpoint;
+    }
+
+    public void setWsdlUsername(String wsdlUsername) {
+        this.wsdlUsername = wsdlUsername;
+    }
+
+    public void setWsdlPassword(String wsdlPassword) {
+        this.wsdlPassword = wsdlPassword;
+    }
+
+    public void setCallbackEndpoint(String callbackEndpoint) {
+        this.callbackEndpoint = callbackEndpoint;
+    }
+
+    public void setCallbackUsername(String callbackUsername) {
+        this.callbackUsername = callbackUsername;
+    }
+
+    public void setCallbackPassword(String callbackPassword) {
+        this.callbackPassword = callbackPassword;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
+    }
+
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
+    }
+
+    public void setSdateTime(String sdateTime) {
+        this.sdateTime = sdateTime;
+    }
+
+    public void setTimeout(String timeout) {
+        this.timeout = timeout;
+    }
+
+    public void setSchannel(String schannel) {
+        this.schannel = schannel;
+    }
+
+    public void setTransport(String transport) {
+        this.transport = transport;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public void setFileNumber(String fileNumber) {
+        this.fileNumber = fileNumber;
+    }
+
+    public void setSnumPages(int snumPages) {
+        this.snumPages = snumPages;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
+    }
+
+    public void setExtension1(String extension1) {
+        this.extension1 = extension1;
+    }
+
+    public void setExtension2(String extension2) {
+        this.extension2 = extension2;
+    }
+
+    public void setFromFaxNumber(String fromFaxNumber) {
+        this.fromFaxNumber = fromFaxNumber;
+    }
+
+    public void setFromPhoneNumber(String fromPhoneNumber) {
+        this.fromPhoneNumber = fromPhoneNumber;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+    }
+
+    public void setDocumentStatusDate(String documentStatusDate) {
+        this.documentStatusDate = documentStatusDate;
+    }
+
+    public void setReceiveFaxCoverPageYn(String receiveFaxCoverPageYn) {
+        this.receiveFaxCoverPageYn = receiveFaxCoverPageYn;
+    }
+
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setFaxCoverSheetHtml(String faxCoverSheetHtml) {
+        this.faxCoverSheetHtml = faxCoverSheetHtml;
+    }
+
+    public void setDocumentStatusHtmlFragment(String documentStatusHtmlFragment) {
+        this.documentStatusHtmlFragment = documentStatusHtmlFragment;
     }
 }

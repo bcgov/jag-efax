@@ -1,8 +1,23 @@
 package ca.bc.gov.ag.proxy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static ca.bc.gov.ag.proxy.validation.ClientRequestValidator.validate;
 
 public class ClientRequestBuilder {
+
+    private static Logger logger = LoggerFactory.getLogger(ClientRequestBuilder.class);
+
     private String wsdlEndpoint;
     private String wsdlUsername;
     private String wsdlPassword;
@@ -18,7 +33,7 @@ public class ClientRequestBuilder {
     private String transport;
     private String subject;
     private String fileNumber;
-    private String snumPages;
+    private int snumPages = 0;
     private String attachment;
     private String extension1;
     private String extension2;
@@ -27,16 +42,49 @@ public class ClientRequestBuilder {
     private String documentStatus;
     private String documentStatusDate;
     private String receiveFaxCoverPageYn;
+    private boolean hasAccountedTheFaxCoverPage = false;
+    private String faxCoverSheetHtml;
+    private String documentStatusHtmlFragment;
+    private String username;
+    private String password;
+    private String endpoint;
 
 
     public ClientRequest build() {
-        validate();
-        return null;
-//        return new ClientRequest();
-    }
+        ClientRequest clientRequest = new ClientRequest();
+        clientRequest.setWsdlEndpoint(wsdlEndpoint);
+        clientRequest.setWsdlUsername(wsdlUsername);
+        clientRequest.setWsdlPassword(wsdlPassword);
+        clientRequest.setCallbackEndpoint(callbackEndpoint);
+        clientRequest.setCallbackUsername(callbackUsername);
+        clientRequest.setCallbackPassword(callbackPassword);
+        clientRequest.setFrom(from);
+        clientRequest.setTo(to);
+        clientRequest.setJobId(jobId);
+        clientRequest.setSdateTime(sdateTime);
+        clientRequest.setTimeout(timeout);
+        clientRequest.setSchannel(schannel);
+        clientRequest.setTransport(transport);
+        clientRequest.setSubject(subject);
+        clientRequest.setFileNumber(fileNumber);
+        clientRequest.setSnumPages(snumPages);
+        clientRequest.setAttachment(attachment);
+        clientRequest.setExtension1(extension1);
+        clientRequest.setExtension2(extension2);
+        clientRequest.setFromFaxNumber(fromFaxNumber);
+        clientRequest.setFromPhoneNumber(fromPhoneNumber);
+        clientRequest.setDocumentStatus(documentStatus);
+        clientRequest.setDocumentStatusDate(documentStatusDate);
+        clientRequest.setReceiveFaxCoverPageYn(receiveFaxCoverPageYn);
+        clientRequest.setFaxCoverSheetHtml(faxCoverSheetHtml);
+        clientRequest.setDocumentStatusHtmlFragment(documentStatusHtmlFragment);
+        clientRequest.setUsername(username);
+        clientRequest.setPassword(password);
+        clientRequest.setEndpoint(endpoint);
 
-    private void validate() {
+        validate(clientRequest);
 
+        return clientRequest;
     }
 
     @Override
@@ -145,7 +193,7 @@ public class ClientRequestBuilder {
     }
 
     public ClientRequestBuilder setSnumPages(String snumPages) {
-        this.snumPages = snumPages;
+        this.snumPages += Integer.parseInt(snumPages);
         return this;
     }
 
@@ -186,7 +234,43 @@ public class ClientRequestBuilder {
 
     public ClientRequestBuilder setReceiveFaxCoverPageYn(String receiveFaxCoverPageYn) {
         this.receiveFaxCoverPageYn = receiveFaxCoverPageYn;
+
+        if (!hasAccountedTheFaxCoverPage && receiveFaxCoverPageYn != null && receiveFaxCoverPageYn.equalsIgnoreCase("Y")) {
+            this.hasAccountedTheFaxCoverPage = true;
+            this.snumPages += 1;
+        }
         return this;
+    }
+
+    public ClientRequestBuilder setFaxCoverSheetHtml(String filepath) throws IOException, URISyntaxException {
+        this.faxCoverSheetHtml = readFile(filepath);
+        return this;
+    }
+
+    public ClientRequestBuilder setDocumentStatusHtmlFragment(String filepath) throws IOException, URISyntaxException {
+        this.documentStatusHtmlFragment = readFile(filepath);
+        return this;
+    }
+
+    public ClientRequestBuilder setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public ClientRequestBuilder setPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public ClientRequestBuilder setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+        return this;
+    }
+
+    private String readFile(String filePath) throws IOException, URISyntaxException {
+        URL resource = getClass().getClassLoader().getResource(filePath);
+        Stream<String> stream = Files.lines(Paths.get(resource.toURI()));
+        return stream.collect(Collectors.joining("\n"));
     }
 
     public String getWsdlEndpoint() {
@@ -249,7 +333,7 @@ public class ClientRequestBuilder {
         return fileNumber;
     }
 
-    public String getSnumPages() {
+    public int getSnumPages() {
         return snumPages;
     }
 
@@ -283,5 +367,18 @@ public class ClientRequestBuilder {
 
     public String getReceiveFaxCoverPageYn() {
         return receiveFaxCoverPageYn;
+    }
+
+    public String getFaxCoverSheetHtml() {
+        return faxCoverSheetHtml;
+    }
+
+    public String getDocumentStatusHtmlFragment() {
+        return documentStatusHtmlFragment;
+    }
+
+    public ClientRequestBuilder logInfo() {
+        logger.info(toString());
+        return this;
     }
 }

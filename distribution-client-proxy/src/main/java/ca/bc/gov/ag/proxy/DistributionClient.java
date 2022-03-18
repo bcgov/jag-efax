@@ -1,14 +1,10 @@
 package ca.bc.gov.ag.proxy;
 
-import ca.bc.gov.ag.efax.pdf.util.PdfUtils;
-import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
-import ca.bc.gov.ag.proxy.validation.ClientRequestValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class DistributionClient {
 
@@ -34,7 +30,7 @@ public class DistributionClient {
     private static final String DOCSTATUS = "%STATUS%";
     private static final String DOCSTATUSDATE = "%STATUSDATE%";
 
-    private static Logger logger = LoggerFactory.getLogger(PdfUtils.class);
+    private static Logger logger = LoggerFactory.getLogger(DistributionClient.class);
 
     public static String process(
             final String wsdlEndpoint,
@@ -62,67 +58,80 @@ public class DistributionClient {
             final String documentStatusDate,
             final String receiveFaxCoverPageYn
     ) {
-
         ClientRequestBuilder builder = new ClientRequestBuilder();
-        builder
-                .setWsdlEndpoint(wsdlEndpoint)
-                .setWsdlUsername(wsdlUsername)
-                .setWsdlPassword(wsdlPassword)
-                .setCallbackEndpoint(callbackEndpoint)
-                .setCallbackUsername(callbackUsername)
-                .setCallbackPassword(callbackPassword)
-                .setFrom(from)
-                .setTo(to)
-                .setJobId(jobId)
-                .setSdateTime(sdateTime)
-                .setTimeout(timeout)
-                .setSchannel(schannel)
-                .setTransport(transport)
-                .setSubject(subject)
-                .setFileNumber(fileNumber)
-                .setSnumPages(snumPages)
-                .setAttachment(attachment)
-                .setExtension1(extension1)
-                .setExtension2(extension2)
-                .setFromFaxNumber(fromFaxNumber)
-                .setFromPhoneNumber(fromPhoneNumber)
-                .setDocumentStatus(documentStatus)
-                .setDocumentStatusDate(documentStatusDate)
-                .setReceiveFaxCoverPageYn(receiveFaxCoverPageYn);
+        try {
+            ClientRequest clientRequest = builder
+                    .setWsdlEndpoint(wsdlEndpoint)
+                    .setWsdlUsername(wsdlUsername)
+                    .setWsdlPassword(wsdlPassword)
+                    .setCallbackEndpoint(callbackEndpoint)
+                    .setCallbackUsername(callbackUsername)
+                    .setCallbackPassword(callbackPassword)
+                    .setFrom(from)
+                    .setTo(to)
+                    .setJobId(jobId)
+                    .setSdateTime(sdateTime)
+                    .setTimeout(timeout)
+                    .setSchannel(schannel)
+                    .setTransport(transport)
+                    .setSubject(subject)
+                    .setFileNumber(fileNumber)
+                    .setSnumPages(snumPages)
+                    .setAttachment(attachment)
+                    .setExtension1(extension1)
+                    .setExtension2(extension2)
+                    .setFromFaxNumber(fromFaxNumber)
+                    .setFromPhoneNumber(fromPhoneNumber)
+                    .setDocumentStatus(documentStatus)
+                    .setDocumentStatusDate(documentStatusDate)
+                    .setReceiveFaxCoverPageYn(receiveFaxCoverPageYn)
+                    .setFaxCoverSheetHtml("DocumentStatusHTMLFragment.html")
+                    .setDocumentStatusHtmlFragment("FaxCoverSheetHTMLTemplate.html")
+                    .setEndpoint(wsdlEndpoint)
+                    .setUsername(wsdlUsername)
+                    .setPassword(wsdlUsername)
+                    .logInfo()
+                    .build();
 
-        logger.info(builder.toString());
-
-        ClientRequest clientRequest = builder.build();
-
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+            return "";
+        }
+        logger.info(builder.getDocumentStatusHtmlFragment());
         return null;
     }
 
     public static void main(String[] args) {
-        String wsdlEndpoint="wsdlEndpoint";
-        String wsdlUsername="wsdlUsername";
-        String wsdlPassword="wsdlPassword";
-        String callbackEndpoint="callbackEndpoint";
-        String callbackUsername="callbackUsername";
-        String callbackPassword="callbackPassword";
-        String from="from";
-        String to="to";
-        String jobId="jobId";
-        String sdateTime="sdateTime";
-        String timeout="timeout";
-        String schannel="schannel";
-        String transport="transport";
-        String subject="subject";
-        String fileNumber="fileNumber";
-        String snumPages="snumPages";
-        String attachment="attachment";
-        String extension1="extension1";
-        String extension2="extension2";
-        String fromFaxNumber="fromFaxNumber";
-        String fromPhoneNumber="fromPhoneNumber";
-        String documentStatus="documentStatus";
-        String documentStatusDate="documentStatusDate";
-        String receiveFaxCoverPageYn="receiveFaxCoverPageYn";
-        ClientRequest clientRequest = new ClientRequest(wsdlEndpoint,
+        String wsdlEndpoint = "http://nginx-ddea46-test.apps.silver.devops.gov.bc.ca/api/ws";
+        String wsdlUsername = "icedtest";
+        String wsdlPassword = "Sumer$14";
+        String callbackEndpoint = "http://wsgw.test.jag.gov.bc.ca:8080/efax/JustinDistributionCallback";
+        String callbackUsername = "callbackUsername";
+        String callbackPassword = "callbackPassword";
+
+        String from = "Steven Dickson";
+        String to = "Joe Bloggs";
+        String jobId = "86420";
+        String sdateTime = "2008-12-12T12:12:12.121-0800";
+        String timeout = "PT3M";
+        String schannel = "fax";
+        String transport = "250 356 9293";
+        String subject = "Distribution Client - Testing";
+        String fileNumber = "F12345-0123";
+//        String snumPages = "3";
+        String snumPages = "0";
+        String attachment = "https://eservice.ag.gov.bc.ca/cso/about/efiling-info.pdf";
+        String extension1 = "";
+        String extension2 = "";
+        String fromFaxNumber = "(250) 356 9293";
+        String fromPhoneNumber = "(250) 590 2252";
+        String documentStatus = "Cancelled";
+        String documentStatusDate = "2008-06-26";
+
+        String receiveFaxCoverPageYn = "Y";
+
+
+        process(wsdlEndpoint,
                 wsdlUsername,
                 wsdlPassword,
                 callbackEndpoint,
@@ -146,10 +155,6 @@ public class DistributionClient {
                 documentStatus,
                 documentStatusDate,
                 receiveFaxCoverPageYn);
-
-        ClientRequestValidator.validate(clientRequest);
-
-
     }
 
 
