@@ -2,11 +2,12 @@ package ca.bc.gov.ag.proxy.validation;
 
 import ca.bc.gov.ag.proxy.ClientRequest;
 
+import static ca.bc.gov.ag.proxy.validation.IntegerValidationHelper.lesserThan;
 import static ca.bc.gov.ag.proxy.validation.StringValidationHelper.notEmpty;
 import static ca.bc.gov.ag.proxy.validation.StringValidationHelper.notNull;
 
 public class ClientRequestValidator {
-    public static void validate(ClientRequest clientRequest){
+    public static void validate(ClientRequest clientRequest) {
         notNull.and(notEmpty).test(clientRequest.getFrom()).throwIfInvalid("from");
         notNull.and(notEmpty).test(clientRequest.getTo()).throwIfInvalid("to");
         notNull.and(notEmpty).test(clientRequest.getJobId()).throwIfInvalid("jobId");
@@ -16,11 +17,12 @@ public class ClientRequestValidator {
         notNull.and(notEmpty).test(clientRequest.getTransport()).throwIfInvalid("transport");
         notNull.and(notEmpty).test(clientRequest.getSubject()).throwIfInvalid("subject");
         notNull.and(notEmpty).test(clientRequest.getFileNumber()).throwIfInvalid("fileNumber");
-        notNull.and(notEmpty).test(clientRequest.getSnumPages()).throwIfInvalid("snumPages");
+        lesserThan(clientRequest.getReceiveFaxCoverPageYn().equalsIgnoreCase("Y") ? 2 : 1).test(clientRequest.getSnumPages()).throwIfInvalid("snumPages");
         notNull.and(notEmpty).test(clientRequest.getAttachment()).throwIfInvalid("attachment");
-        notNull.and(notEmpty).test(clientRequest.getExtension1()).throwIfInvalid("extension1");
-        notNull.and(notEmpty).test(clientRequest.getExtension2()).throwIfInvalid("extension2");
+        notNull.test(clientRequest.getExtension1()).throwIfInvalid("extension1");
+        notNull.test(clientRequest.getExtension2()).throwIfInvalid("extension2");
         notNull.and(notEmpty).test(clientRequest.getFromFaxNumber()).throwIfInvalid("fromFaxNumber");
         notNull.and(notEmpty).test(clientRequest.getFromPhoneNumber()).throwIfInvalid("fromPhoneNumber");
     }
+
 }
