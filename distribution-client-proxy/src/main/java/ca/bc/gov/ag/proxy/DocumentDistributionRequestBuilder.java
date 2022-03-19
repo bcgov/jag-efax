@@ -2,6 +2,7 @@ package ca.bc.gov.ag.proxy;
 
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest.Attachments;
+import ca.bc.gov.ag.proxy.config.ApplicationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,9 +39,6 @@ public class DocumentDistributionRequestBuilder {
     private static final String DOCSTATUS = "%STATUS%";
     private static final String DOCSTATUSDATE = "%STATUSDATE%";
 
-    private static final String FAX_COVER_SHEET_HTML_FILEPATH = "FaxCoverSheetHTMLTemplate.html";
-    private static final String DOCUMENT_STATUS_HTML_FRAGMENT_FILEPATH = "DocumentStatusHTMLFragment.html";
-
     private String from;
     private String to;
     private String jobId;
@@ -50,7 +48,7 @@ public class DocumentDistributionRequestBuilder {
     private String subject;
     private String body = "";
     private int numPages = 0; //not required
-    private Attachments attachments = new Attachments();
+    private final Attachments attachments = new Attachments();
     private String extension1 = "";
     private String extension2 = "";
     private boolean hasAccountedTheFaxCoverPage = false;
@@ -106,7 +104,7 @@ public class DocumentDistributionRequestBuilder {
     private String getCoverSheet(String template) throws IOException, URISyntaxException {
         String docStatusFragment = "";
         if (!documentStatus.isEmpty()) {
-            docStatusFragment = readFile(DOCUMENT_STATUS_HTML_FRAGMENT_FILEPATH);
+            docStatusFragment = readFile(ApplicationProperties.getDocumentStatusHtmlFragmentFilepath());
             docStatusFragment = docStatusFragment.replaceAll(DOCSTATUS, documentStatus);
             docStatusFragment = docStatusFragment.replaceAll(DOCSTATUSDATE, documentStatusDate);
         }
@@ -114,7 +112,7 @@ public class DocumentDistributionRequestBuilder {
     }
 
     private void constructBody() throws IOException, URISyntaxException {
-        String template = readFile(FAX_COVER_SHEET_HTML_FILEPATH);
+        String template = readFile(ApplicationProperties.getFaxCoverSheetHtmlFilepath());
         template = template.replaceAll(RECIPIENT, to);
         template = template.replaceAll(TOFAXNUMBER, transport);
         template = template.replaceAll(SENDER, from);
