@@ -100,7 +100,6 @@ public class DocumentDistributionRequestBuilder {
         documentDistributionRequest.setExtension2(extension2);
         documentDistributionRequest.setBody(body);
 
-        System.out.println(documentDistributionRequest);
         return documentDistributionRequest;
     }
 
