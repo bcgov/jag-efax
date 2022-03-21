@@ -5,95 +5,95 @@
 	$Revision: 1.1.1.1 $
   -->
 <schema attributeFormDefault="unqualified"
-	elementFormDefault="qualified"
-	targetNamespace="http://ag.gov.bc.ca/DocumentDistributionMainProcess"
-	xmlns="http://www.w3.org/2001/XMLSchema">
-        
+        elementFormDefault="qualified"
+        targetNamespace="http://ag.gov.bc.ca/DocumentDistributionMainProcess"
+        xmlns="http://www.w3.org/2001/XMLSchema">
+
     <element name="DocumentDistributionRequest">
-		<complexType>
-			<sequence>
-				<element name="from" type="string"/>
-                                <element name="to" type="string"/>
-                                <element name="jobId" type="string"/>
-                                <element name="dateTime" type="dateTime"/>
-                                <element name="timeout" type="duration"/>
-                                <element name="channel">
-                                    <simpleType>
-                                        <restriction base="string">
-                                            <enumeration value="email"/>
-                                            <enumeration value="fax"/>
-                                            <enumeration value="sms"/>
-                                        </restriction>
-                                    </simpleType>
-                                </element>
-                                <element name="transport" type="string"/>
-                                <element name="subject" type="string"/>
-                                <element name="body" type="string"/>
-                                <element name="numPages" type="int"/>
-                                <element name="attachments">
-                                    <complexType>
-                                        <sequence>
-                                            <element name="uri" minOccurs="0" maxOccurs="unbounded" type="anyURI"/>
-                                        </sequence>
-                                    </complexType>
-                                </element>
-                                <element name="extension1" type="string"/>
-                                <element name="extension2" type="string"/>
-			</sequence>
-		</complexType>
-	</element>
-        	
-        <element name="DocumentDistributionMainProcessProcessResponse">
-			<complexType>
-				<sequence>
-					<element name="jobId" type="string"/>
-	                <element name="statusCode" type="string"/>
-	                <element name="statusMessage" type="string"/>
-				</sequence>
-			</complexType>
-	    </element>
-        
-        <element name="DocumentDistributionMainProcessProcessResponseResponse">
-        </element>
-        
-        <element name="DocumentDistributionMainProcessProcessFault">
-            <complexType>
-                <sequence>
-                    <element name="jobId" type="string"/>
-                    <element name="faultCode" type="string"/>
-                    <element name="faultMessage" type="string"/>
-                </sequence>
-            </complexType>
-        </element>
-        
-        <element name="DocumentDistributionMainProcessProcessUpdate">
-              <complexType>
-                <sequence>
-                    <element name="status" type="string"/>
-                    <element name="statusMsg" type="string"/>
-                    <element name="dateTime" type="dateTime"/>
-                    <element name="uuid" type="string"/>
-                    <element name="jobId" type="string"/>
-                    <element name="numPages" type="int"/>
-                </sequence>
-            </complexType>
-        </element>
-            
-        <element name="DocumentDistributionMainProcessProcessCorrelation">
-            <complexType>
-                <sequence>
-                    <element name="uuid" type="string"/>
-                </sequence>
-            </complexType>
-        </element>
-        
-        <element name="DocumentDistributionMainProcessAttachment">
-            <complexType>
-                <sequence>
-                    <element name="uri" type="anyURI"/>
-                </sequence>
-            </complexType>
-        </element>
-        
+        <complexType>
+            <sequence>
+                <element name="from" type="string"/>
+                <element name="to" type="string"/>
+                <element name="jobId" type="string"/>
+                <element name="dateTime" type="dateTime"/>
+                <element name="timeout" type="duration"/>
+                <element name="channel">
+                    <simpleType>
+                        <restriction base="string">
+                            <enumeration value="email"/>
+                            <enumeration value="fax"/>
+                            <enumeration value="sms"/>
+                        </restriction>
+                    </simpleType>
+                </element>
+                <element name="transport" type="string"/>
+                <element name="subject" type="string"/>
+                <element name="body" type="string"/>
+                <element name="numPages" type="int"/>
+                <element name="attachments">
+                    <complexType>
+                        <sequence>
+                            <element name="uri" minOccurs="0" maxOccurs="unbounded" type="anyURI"/>
+                        </sequence>
+                    </complexType>
+                </element>
+                <element name="extension1" type="string"/>
+                <element name="extension2" type="string"/>
+            </sequence>
+        </complexType>
+    </element>
+
+    <element name="DocumentDistributionMainProcessProcessResponse">
+        <complexType>
+            <sequence>
+                <element name="jobId" type="string"/>
+                <element name="statusCode" type="string"/>
+                <element name="statusMessage" type="string"/>
+            </sequence>
+        </complexType>
+    </element>
+
+    <element name="DocumentDistributionMainProcessProcessResponseResponse">
+    </element>
+
+    <element name="DocumentDistributionMainProcessProcessFault">
+        <complexType>
+            <sequence>
+                <element name="jobId" type="string"/>
+                <element name="faultCode" type="string"/>
+                <element name="faultMessage" type="string"/>
+            </sequence>
+        </complexType>
+    </element>
+
+    <element name="DocumentDistributionMainProcessProcessUpdate">
+        <complexType>
+            <sequence>
+                <element name="status" type="string"/>
+                <element name="statusMsg" type="string"/>
+                <element name="dateTime" type="dateTime"/>
+                <element name="uuid" type="string"/>
+                <element name="jobId" type="string"/>
+                <element name="numPages" type="int"/>
+            </sequence>
+        </complexType>
+    </element>
+
+    <element name="DocumentDistributionMainProcessProcessCorrelation">
+        <complexType>
+            <sequence>
+                <element name="uuid" type="string"/>
+            </sequence>
+        </complexType>
+    </element>
+
+    <element name="DocumentDistributionMainProcessAttachment">
+        <complexType>
+            <sequence>
+                <element name="uri" type="anyURI"/>
+            </sequence>
+        </complexType>
+    </element>
+
 </schema>
 

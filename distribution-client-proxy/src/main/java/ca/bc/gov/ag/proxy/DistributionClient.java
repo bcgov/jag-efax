@@ -1,9 +1,11 @@
 package ca.bc.gov.ag.proxy;
 
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
+import ca.bc.gov.ag.proxy.service.DocumentDistributionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.soap.SOAPException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.StringJoiner;
@@ -37,7 +39,7 @@ public class DistributionClient {
             final String documentStatus,
             final String documentStatusDate,
             final String receiveFaxCoverPageYn
-    ) throws IOException, URISyntaxException {
+    ) throws IOException, URISyntaxException, SOAPException {
 
         logArguments(wsdlEndpoint,
                 wsdlUsername,
@@ -86,7 +88,11 @@ public class DistributionClient {
                 .build();
 
 //        logger.info(builder.getDocumentStatusHtmlFragment());
-        return null;
+        DocumentDistributionService distributionService = new DocumentDistributionService(
+                wsdlEndpoint,
+                "initiate",
+                clientRequest);
+        return distributionService.callSoapWebService(wsdlUsername, wsdlPassword);
     }
 
     private static void logArguments(String wsdlEndpoint, String wsdlUsername, String wsdlPassword, String callbackEndpoint, String callbackUsername, String callbackPassword, String from, String to, String jobId, String sdateTime, String timeout, String schannel, String transport, String subject, String fileNumber, String snumPages, String attachment, String extension1, String extension2, String fromFaxNumber, String fromPhoneNumber, String documentStatus, String documentStatusDate, String receiveFaxCoverPageYn) {
@@ -121,10 +127,10 @@ public class DistributionClient {
                 .add("}")
                 .toString();
 
-        logger.info(msg);
+//        logger.info(msg);
     }
 
-    public static void main(String[] args) throws IOException, URISyntaxException {
+    public static void main(String[] args) throws IOException, URISyntaxException, SOAPException {
         String wsdlEndpoint = "http://nginx-ddea46-test.apps.silver.devops.gov.bc.ca/api/ws";
         String wsdlUsername = "icedtest";
         String wsdlPassword = "Sumer$14";
