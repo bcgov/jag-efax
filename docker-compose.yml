@@ -9,7 +9,7 @@ services:
     hostname: webservice
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: jag-efax/Dockerfile
       args:
         - SKIP_TESTS=true
         - ENABLE_SPLUNK=${ENABLE_SPLUNK:-false}
