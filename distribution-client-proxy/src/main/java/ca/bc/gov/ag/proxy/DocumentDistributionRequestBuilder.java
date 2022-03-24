@@ -11,15 +11,15 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.StringJoiner;
 
 import static ca.bc.gov.ag.proxy.validation.DocumentDistributionRequestBuilderValidator.validatePreBuild;
 
@@ -219,10 +219,25 @@ public class DocumentDistributionRequestBuilder {
         return this;
     }
 
-    private String readFile(String filePath) throws IOException, URISyntaxException {
-        URL resource = getClass().getClassLoader().getResource(filePath);
-        Stream<String> stream = Files.lines(Paths.get(resource.toURI()));
-        return stream.collect(Collectors.joining("\n"));
+    private String readFile(String filePath) throws IllegalArgumentException {
+        InputStream resource = getClass().getClassLoader().getResourceAsStream(filePath);
+        if (resource == null) {
+            throw new IllegalArgumentException("file not found!");
+        }
+
+        StringJoiner fileContent = new StringJoiner("\n");
+        try (InputStreamReader streamReader = new InputStreamReader(resource, StandardCharsets.UTF_8);
+             BufferedReader reader = new BufferedReader(streamReader)) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                fileContent.add(line);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fileContent.toString();
     }
 
     public String getFrom() {
