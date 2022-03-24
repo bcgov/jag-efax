@@ -1,37 +1,43 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>ca.bc.gov.ag</groupId>
     <artifactId>jag-efax-multi-module</artifactId>
     <version>1.0.6</version>
+
+    <name>jag-efax-multi-module</name>
     <packaging>pom</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <main.basedir>${project.basedir}</main.basedir>
+    </properties>
 
     <modules>
         <module>jag-efax</module>
         <module>distribution-client-proxy</module>
     </modules>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.1</version>
-    </parent>
-
-    <profiles>
-        <profile>
-            <id>jag-efax</id>
-            <modules>
-                <module>jag-efax</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>distribution-client-proxy</id>
-            <modules>
-                <module>jag-efax</module>
-                <module>distribution-client-proxy</module>
-            </modules>
-        </profile>
-    </profiles>
+<!--    <profiles>-->
+<!--        <profile>-->
+<!--            <id>jag-efax</id>-->
+<!--            <activation>-->
+<!--                <activeByDefault>true</activeByDefault>-->
+<!--            </activation>-->
+<!--            <modules>-->
+<!--                <module>jag-efax</module>-->
+<!--            </modules>-->
+<!--        </profile>-->
+<!--        <profile>-->
+<!--            <id>distribution-client-proxy</id>-->
+<!--            <modules>-->
+<!--                <module>jag-efax</module>-->
+<!--                <module>distribution-client-proxy</module>-->
+<!--            </modules>-->
+<!--        </profile>-->
+<!--    </profiles>-->
 
 </project>
