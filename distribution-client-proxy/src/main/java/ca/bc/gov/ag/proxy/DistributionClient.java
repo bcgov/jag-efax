@@ -131,7 +131,7 @@ public class DistributionClient {
     }
 
     public static void main(String[] args) throws IOException, URISyntaxException, SOAPException {
-        String wsdlEndpoint = "http://nginx-ddea46-test.apps.silver.devops.gov.bc.ca/api/ws";
+        String wsdlEndpoint = "http://localhost:8080/ws";
         String wsdlUsername = "icedtest";
         String wsdlPassword = "***REMOVED***";
         String callbackEndpoint = "http://wsgw.test.jag.gov.bc.ca:8080/efax/JustinDistributionCallback";
