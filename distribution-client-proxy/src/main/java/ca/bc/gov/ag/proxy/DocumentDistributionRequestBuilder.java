@@ -2,6 +2,7 @@ package ca.bc.gov.ag.proxy;
 
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest.Attachments;
+import ca.bc.gov.ag.efax.ws.model.ObjectFactory;
 import ca.bc.gov.ag.proxy.config.ApplicationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +84,7 @@ public class DocumentDistributionRequestBuilder {
 
         constructBody();
 
-        DocumentDistributionRequest documentDistributionRequest = new DocumentDistributionRequest();
+        DocumentDistributionRequest documentDistributionRequest = new ObjectFactory().createDocumentDistributionRequest();
         documentDistributionRequest.setFrom(from);
         documentDistributionRequest.setTo(to);
         documentDistributionRequest.setJobId(jobId);

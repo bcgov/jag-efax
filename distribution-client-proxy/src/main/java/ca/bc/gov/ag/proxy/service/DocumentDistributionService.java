@@ -1,14 +1,21 @@
 package ca.bc.gov.ag.proxy.service;
 
-import ca.bc.gov.ag.efax.ws.config.WebServiceConfig;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
 import javax.xml.soap.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.StringWriter;
+import java.util.Base64;
 
 public class DocumentDistributionService {
     private final String soapEndpointUrl;
@@ -32,24 +39,24 @@ public class DocumentDistributionService {
         SOAPPart soapPart = soapMessage.getSOAPPart();
 
         SOAPEnvelope envelope = soapPart.getEnvelope();
-        envelope.addAttribute(new QName("targetNamespace"), WebServiceConfig.NAMESPACE_URI);
-        envelope.addNamespaceDeclaration("", "http://www.w3.org/2001/XMLSchema");
+        envelope.addNamespaceDeclaration("ns2", "http://ag.gov.bc.ca/DocumentDistributionMainProcess");
 
-        return createBody(envelope);
+        SOAPEnvelope body = createBody(envelope);
+        return body;
     }
 
     private SOAPEnvelope createBody(SOAPEnvelope envelope) throws SOAPException {
         SOAPBody soapBody = envelope.getBody();
-        String x;
         try {
             StringWriter sw = new StringWriter();
             JAXBContext jaxbContext = JAXBContext.newInstance(DocumentDistributionRequest.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
             jaxbMarshaller.marshal(documentDistributionRequest, sw);
-            x = sw.toString();
-            soapBody.addTextNode(x);
+            String text = sw.toString();
+            soapBody.addTextNode(text);
 
         } catch (JAXBException e) {
             e.printStackTrace();
@@ -59,23 +66,28 @@ public class DocumentDistributionService {
 
     public String callSoapWebService(String username, String password) {
         String response = "";
-        try {
-            // Create SOAP Connection
-            SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
-            SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
-            // Send SOAP Message to SOAP Server
-            SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(username, password), soapEndpointUrl);
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
 
-            // Print the SOAP Response
-            response = soapResponse.toString();
-            soapResponse.writeTo(System.out);
+            HttpPost request = new HttpPost(soapEndpointUrl);
+            request.setHeader("Content-Type", "text/xml");
 
-            soapConnection.close();
-        } catch (Exception e) {
-            System.err.println("\nError occurred while sending SOAP Request to Server!\nMake sure you have the correct endpoint URL and SOAPAction!\n");
+            OutputStream outputStream = new ByteArrayOutputStream();
+            soapMessage.writeTo(outputStream);
+
+            String envelope = outputStream.toString();
+            envelope = envelope.replaceAll("&lt;", "<");
+            envelope = envelope.replaceAll("&gt;", ">");
+            StringEntity entity = new StringEntity(envelope);
+            request.setEntity(entity);
+
+            CloseableHttpResponse httpResponse = client.execute(request);
+            response = httpResponse.toString();
+
+        } catch (IOException | SOAPException e) {
             e.printStackTrace();
         }
+
         return response;
     }
 
@@ -84,7 +96,8 @@ public class DocumentDistributionService {
         headers.addHeader("SOAPAction", soapAction);
 
         String userAndPassword = String.format("%s:%s", username, password);
-        String basicAuth = new sun.misc.BASE64Encoder().encode(userAndPassword.getBytes());
+
+        String basicAuth = Base64.getEncoder().encodeToString(userAndPassword.getBytes());
         headers.addHeader("Authorization", "Basic " + basicAuth);
 
         soapMessage.saveChanges();
