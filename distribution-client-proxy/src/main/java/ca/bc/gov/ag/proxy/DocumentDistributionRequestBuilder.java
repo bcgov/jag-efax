@@ -309,7 +309,7 @@ public class DocumentDistributionRequestBuilder {
     }
 
     public DocumentDistributionRequestBuilder setDocumentStatusDate(String documentStatusDate) {
-        if (documentStatus != null && !documentStatusDate.isEmpty())
+        if (documentStatusDate != null && !documentStatusDate.isEmpty())
             this.documentStatusDate = documentStatusDate;
         return this;
     }
