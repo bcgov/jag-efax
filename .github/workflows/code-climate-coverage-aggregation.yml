@@ -60,10 +60,13 @@ jobs:
           java-version: 11
 
       - name: Clean m2 repository
-        run: rm -rf /home/runner/.m2/repository
+        run: |
+          rm -rf /home/runner/.m2/repository/ca/bc/gov/ag
+          ls -la /home/runner/.m2/repository/ca/bc/gov
+
 #      - uses: actions/cache@v1
 #        with:
-#          path: ~/.m2/repository
+#          path: ~/.m2/repository/
 #          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 #          restore-keys: |
 #            ${{ runner.os }}-maven-
