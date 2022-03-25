@@ -61,8 +61,7 @@ jobs:
 
       - name: Clean m2 repository
         run: |
-          rm -rf /home/runner/.m2/repository/ca/bc/gov/ag
-          ls -la /home/runner/.m2/repository
+          rm -rf /home/runner/.m2/repository/ca/bc/gov/ag/
 
 #      - uses: actions/cache@v1
 #        with:
