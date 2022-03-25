@@ -61,7 +61,9 @@ jobs:
 
       - name: Finding the correct path
         run: |
-          ls /
+          echo "ls $HOME"
+          ls $HOME
+          echo "\n"
 
       - uses: actions/cache@v1
         with:
