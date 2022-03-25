@@ -59,16 +59,16 @@ jobs:
         with:
           java-version: 11
 
-      - name: Clean m2 repository
+      - name: Finding the correct path
         run: |
-          rm -rf /home/runner/.m2/repository/ca/bc/gov/ag/
+          ls /
 
-#      - uses: actions/cache@v1
-#        with:
-#          path: ~/.m2/repository/
-#          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-#          restore-keys: |
-#            ${{ runner.os }}-maven-
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository/
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
       # Java Version
       - name: What JDK Version am I?
