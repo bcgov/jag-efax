@@ -143,9 +143,10 @@ public class DistributionClient {
                     wsdlEndpoint,
                     "initiate",
                     clientRequest);
-            response = distributionService.callSoapWebService(wsdlUsername, wsdlPassword);
+            distributionService.callSoapWebService(wsdlUsername, wsdlPassword);
         } catch (IOException | URISyntaxException | SOAPException e) {
             e.printStackTrace();
+            response = "Distribution failed.";
         }
 
         return response;
