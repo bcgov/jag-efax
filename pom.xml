@@ -16,28 +16,23 @@
         <main.basedir>${project.basedir}</main.basedir>
     </properties>
 
-    <modules>
-        <module>jag-efax</module>
-        <module>distribution-client-proxy</module>
-    </modules>
-
-<!--    <profiles>-->
-<!--        <profile>-->
-<!--            <id>jag-efax</id>-->
-<!--            <activation>-->
-<!--                <activeByDefault>true</activeByDefault>-->
-<!--            </activation>-->
-<!--            <modules>-->
-<!--                <module>jag-efax</module>-->
-<!--            </modules>-->
-<!--        </profile>-->
-<!--        <profile>-->
-<!--            <id>distribution-client-proxy</id>-->
-<!--            <modules>-->
-<!--                <module>jag-efax</module>-->
-<!--                <module>distribution-client-proxy</module>-->
-<!--            </modules>-->
-<!--        </profile>-->
-<!--    </profiles>-->
+    <profiles>
+        <profile>
+            <id>jag-efax</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>jag-efax</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>distribution-client-proxy</id>
+            <modules>
+                <module>jag-efax</module>
+                <module>distribution-client-proxy</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>
