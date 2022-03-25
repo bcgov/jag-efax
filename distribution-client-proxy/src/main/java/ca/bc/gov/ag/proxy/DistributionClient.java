@@ -1,9 +1,8 @@
 package ca.bc.gov.ag.proxy;
 
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
+import ca.bc.gov.ag.proxy.config.Logger;
 import ca.bc.gov.ag.proxy.service.DocumentDistributionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.xml.soap.SOAPException;
 import java.io.IOException;
@@ -12,7 +11,7 @@ import java.util.StringJoiner;
 
 public class DistributionClient {
 
-    private static Logger logger = LoggerFactory.getLogger(DistributionClient.class);
+    private static final Logger logger = new Logger();
 
     public static String process(
             final String wsdlEndpoint,
