@@ -58,6 +58,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+
+      - name: Clean m2 repository
+        run: rm -rf /home/runner/.m2/repository
 #      - uses: actions/cache@v1
 #        with:
 #          path: ~/.m2/repository
