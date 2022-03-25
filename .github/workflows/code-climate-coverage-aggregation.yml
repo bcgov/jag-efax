@@ -61,8 +61,8 @@ jobs:
 
       - name: Finding the correct path
         run: |
-          echo "ls $HOME"
-          ls $HOME
+          echo "ls $HOME/work/jag-efax"
+          ls $HOME/work/jag-efax
           echo "\n"
 
       - uses: actions/cache@v1
@@ -87,7 +87,7 @@ jobs:
       # Run Maven Verify to generate all jacoco reports
       - name: Build with Maven
         run: mvn -B verify
-        working-directory: /
+        working-directory: "${HOME}"
 
       # Formatting the BACKEND coverage reports generated (dynamically)
       - name: Format BACKEND coverage reports
