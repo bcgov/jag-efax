@@ -87,7 +87,7 @@ jobs:
       # Run Maven Verify to generate all jacoco reports
       - name: Build with Maven
         run: mvn -B verify
-        working-directory: "/home/runner/work/jag-efax/jag-efax"
+        working-directory: "/home/runner/work/jag-efax"
 
       # Formatting the BACKEND coverage reports generated (dynamically)
       - name: Format BACKEND coverage reports
