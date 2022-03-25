@@ -4,8 +4,6 @@ import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest.Attachments;
 import ca.bc.gov.ag.efax.ws.model.ObjectFactory;
 import ca.bc.gov.ag.proxy.config.ApplicationProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -24,8 +22,6 @@ import java.util.StringJoiner;
 import static ca.bc.gov.ag.proxy.validation.DocumentDistributionRequestBuilderValidator.validatePreBuild;
 
 public class DocumentDistributionRequestBuilder {
-
-    private static Logger logger = LoggerFactory.getLogger(DocumentDistributionRequestBuilder.class);
 
     private static final String RECIPIENT = "%RECIPIENT%";
     private static final String TOFAXNUMBER = "%TOFAXNUMBER%";
