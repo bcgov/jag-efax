@@ -32,7 +32,7 @@ jobs:
         with:
           name: distribution-client-proxy.jar
           path: |
-            ./jag-efax/jag-efax/distribution-client-proxy/target/distribution-client-proxy-${{ needs.app-version.outputs.app-version }}-jar-with-dependencies.jar
+            /home/runner/work/jag-efax/jag-efax/distribution-client-proxy/target/distribution-client-proxy-${{ needs.app-version.outputs.app-version }}-jar-with-dependencies.jar
           retention-days: 14
 
 
