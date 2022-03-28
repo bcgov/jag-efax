@@ -17,14 +17,22 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <nexus-url>file:${file.separator}${file.separator}${project.basedir}${file.separator}..${file.separator}jag-efax/nexus</nexus-url>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>nexus</id>
+            <url>${nexus-url}</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
             <groupId>ca.bc.gov.ag</groupId>
             <artifactId>jag-efax</artifactId>
             <version>1.0.6</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
             <classifier>proxy</classifier>
         </dependency>
     </dependencies>
@@ -50,6 +58,24 @@
                     </execution>
                 </executions>
             </plugin>
+<!--                        <plugin>-->
+<!--                            <groupId>org.apache.maven.plugins</groupId>-->
+<!--                            <artifactId>maven-shade-plugin</artifactId>-->
+<!--                            <version>3.2.4</version>-->
+<!--                            <configuration>-->
+<!--                                &lt;!&ndash; put your configurations here &ndash;&gt;-->
+<!--                            </configuration>-->
+<!--                            <executions>-->
+<!--                                <execution>-->
+<!--                                    <phase>package</phase>-->
+<!--                                    <goals>-->
+<!--                                        <goal>shade</goal>-->
+<!--                                    </goals>-->
+<!--                                </execution>-->
+<!--                            </executions>-->
+
+
+<!--                        </plugin>-->
         </plugins>
     </build>
 </project>
