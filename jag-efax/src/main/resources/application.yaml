@@ -8,7 +8,7 @@ spring:
     password: ${REDIS_PASSWORD:admin}
 
 exchange:
-  service:  
+  service:
     endpoint: ${EXCHANGE_ENDPOINT:}
     username: ${EXCHANGE_USERNAME:}
     password: ${EXCHANGE_PASSWORD:}
@@ -16,9 +16,9 @@ exchange:
     # The temporary directory used to store PDF files while they are added as attachments to an email message (fax).
     #   May be null.  If empty, will default to the OS temp directory as specified by the "java.io.tmpdir" system property.
     tempDirectory: ${EXCHANGE_TEMP_DIR:}
-  poller:  
+  poller:
     enabled: true
-    # Interval (in milliseconds) of how often to poll the exchange server email inbox  
+    # Interval (in milliseconds) of how often to poll the exchange server email inbox
     interval: 300000    # 5 minutes
 
 aem: # AEM is a PDF flattening service
@@ -30,13 +30,13 @@ aem: # AEM is a PDF flattening service
     endpoint: ${PDF_ENDPOINT:-}
     username: ${PDF_USERNAME:-}
     password: ${PDF_PASSWORD:-}
-  
-ws:  
+
+ws:
   # A regular expression pattern that matches the email recipent (To:) to enable faxing by Exchange.
   faxFormat: ${FAX_FORMAT:}
   
   timeout:
-    enabled: true   
+    enabled: true
     # Timeout (in milliseconds) when no response has been received by exchange for a sent fax
     #   After this timeout, the fax is considered lost and a failed status is returned to the user.  
     duration: 1500000   # 25 minutes
