@@ -24,8 +24,6 @@ public class DocumentDistributionService {
     private final SOAPMessage soapMessage;
     private final SOAPEnvelope soapEnvelope;
 
-    private final String documentDistributionRequestNamespace = "DocumentDistributionRequest";
-
     public DocumentDistributionService(String soapEndpointUrl, String soapAction, DocumentDistributionRequest documentDistributionRequest) throws SOAPException {
         this.soapEndpointUrl = soapEndpointUrl;
         this.soapAction = soapAction;
@@ -91,22 +89,4 @@ public class DocumentDistributionService {
         return response;
     }
 
-    private SOAPMessage createSOAPRequest(String username, String password) throws Exception {
-        MimeHeaders headers = soapMessage.getMimeHeaders();
-        headers.addHeader("SOAPAction", soapAction);
-
-        String userAndPassword = String.format("%s:%s", username, password);
-
-        String basicAuth = Base64.getEncoder().encodeToString(userAndPassword.getBytes());
-        headers.addHeader("Authorization", "Basic " + basicAuth);
-
-        soapMessage.saveChanges();
-
-        /* Print the request message, just for debugging purposes */
-        System.out.println("Request SOAP Message:");
-        soapMessage.writeTo(System.out);
-        System.out.println("\n");
-
-        return soapMessage;
-    }
 }
