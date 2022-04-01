@@ -1,12 +1,7 @@
 name: TEST Deploy of Efax Webservice Image 
 
-on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: "Image tag to be deployed"
-        required: true
-
+on: workflow_dispatch
+   
 jobs:
   build:
     runs-on: ubuntu-latest
