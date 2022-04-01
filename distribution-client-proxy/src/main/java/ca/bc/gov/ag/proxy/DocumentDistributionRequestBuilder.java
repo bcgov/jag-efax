@@ -4,6 +4,7 @@ import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest.Attachments;
 import ca.bc.gov.ag.efax.ws.model.ObjectFactory;
 import ca.bc.gov.ag.proxy.config.ApplicationProperties;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -120,7 +121,11 @@ public class DocumentDistributionRequestBuilder {
         template = template.replaceAll(FILENUMBER, fileNumber);
         template = template.replaceAll(NUMPAGES, Integer.toString(numPages));
         template = template.replaceAll(DOCUMENTSTATUSFRAGMENT, getCoverSheet(template));
-        this.body = template;
+
+        template = StringEscapeUtils.unescapeHtml4(template);
+        template = StringEscapeUtils.unescapeJava(template);
+
+        this.body = cdataWrap(template);
     }
 
     public DocumentDistributionRequestBuilder setFrom(String from) {
@@ -166,7 +171,11 @@ public class DocumentDistributionRequestBuilder {
     }
 
     public DocumentDistributionRequestBuilder setSubject(String subject) {
-        this.subject = subject;
+        String s = StringEscapeUtils.unescapeHtml4(subject);
+        s = StringEscapeUtils.unescapeJava(s);
+        s = s.replaceAll("\u00A0", " ");
+        s = s.replaceAll("\\<.*?\\>", "");
+        this.subject = s;
         return this;
     }
 
@@ -323,5 +332,9 @@ public class DocumentDistributionRequestBuilder {
         if (documentStatusDate != null && !documentStatusDate.isEmpty())
             this.documentStatusDate = documentStatusDate;
         return this;
+    }
+
+    private String cdataWrap(final String text){
+        return "<![CDATA[" + text + "]]>";
     }
 }

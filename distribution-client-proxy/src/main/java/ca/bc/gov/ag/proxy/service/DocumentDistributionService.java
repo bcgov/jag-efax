@@ -1,6 +1,7 @@
 package ca.bc.gov.ag.proxy.service;
 
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -15,7 +16,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
-import java.util.Base64;
 
 public class DocumentDistributionService {
     private final String soapEndpointUrl;
@@ -54,7 +54,7 @@ public class DocumentDistributionService {
 
             jaxbMarshaller.marshal(documentDistributionRequest, sw);
             String text = sw.toString();
-            soapBody.addTextNode(text);
+            soapBody.addTextNode(StringEscapeUtils.unescapeXml(text));
 
         } catch (JAXBException e) {
             e.printStackTrace();
@@ -73,10 +73,8 @@ public class DocumentDistributionService {
             OutputStream outputStream = new ByteArrayOutputStream();
             soapMessage.writeTo(outputStream);
 
-            String envelope = outputStream.toString();
-            envelope = envelope.replaceAll("&lt;", "<");
-            envelope = envelope.replaceAll("&gt;", ">");
-            StringEntity entity = new StringEntity(envelope);
+            String envelope = StringEscapeUtils.unescapeXml(outputStream.toString());
+            StringEntity entity = new StringEntity(envelope, "utf-8");
             request.setEntity(entity);
 
             CloseableHttpResponse httpResponse = client.execute(request);
