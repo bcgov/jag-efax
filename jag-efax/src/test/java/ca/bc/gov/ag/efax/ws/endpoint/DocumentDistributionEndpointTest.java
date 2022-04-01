@@ -7,6 +7,7 @@ import static org.springframework.ws.test.server.RequestCreators.withPayload;
 import static org.springframework.ws.test.server.ResponseMatchers.noFault;
 import static org.springframework.ws.test.server.ResponseMatchers.serverOrReceiverFault;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -104,7 +105,7 @@ public class DocumentDistributionEndpointTest extends BaseTestSuite {
         return payload;
     }
 
-    private DocumentDistributionRequest getBaseRequest() throws DatatypeConfigurationException {
+    private DocumentDistributionRequest getBaseRequest() throws DatatypeConfigurationException, URISyntaxException {
         DocumentDistributionRequest request = new DocumentDistributionRequest();
         request.setFrom("Someone");
         request.setTo("Someone Else");
@@ -117,7 +118,7 @@ public class DocumentDistributionEndpointTest extends BaseTestSuite {
         request.setBody("Test body");
         request.setNumPages(1);
         request.setAttachments(new Attachments());
-        request.getAttachments().getUri().add("https://github.com/bcgov/jag-efax/raw/main/src/test/resources/sample_v1.6.pdf");
+        request.getAttachments().getUri().add(getClass().getClassLoader().getResource("sample_v1.6.pdf").toString());
         request.setExtension1("a");
         request.setExtension2("b");
         return request;
