@@ -117,7 +117,7 @@ public class DocumentDistributionEndpointTest extends BaseTestSuite {
         request.setBody("Test body");
         request.setNumPages(1);
         request.setAttachments(new Attachments());
-        request.getAttachments().getUri().add("https://github.com/bcgov/jag-efax/main/jag-efax/src/test/resources/sample_v1.6.pdf");
+        request.getAttachments().getUri().add("https://github.com/bcgov/jag-efax/raw/main/src/test/resources/sample_v1.6.pdf");
         request.setExtension1("a");
         request.setExtension2("b");
         return request;
