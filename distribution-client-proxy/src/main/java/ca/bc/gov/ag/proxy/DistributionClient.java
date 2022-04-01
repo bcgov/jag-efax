@@ -7,6 +7,8 @@ import ca.bc.gov.ag.proxy.service.DocumentDistributionService;
 import javax.xml.soap.SOAPException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.StringJoiner;
 
 public class DistributionClient {
@@ -185,5 +187,37 @@ public class DistributionClient {
                 .toString();
 
         logger.info(msg);
+    }
+
+    public static void main(String[] args) {
+        String now = String.valueOf(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
+        System.out.println("id: " + now);
+
+//        String resp = DistributionClient.process("http://nginx-ddea46-test.apps.silver.devops.gov.bc.ca/api/ws"
+        String resp = DistributionClient.process("http://localhost:8080/ws"
+                , "icedtest"
+                , "Sumer$14"
+                , null
+                , null
+                , null
+                , "Gabriel Testing from Local"
+                , "Me, myself, and I"
+                , now
+                , "24-MAR-2022 02:16 pm"
+                , "PT25M"
+                , "fax"
+                , "7785720693"
+                , "Probation Order (OA)(Prison)<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CUNNINGHAM, Richie"
+                , now
+                , "1"
+                , "https://github.com/bcgov/jag-efax/raw/main/jag-efax/src/test/resources/sample_v1.4.pdf"
+                , "a"
+                , "b"
+                , "(250)940-5373"
+                , "(250)470-6900"
+                , null
+                , null
+                , "Y"
+        );
     }
 }
