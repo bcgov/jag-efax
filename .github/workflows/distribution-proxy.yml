@@ -5,8 +5,15 @@ on:
     branches: [main]
 
 jobs:
+  app-version:
+    uses: SierraSystems/reusable-workflows/.github/workflows/java-maven-app-version.yml@main
+    with:
+      working_directory: "."
+
   build:
     runs-on: ubuntu-latest
+    needs:
+      - app-version
 
     steps:
       - uses: actions/checkout@v2
@@ -18,7 +25,14 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        run: mvn --batch-mode clean package
+        run: mvn --batch-mode clean package -Pdistribution-client-proxy -DskipTests
 
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: distribution-client-proxy.jar
+          path: |
+            /home/runner/work/jag-efax/jag-efax/distribution-client-proxy/target/distribution-client-proxy-${{ needs.app-version.outputs.app-version }}-jar-with-dependencies.jar
+          retention-days: 14
 
 
