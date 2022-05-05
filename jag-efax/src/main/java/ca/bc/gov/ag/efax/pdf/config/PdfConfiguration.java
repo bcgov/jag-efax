@@ -31,7 +31,7 @@ public class PdfConfiguration {
     public Dispatch<Object> outputServiceDispatch(PdfProperties pdfProperties) throws JAXBException {
         QName serviceName = new QName("http://adobe.com/idp/services", "OutputServiceService");
         QName portQName = new QName("http://adobe.com/idp/services", "OutputService");
-        String endpoint = "https://wsgw.test.jag.gov.bc.ca/courts/eInformation/OutPutService";
+        String endpoint = pdfProperties.getEndpoint();
 
         javax.xml.ws.Service service = javax.xml.ws.Service.create(serviceName);
         service.addPort(portQName, SOAPBinding.SOAP11HTTP_BINDING, endpoint);
@@ -40,8 +40,8 @@ public class PdfConfiguration {
         Dispatch<Object> pdfDispatch = service.createDispatch(portQName, jc, javax.xml.ws.Service.Mode.PAYLOAD);
 
         BindingProvider prov = (BindingProvider) pdfDispatch;
-        prov.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, "icedtest");
-        prov.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, "Sumer$14");
+        prov.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, pdfProperties.getUsername());
+        prov.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, pdfProperties.getPassword());
 
         return pdfDispatch;
     }
