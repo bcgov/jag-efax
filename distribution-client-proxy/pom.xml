@@ -9,7 +9,7 @@
     <parent>
         <groupId>ca.bc.gov.ag</groupId>
         <artifactId>jag-efax-multi-module</artifactId>
-        <version>1.0.6</version>
+        <version>1.0.7</version>
     </parent>
 
     <artifactId>distribution-client-proxy</artifactId>
@@ -31,7 +31,7 @@
         <dependency>
             <groupId>ca.bc.gov.ag</groupId>
             <artifactId>jag-efax</artifactId>
-            <version>1.0.6</version>
+            <version>1.0.7</version>
             <scope>compile</scope>
             <classifier>proxy</classifier>
         </dependency>
