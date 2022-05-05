@@ -11,12 +11,10 @@ public class Logger {
     private static final String outputFileName = "DistributionClient.log";
     private static final String userDir = ".";
 
-    private static final String fileName = userDir + filesepChar + outputFileName;
-
     public void log(final String msg) {
         SimpleDateFormat f = new SimpleDateFormat(datePattern);
 
-        try (FileWriter flog = new FileWriter(fileName, true)) {
+        try (FileWriter flog = new FileWriter(getLogFilePath(), true)) {
 
             flog.write(f.format(new java.util.Date()) + ": " + msg + nlChar);
 
@@ -28,5 +26,9 @@ public class Logger {
 
     public void info(final String msg) {
         log(msg);
+    }
+
+    public String getLogFilePath(){
+        return userDir + filesepChar + outputFileName;
     }
 }
