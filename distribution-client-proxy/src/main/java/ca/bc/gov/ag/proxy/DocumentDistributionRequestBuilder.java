@@ -59,7 +59,7 @@ public class DocumentDistributionRequestBuilder {
     private String fromPhoneNumber;
     private String fileNumber;
     private String documentStatus = "";
-    private String documentStatusDate = " ";
+    private String documentStatusDate = "";
 
     private static XMLGregorianCalendar getDateTime() {
         Date current_date = new Date();
@@ -315,7 +315,7 @@ public class DocumentDistributionRequestBuilder {
     }
 
     public DocumentDistributionRequestBuilder setDocumentStatus(String documentStatus) {
-        if (documentStatus != null)
+        if (documentStatus != null && !documentStatus.trim().isEmpty())
             this.documentStatus = documentStatus;
         return this;
     }
@@ -329,12 +329,12 @@ public class DocumentDistributionRequestBuilder {
     }
 
     public DocumentDistributionRequestBuilder setDocumentStatusDate(String documentStatusDate) {
-        if (documentStatusDate != null && !documentStatusDate.isEmpty())
+        if (documentStatusDate != null && !documentStatusDate.trim().isEmpty())
             this.documentStatusDate = documentStatusDate;
         return this;
     }
 
-    private String cdataWrap(final String text){
+    private String cdataWrap(final String text) {
         return "<![CDATA[" + text + "]]>";
     }
 }
