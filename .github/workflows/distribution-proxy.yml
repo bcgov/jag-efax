@@ -8,7 +8,7 @@ jobs:
   app-version:
     uses: SierraSystems/reusable-workflows/.github/workflows/java-maven-app-version.yml@main
     with:
-      working_directory: "."
+      working_directory: "./distribution-client-proxy"
 
   build:
     runs-on: ubuntu-latest
@@ -30,7 +30,7 @@ jobs:
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v3
         with:
-          name: distribution-client-proxy.jar
+          name: "distribution-client-proxy-${{ needs.app-version.outputs.app-version }}.jar"
           path: |
             /home/runner/work/jag-efax/jag-efax/distribution-client-proxy/target/distribution-client-proxy-${{ needs.app-version.outputs.app-version }}-jar-with-dependencies.jar
           retention-days: 14
