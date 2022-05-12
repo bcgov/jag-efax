@@ -5,6 +5,7 @@ import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest.Attachments;
 import ca.bc.gov.ag.efax.ws.model.ObjectFactory;
 import ca.bc.gov.ag.proxy.config.ApplicationProperties;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -315,7 +316,7 @@ public class DocumentDistributionRequestBuilder {
     }
 
     public DocumentDistributionRequestBuilder setDocumentStatus(String documentStatus) {
-        if (documentStatus != null && !documentStatus.trim().isEmpty())
+        if (!StringUtils.isBlank(documentStatus))
             this.documentStatus = documentStatus;
         return this;
     }
@@ -329,7 +330,7 @@ public class DocumentDistributionRequestBuilder {
     }
 
     public DocumentDistributionRequestBuilder setDocumentStatusDate(String documentStatusDate) {
-        if (documentStatusDate != null && !documentStatusDate.trim().isEmpty())
+        if (!StringUtils.isBlank(documentStatusDate))
             this.documentStatusDate = documentStatusDate;
         return this;
     }
