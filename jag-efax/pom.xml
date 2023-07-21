@@ -69,7 +69,7 @@
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>rt</artifactId>
-            <version>2.3.1</version>
+            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>javax.jws</groupId>
@@ -120,13 +120,6 @@
             <version>0.7.3</version>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.woodstox</groupId>
-            <artifactId>woodstox-core</artifactId>
-            <version>5.4.0</version>
-        </dependency>
-
     </dependencies>
 
     <profiles>
@@ -245,7 +238,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.6</version>
+                <version>0.8.8</version>
 
                 <configuration>
                     <excludes>
