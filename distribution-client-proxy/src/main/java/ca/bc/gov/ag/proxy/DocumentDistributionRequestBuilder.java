@@ -111,22 +111,26 @@ public class DocumentDistributionRequestBuilder {
     }
 
     private void constructBody() throws IOException, URISyntaxException {
-        String template = readFile(ApplicationProperties.getFaxCoverSheetHtmlFilepath());
-        template = template.replaceAll(RECIPIENT, to);
-        template = template.replaceAll(TOFAXNUMBER, transport);
-        template = template.replaceAll(SENDER, from);
-        template = template.replaceAll(FROMFAXNUMBER, fromFaxNumber);
-        template = template.replaceAll(FROMPHONENUMBER, fromPhoneNumber);
-        template = template.replaceAll(DATETIME, stringDateTime);
-        template = template.replaceAll(SUBJECT, subject);
-        template = template.replaceAll(FILENUMBER, fileNumber);
-        template = template.replaceAll(NUMPAGES, Integer.toString(numPages));
-        template = template.replaceAll(DOCUMENTSTATUSFRAGMENT, getCoverSheet(template));
+        if(this.hasAccountedTheFaxCoverPage) {
+            String template = readFile(ApplicationProperties.getFaxCoverSheetHtmlFilepath());
+            template = template.replaceAll(RECIPIENT, to);
+            template = template.replaceAll(TOFAXNUMBER, transport);
+            template = template.replaceAll(SENDER, from);
+            template = template.replaceAll(FROMFAXNUMBER, fromFaxNumber);
+            template = template.replaceAll(FROMPHONENUMBER, fromPhoneNumber);
+            template = template.replaceAll(DATETIME, stringDateTime);
+            template = template.replaceAll(SUBJECT, subject);
+            template = template.replaceAll(FILENUMBER, fileNumber);
+            template = template.replaceAll(NUMPAGES, Integer.toString(numPages));
+            template = template.replaceAll(DOCUMENTSTATUSFRAGMENT, getCoverSheet(template));
 
-        template = StringEscapeUtils.unescapeHtml4(template);
-        template = StringEscapeUtils.unescapeJava(template);
+            template = StringEscapeUtils.unescapeHtml4(template);
+            template = StringEscapeUtils.unescapeJava(template);
 
-        this.body = cdataWrap(template);
+            this.body = cdataWrap(template);
+        } else {
+            this.body = "";
+        }
     }
 
     public DocumentDistributionRequestBuilder setFrom(String from) {
