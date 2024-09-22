@@ -70,6 +70,17 @@ public class EmailServiceImpl implements EmailService {
 
         List<EmailMessage> emailMessages = emails.getItems().stream().map(item -> (EmailMessage) item).collect(Collectors.toList());
         logger.trace("Retrieved {} emails", emailMessages.size());
+        
+        
+        //sm
+        if (!emails.getItems().isEmpty()) {
+        	for (EmailMessage item: emailMessages) {
+        		System.out.println("item: " + item.getSubject());
+        		System.out.println("item: " + item.getBody() + "\n");
+        	}
+        }
+        
+        
         return emailMessages;
     }
 

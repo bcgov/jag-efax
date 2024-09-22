@@ -12,7 +12,7 @@
 
     <groupId>ca.bc.gov.ag</groupId>
     <artifactId>jag-efax</artifactId>
-    <version>1.0.8</version>
+    <version>1.1.8</version>
     <name>jag-eFax</name>
     <description>A BPEL eFax Replacement project.</description>
 
@@ -48,10 +48,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+    
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+        
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
 
         <!-- OutputService dependencies -->
         <dependency>
@@ -94,6 +101,24 @@
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
         </dependency>
+        
+        <!-- MS Graph Specific Start-->
+		<dependency>
+			<groupId>com.microsoft.graph</groupId>
+		    <artifactId>microsoft-graph</artifactId>
+		    <version>[6.0,)</version> 
+		</dependency>
+		<dependency>
+		    <groupId>com.microsoft.graph</groupId>
+		    <artifactId>microsoft-graph-beta</artifactId>
+		    <version>[6.0,)</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.azure</groupId>
+		    <artifactId>azure-identity</artifactId>
+		    <version>[1.11,)</version>
+		</dependency>
+		<!-- MS Graph Specific End-->
 
         <!-- Custom dependencies -->
         <dependency>
@@ -129,6 +154,7 @@
     </dependencies>
 
     <profiles>
+    
         <profile>
             <id>java11</id>
             <activation>
@@ -136,10 +162,12 @@
             </activation>
 
             <dependencies>
+            
                 <dependency>
                     <groupId>org.glassfish.jaxb</groupId>
                     <artifactId>jaxb-runtime</artifactId>
                 </dependency>
+                
             </dependencies>
         </profile>
         <profile>

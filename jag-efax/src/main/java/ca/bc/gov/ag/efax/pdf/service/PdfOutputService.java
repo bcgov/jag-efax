@@ -38,6 +38,8 @@ public class PdfOutputService extends WebServiceGatewaySupport implements PdfSer
      * @return a flattened PDF, or null if an error occurred.
      */
     public File flattenPdf(URL url, String path, String jobId) {
+    	
+    	// TODO - Uncomment when JUSTINCSB-2768 complete.     	
         try {
             logger.info("PDF OutputService Flattening: jobId {} attempting flattening.", jobId);
 
@@ -54,6 +56,17 @@ public class PdfOutputService extends WebServiceGatewaySupport implements PdfSer
             logger.error("Error calling OutputService's TransformPDF service", e);
             return null;
         }
+    	
+//    	File file = new File(path);
+//    	try {
+//			FileUtils.copyURLToFile(url, file);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//        
+//        return file; 
+    	
+//    	return null; 
     }
 
     private File extractResults(TransformPDFResponse response, String path) throws IOException {
