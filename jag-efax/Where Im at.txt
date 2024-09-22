@@ -1,0 +1,25 @@
+
+1. (done) Review code based on the notes taken with Kevin N recently. 
+
+2. (In Progress) See if I can get the code running the way it presently is, locally first.
+
+	- (Done) Create Basic POSTMAN request (See eFax local testing collection - legacy).
+	
+	- (Done) Execute a real request using the dev account.
+	
+	- (Done) Sort out issue when invoking the AEM (can see the outside world and hence need a local file available by URL).     
+	
+	- (Done) Sort out eFax connection issues from both accounts. 
+		- JAG11_T cannot 'see' either fax.gov.bc.ca or squadron.gov.bc.ca 
+		- jusefaxd can only see squadron. 
+		
+	- (Done) - Make sure Email Messages pulled from EmailServiceImpl: getInboxEmails() are pulled by received date in 
+	  SortDirection.Ascending order.
+	  
+	  	Old is definitely ascending or der in fetch of new email.  
+	  	Subject is text. 
+	  	Body is html. 
+	  
+	- (Next) Try to fetch and parse an inbox item with the new impl using MS Graph.    	
+	
+	

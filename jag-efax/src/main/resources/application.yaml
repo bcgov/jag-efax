@@ -7,6 +7,16 @@ spring:
     port: ${REDIS_PORT:6379}
     password: ${REDIS_PASSWORD:admin}
 
+msg:
+  clientId: ${MSG_CLIENTID}
+  authority: ${MSG_AUTHORITY}
+  secretKey: ${MSG_SECRETKEY}
+  expiry:
+     threshold: ${MSG_EXPIRY_THRESHOLD}
+  endpoint: ${MSG_ENDPOINT}
+  email:
+     account: ${MSG_EMAIL_ACCOUNT} 
+
 exchange:
   service:
     endpoint: ${EXCHANGE_ENDPOINT:}
