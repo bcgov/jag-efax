@@ -5,8 +5,8 @@ package ca.bc.gov.ag.efax.graph.service;
 
 import com.microsoft.graph.models.MessageCollectionResponse;
 
-import ca.bc.gov.ag.efax.graph.model.EmailMessage;
-import ca.bc.gov.ag.efax.graph.model.MailMessage;
+import ca.bc.gov.ag.efax.mail.model.MailMessage;
+
 
 /**
  * MS Graph Service Interface
@@ -17,8 +17,9 @@ import ca.bc.gov.ag.efax.graph.model.MailMessage;
 public interface MSGraphService {
 	
 	public MessageCollectionResponse GetMessages() throws Exception;
-	public void sendMessage(MailMessage mailMessage, boolean saveToSentItems) throws Exception; 
-	public void deleteMessage(EmailMessage emailMessage) throws Exception; 
+	public void sendMessage(MailMessage mailMessage) throws Exception; 
+	public void deleteMessage(String id) throws Exception; 
 	public String getPasswordCredentialsExpiryDate(); 
+	public String getApplicationName();
 	
 }

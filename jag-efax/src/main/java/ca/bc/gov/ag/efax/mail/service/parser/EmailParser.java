@@ -7,11 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ca.bc.gov.ag.efax.graph.model.GmailMessage;
 import ca.bc.gov.ag.efax.mail.model.DocumentDistributionMainProcessProcessResponseDecorator;
 import ca.bc.gov.ag.efax.ws.exception.FAXSendFault;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
-import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
-import microsoft.exchange.webservices.data.property.complex.MessageBody;
 
 public class EmailParser {
 
@@ -31,13 +30,16 @@ public class EmailParser {
      * @return
      * @throws Exception
      */
-    public DocumentDistributionMainProcessProcessResponseDecorator parse(EmailMessage emailMessage) throws Exception {
-        DocumentDistributionMainProcessProcessResponseDecorator response = new DocumentDistributionMainProcessProcessResponseDecorator();
+    public DocumentDistributionMainProcessProcessResponseDecorator parse(GmailMessage emailMessage) throws Exception {	
+    
+    	DocumentDistributionMainProcessProcessResponseDecorator response = new DocumentDistributionMainProcessProcessResponseDecorator();
 
         String subject = emailMessage.getSubject();
-        String body = MessageBody.getStringFromMessageBody(emailMessage.getBody());
+        
+        // Body should be in clear text at this stage (no HTML formatting included). 
+        String body = emailMessage.getBody();
 
-        // Try every registered email visitor to see if we can parse the email response from MS Exchange.
+        // Try every registered email visitor to see if we can parse the email response from MS Graph API.
         for (EmailVisitor emailParserVisitor : visitors) {
             if (hasJobId(response))
                 break;

@@ -1,10 +1,15 @@
 package ca.bc.gov.ag.efax.graph.model;
 
-public class EmailMessage {
+
+/**
+ * Equivalent of microsoft.exchange.webservices.data.core.service.item.EmailMessage
+ * used by the former Microsoft ExchangeService client API. 
+ */
+public class GmailMessage {
 	
 	private String subject;
 	private String body;
-	private String contentType; 
+	private String id; 
 	
 	public String getSubject() {
 		return subject;
@@ -18,11 +23,10 @@ public class EmailMessage {
 	public void setBody(String body) {
 		this.body = body;
 	}
-	public String getContentType() {
-		return contentType;
+	public String getId() {
+		return id;
 	}
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
+	public void setId(String id) {
+		this.id = id;
 	} 
-
 }

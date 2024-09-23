@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 
 public class MailMessage {
+	
+	//TODO - marked for delete after full testing. 
 
     @NotEmpty(message = "Property 'uuid' must not be empty")
     private String uuid;

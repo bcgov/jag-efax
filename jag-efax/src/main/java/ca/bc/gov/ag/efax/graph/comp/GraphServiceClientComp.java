@@ -12,11 +12,9 @@ import ca.bc.gov.ag.efax.graph.config.MSGraphProperties;
 
 /**
  * 
- * Provides a GraphServiceClient
+ * Provides a GraphServiceClient (Handles token fetch - Token Refresh, etc). 
  * 
- * Reference: https://learn.microsoft.com/en-us/graph/sdks/choose-authentication-providers?tabs=java#client-credentials-provider
- *  
- * If the expiry date of the Secret key is coming up due, send a notification. 
+ * Reference: https://learn.microsoft.com/en-us/graph/sdks/choose-authentication-providers?tabs=java#client-credentials-provider 
  * 
  */
 @Component
@@ -41,9 +39,9 @@ public class GraphServiceClientComp {
 
 		try {
 
-			this.clientId = props.getMsgClientId();
-			this.tenantId = props.getMsgAuthority();
-			this.clientSecret = props.getMsgSecretKey();
+			this.clientId = props.getClientId();
+			this.tenantId = props.getAuthority();
+			this.clientSecret = props.getSecretKey();
 
 			// The client credentials flow requires that you request the
 			// /.default scope, and pre-configure your permissions on the

@@ -8,12 +8,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import ca.bc.gov.ag.efax.graph.model.GmailMessage;
 import ca.bc.gov.ag.efax.mail.model.DocumentDistributionMainProcessProcessResponseDecorator;
 import ca.bc.gov.ag.efax.mail.repository.SentMessageRepository;
 import ca.bc.gov.ag.efax.mail.service.EmailService;
 import ca.bc.gov.ag.efax.mail.service.parser.EmailParser;
 import ca.bc.gov.ag.efax.ws.service.DocumentDistributionService;
-import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
 
 @Component
 @ConditionalOnProperty(
@@ -39,11 +39,11 @@ public class EmailPoller {
     @Scheduled(fixedDelayString = "${exchange.poller.interval}")
     public void pollForEmails() throws Exception {
         logger.debug("Started email inbox poll.");
-
-        // Retrieve all INBOX emails (that was originally sent to IMCEAFAX) 
-        for (EmailMessage emailMessage : emailService.getInboxEmails()) {
+        
+        // Retrieve all INBOX emails
+        for (GmailMessage emailMessage : emailService.getInboxEmails()) {	
             
-            // Attempt to parse the email response from MS Exchange
+            // Attempt to parse the email response from MS Graph API. 
             DocumentDistributionMainProcessProcessResponseDecorator response = emailParser.parse(emailMessage);
 
             // If the jobId is blank, there's nothing we can do except move on. (We can't send a message to the Justin Callback informing the user
@@ -57,7 +57,7 @@ public class EmailPoller {
             }
             
             // Move email to the "Deleted Items" folder so we don't process this same email again.
-            emailService.deleteEmail(emailMessage);
+            emailService.deleteEmail(emailMessage.getId());
         }
 
         logger.debug("Finished email inbox poll.");
