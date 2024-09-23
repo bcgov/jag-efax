@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import ca.bc.gov.ag.efax.graph.config.MSGraphProperties;
+import ca.bc.gov.ag.efax.graph.notification.ErrorNotificationService;
 import ca.bc.gov.ag.efax.graph.service.MSGraphService;
 import ca.bc.gov.ag.efax.graph.service.MSGraphServiceImpl;
 import ca.bc.gov.ag.efax.graph.utils.EFaxGraphConstants;
@@ -29,13 +30,15 @@ public class ExpiryMonitor {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ExpiryMonitor.class);
 	
-	private MSGraphProperties props; 
+	private MSGraphProperties gProps; 
 	
-	private MSGraphService mService; 
+	private MSGraphService gService; 
 	
-	public ExpiryMonitor(MSGraphProperties props, MSGraphServiceImpl mService) {
-		this.props = props; 
-		this.mService = mService; 
+	private ErrorNotificationService eService;  
+	
+	public ExpiryMonitor(MSGraphProperties gProps, MSGraphServiceImpl gService) {
+		this.gProps = gProps; 
+		this.gService = gService; 
 	}
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat(EFaxGraphConstants.dateFormat);
@@ -60,15 +63,18 @@ public class ExpiryMonitor {
 		Date nowDt = new Date();
 		
 		// MS Graph API credential (Secret Key) expiry date. 
-		Date expiryDt = sdf.parse(mService.getPasswordCredentialsExpiryDate());
+		Date expiryDt = sdf.parse(gService.getPasswordCredentialsExpiryDate());
 		
 		long diff = getDifferenceDays(nowDt, expiryDt);
 		logger.debug("Delta between now and MS Graph API Secret Key credential expiration date is:  " + diff + " days.");
 		
-		if (diff <= Long.parseLong(props.getMsgSecretKeyExpiryThreshold())) {
-			logger.info("Sending notification to renew MS Graph API Secret Key. Presently " + diff + "days from expiration.");
+		if (diff <= Long.parseLong(gProps.getExpiryThreshold())) {
+			logger.info("Sending notification to designated Admin to renew MS Graph API Secret Key. Key is " + diff + " days from expiration.");
+			
+			String appName = gService.getApplicationName();
+			
 			// TODO - finish me. 
-			//nService.sendNotification(diff);
+			eService.sendMSGraphCredentialWarning(diff, appName);
 		}
 	}
 	

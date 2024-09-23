@@ -20,6 +20,18 @@
 	  	Subject is text. 
 	  	Body is html. 
 	  
-	- (Next) Try to fetch and parse an inbox item with the new impl using MS Graph.    	
+	- (Done) Try to fetch and parse an inbox item with the new impl using MS Graph.
 	
+			Recall that the new EmailMessage class needs the following attributes: 
+			
+					emailMessage.getSubject();
+    				emailMessage.getBody()); <-- what format is this in HTML or ??
+						a: String body = MessageBody.getStringFromMessageBody(emailMessage.getBody());   HTML STRING! 
+					emailMessage.getId()  
+					  	
+	- (Done) See if each inbox item has an id. If so, add it to the GmailMessage for the deletion process.
+	
+	- (TODO) - Begin process of updating send mail method in gService.
+	- (TODO) - Pull the poller enviro variables in to the MSG set. 
+	- (TODO) - Completely remove the exchange enviro variables.   
 	

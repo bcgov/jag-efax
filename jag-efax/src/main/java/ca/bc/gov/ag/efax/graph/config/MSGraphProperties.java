@@ -8,47 +8,69 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties()
 public class MSGraphProperties {
 	
-	@Value("${msg.clientId}")
-	private String msgClientId;
+	@Value("${ms.graph.clientId}")
+	private String clientId;
 	
-	@Value("${msg.authority}")
-	private String msgAuthority;
+	@Value("${ms.graph.authority}")
+	private String authority;
 	
-	@Value("${msg.secretKey}")
-	private String msgSecretKey;
+	@Value("${ms.graph.secretKey}")
+	private String secretKey;
 	
-	@Value("${msg.endpoint}")
-	private String msgEndpoint;
+	@Value("${ms.graph.endpoint}")
+	private String endpoint;
 	
-	@Value("${msg.email.account}")
-	private String msgEmailAccount; 
+	@Value("${ms.graph.email.account}")
+	private String emailAccount; 
 	
 	// Number of days before MS Graph API Secret Key Expiry Date to start sending notifications. 
-	@Value("${msg.expiry.threshold}")
-	private String msgSecretKeyExpiryThreshold; 
-
-	public String getMsgClientId() {
-		return msgClientId;
-	}
-
-	public String getMsgAuthority() {
-		return msgAuthority;
-	}
-
-	public String getMsgSecretKey() {
-		return msgSecretKey;
-	}
-
-	public String getMsgEndpoint() {
-		return msgEndpoint;
-	}
-
-	public String getMsgEmailAccount() {
-		return msgEmailAccount;
-	}
-
-	public String getMsgSecretKeyExpiryThreshold() {
-		return msgSecretKeyExpiryThreshold;
-	}
+	@Value("${ms.graph.expiry.threshold}")
+	private String expiryThreshold; 
 	
+	@Value("${ms.graph.saveToSent}")
+	private boolean saveToSent; 
+	
+	@Value("${ms.graph.tempDirectory}")
+	private String tempDirectory;
+	
+	@Value("${ms.graph.adminEmail}")
+	private String adminEmail; 
+	
+
+	public String getClientId() {
+		return clientId;
+	}
+
+	public String getAuthority() {
+		return authority;
+	}
+
+	public String getSecretKey() {
+		return secretKey;
+	}
+
+	public String getEndpoint() {
+		return endpoint;
+	}
+
+	public String getEmailAccount() {
+		return emailAccount;
+	}
+
+	public String getExpiryThreshold() {
+		return expiryThreshold;
+	}
+
+	public boolean isSaveToSent() {
+		return saveToSent;
+	}
+
+	public String getTempDirectory() {
+		return tempDirectory;
+	}
+
+	public String getAdminEmail() {
+		return adminEmail;
+	}
+
 }
