@@ -63,7 +63,7 @@ public class EmailServiceImpl implements EmailService {
 		return o;
 	}   
     
-// TODO - clean up. 
+// TODO - clean up
 // Original code used for Jusefaxd.     
 //    @Override
 //    public List<EmailMessage> getInboxEmails() throws Exception {
