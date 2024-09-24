@@ -96,7 +96,6 @@ public class MSGraphServiceImpl implements MSGraphService {
 
 		com.microsoft.graph.users.item.sendmail.SendMailPostRequestBody sendMailPostRequestBody = new com.microsoft.graph.users.item.sendmail.SendMailPostRequestBody();
 
-		// TODO - Check that the body content matches the original service?
 		Message message = new Message();
 		message.setSubject(mailMessage.getSubject());
 		ItemBody ib = new ItemBody();

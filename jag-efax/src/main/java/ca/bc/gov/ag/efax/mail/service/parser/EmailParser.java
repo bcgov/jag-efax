@@ -6,12 +6,15 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import ca.bc.gov.ag.efax.graph.model.GmailMessage;
 import ca.bc.gov.ag.efax.mail.model.DocumentDistributionMainProcessProcessResponseDecorator;
 import ca.bc.gov.ag.efax.ws.exception.FAXSendFault;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 
+// TODO - Note. This had not been a service previously. Not sure how it had worked. 
+@Service
 public class EmailParser {
 
     private final Logger logger = LoggerFactory.getLogger(EmailParser.class);

@@ -31,7 +31,13 @@
 					  	
 	- (Done) See if each inbox item has an id. If so, add it to the GmailMessage for the deletion process.
 	
-	- (TODO) - Begin process of updating send mail method in gService.
-	- (TODO) - Pull the poller enviro variables in to the MSG set. 
-	- (TODO) - Completely remove the exchange enviro variables.   
+	- (Done) - Begin process of updating send mail method in gService.
+	- (Done) - Pull the poller enviro variables in to the MSG set. 
+	- (Done) - Completely remove the exchange enviro variables.
+	
+	- (TODO) - Document the set of new environmental variables for MS Graph API support. 
+	- (TODO) - Work to get the code running with PROD account first as per Ryan's suggestion. 
+	- (TODO) - Test prod fax service connectivity with new PROD account.
+	- (TODO) - Fix test classes after pulling EWS library.  
+	    
 	
