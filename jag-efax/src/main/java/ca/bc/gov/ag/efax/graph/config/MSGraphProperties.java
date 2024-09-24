@@ -36,6 +36,9 @@ public class MSGraphProperties {
 	@Value("${ms.graph.adminEmail}")
 	private String adminEmail; 
 	
+	@Value("${ms.graph.azureAppName}")
+	private String azureAppName;
+	
 
 	public String getClientId() {
 		return clientId;
@@ -73,4 +76,8 @@ public class MSGraphProperties {
 		return adminEmail;
 	}
 
+	public String getAzureAppName() {
+		return azureAppName;
+	}
+	
 }

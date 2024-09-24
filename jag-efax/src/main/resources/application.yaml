@@ -20,6 +20,7 @@ ms:
   saveToSent: ${MSG_SAVE_IN_SENT:true}
   tempDirectory: ${MSG_TEMP_DIR:}
   adminEmail: ${MSG_ADMIN_EMAIL}
+  azureAppName: ${MSG_APP_NAME}
 
 exchange:
   service:
