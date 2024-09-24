@@ -36,9 +36,10 @@ public class ExpiryMonitor {
 	
 	private ErrorNotificationService eService;  
 	
-	public ExpiryMonitor(MSGraphProperties gProps, MSGraphServiceImpl gService) {
+	public ExpiryMonitor(MSGraphProperties gProps, MSGraphServiceImpl gService, ErrorNotificationService eService) {
 		this.gProps = gProps; 
 		this.gService = gService; 
+		this.eService = eService; 
 	}
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat(EFaxGraphConstants.dateFormat);
@@ -69,11 +70,10 @@ public class ExpiryMonitor {
 		logger.debug("Delta between now and MS Graph API Secret Key credential expiration date is:  " + diff + " days.");
 		
 		if (diff <= Long.parseLong(gProps.getExpiryThreshold())) {
-			logger.info("Sending notification to designated Admin to renew MS Graph API Secret Key. Key is " + diff + " days from expiration.");
+			logger.warn("Sending notification to designated Admin to renew MS Graph API Secret Key. Key is " + diff + " days from expiration.");
 			
 			String appName = gService.getApplicationName();
 			
-			// TODO - finish me. 
 			eService.sendMSGraphCredentialWarning(diff, appName);
 		}
 	}

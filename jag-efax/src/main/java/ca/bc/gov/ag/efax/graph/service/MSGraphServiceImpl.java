@@ -104,15 +104,16 @@ public class MSGraphServiceImpl implements MSGraphService {
 		ib.setContent(mailMessage.getBody());
 		message.setBody(ib);
 
-		// Populate recipients
-		LinkedList<Recipient> toRecipientsList = new LinkedList<Recipient>();
-		Recipient toRecipient = new Recipient();
-		EmailAddress emailAddress = new EmailAddress();
-		emailAddress.setAddress(mailMessage.getTo());
-		toRecipient.setEmailAddress(emailAddress);
-		toRecipientsList.add(toRecipient);
-		message.setToRecipients(new ArrayList<Recipient>());
-		message.getToRecipients().add(toRecipient);
+		// Populate recipient(s)
+		message.setToRecipients(new ArrayList<Recipient>()); 
+		String[] emailArray = mailMessage.getTo().split(",");
+		for (String email : emailArray) {
+			Recipient toRecipient = new Recipient();
+			EmailAddress emailAddress = new EmailAddress();
+			emailAddress.setAddress(email);
+			toRecipient.setEmailAddress(emailAddress);
+			message.getToRecipients().add(toRecipient);
+	    }
 
 		// Add attachment(s)
 		if (null != mailMessage.getAttachments() && mailMessage.getAttachments().size() > 0) {
@@ -267,7 +268,10 @@ public class MSGraphServiceImpl implements MSGraphService {
 	@Override
 	public String getApplicationName() {
 		
-		Application a = gComp.getGraphClient().applications().byApplicationId("{application-id}").get();
-		return a.getAppId();
+		return gProps.getAzureAppName();
+		
+		// TODO - this could be automated. 
+		//Application a = gComp.getGraphClient().applications().byApplicationId("{application-id}").get();
+		//return a.getAppId();
 	}
 }
