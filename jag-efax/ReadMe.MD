@@ -1,5 +1,12 @@
 # eFax Service
 
+This is a SOAP based service responsible for consuming a request to send a fax and then 
+monitoring for it's successful tranmission to the intended fax recipient. 
+
+This service relies on REDIS to maintain the 'in flight' fax requests and MS Graph API 
+to interoperate with a designated service account outlook mailbox for sending the fax request to a faxing service endpoint 
+and receiving the notification that the fax was (or wasn't) successfully sent.  
+
 ### Environmental Variables
 
 | Key        | Description     |
@@ -47,3 +54,21 @@ Once the container is up and running, set the admin password by using the redis-
 mvn spring-boot:run
 
 ```
+
+3. Triggering a dummy SOAP request when running locally  
+
+- Load the POSTMAN test collection from the 'testing' folder.
+- Launch the test 'POST eFax Request 1'.  
+
+Notes for populating the test call, 'eFax Request 1': 
+
+- Transport node holds the receiving fax phone number (this should be a real fax number) 
+- Attachments must be available as a URL on a server accessible from the machine this service is running on.
+- From/To nodes are just names - not email addresses. 
+- dateTime node is populated with a ISO 8601 UTC time with UTC offset, example: '2024-09-20T11:04:18.522-07:00'  
+- set jobId to a unique value for each call. 
+- Update the body node with the same unique value after the label 'JobID: '.
+
+Response from the call should be a HTTP Status 200.  
+ 
+
