@@ -33,6 +33,11 @@
  (Done) - Get squadron response template fixed. 
  (IN PROGRESS) - Get JAG11_T account (dev) access to call squadron. Currently this is not permitted. 
  (TODO) - Work out what needs to be done to run basic testing in our TEST environment w/ Louise's help. 
+ (Done) - Begin work on setting up Pre Prod - Set Permissions and account scoping for jefaxp@gov.bc.ca
+ (Done) - Test MS Graph API access to jefaxp@gov.bc.ca mailbox. Gen access tokens and Send mail from jefaxp account.
+ (Done) - Set up POSTMAN Soap call for PrepProd testing. 
+ (IN PROGRESS) - Commence on setting up O/S Preprod. 
+  
  
 	    
 	
