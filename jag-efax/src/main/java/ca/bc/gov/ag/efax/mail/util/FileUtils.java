@@ -6,21 +6,25 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import ca.bc.gov.ag.efax.mail.config.ExchangeProperties;
+import ca.bc.gov.ag.efax.graph.config.MSGraphProperties;
+//import ca.bc.gov.ag.efax.mail.config.ExchangeProperties;
 import ca.bc.gov.ag.efax.mail.model.MailMessage;
 import ca.bc.gov.ag.efax.ws.config.SpringContext;
 
 public class FileUtils {
-
+	
     public static String getTempFilename(MailMessage mailMessage, int index) {
         return "tmp_attach_" + StringUtils.normalizeUUID(mailMessage.getUuid()) + "_" + index + ".pdf";
     }
 
     public static File getTempFile(MailMessage mailMessage, int index) {
-        ExchangeProperties exchangeProperties = SpringContext.getBean(ExchangeProperties.class);
+        //ExchangeProperties exchangeProperties = SpringContext.getBean(ExchangeProperties.class);
+    	MSGraphProperties gProps = SpringContext.getBean(MSGraphProperties.class);
 
         String tempFilename = getTempFilename(mailMessage, index);
-        File tempFile = new File(exchangeProperties.getTempDirectory() + tempFilename);
+        //File tempFile = new File(exchangeProperties.getTempDirectory() + tempFilename);
+        File tempFile = new File(gProps.getTempDirectory() + tempFilename);
+        
         return tempFile;
     }
 
