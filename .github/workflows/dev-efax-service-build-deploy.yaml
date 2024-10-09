@@ -40,7 +40,7 @@ jobs:
             
       - name: Build the Docker image
         run: |            
-          docker-compose build --build-arg ENABLE_SPLUNK=true webservice
+          docker compose build --build-arg ENABLE_SPLUNK=true webservice
           
       - name: Docker Tag Version
         run: |  
