@@ -34,10 +34,10 @@ jobs:
       - name: Build the Docker image
         run: |            
           docker compose build --build-arg ENABLE_SPLUNK=true webservice
-          
+          docker image ls
       - name: Docker Tag Version
         run: |  
-          docker tag jag-efax_webservice artifacts.developer.gov.bc.ca/edde-jag-efax-web/jag-efax-webservice:${{ env.LATEST_VERSION }}
+          docker tag webservice artifacts.developer.gov.bc.ca/edde-jag-efax-web/jag-efax-webservice:${{ env.LATEST_VERSION }}
           
       - name: Docker Push Version
         run: |  
