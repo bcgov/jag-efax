@@ -3,6 +3,8 @@ package ca.bc.gov.ag.efax.graph.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
+
 
 @Configuration
 @ConfigurationProperties()
@@ -69,7 +71,18 @@ public class MSGraphProperties {
 	}
 
 	public String getTempDirectory() {
-		return tempDirectory;
+		String path = "";
+		if (StringUtils.hasLength(tempDirectory))
+		    path = tempDirectory;
+		else
+			path = System.getProperty("java.io.tmpdir");
+		
+        String separator = System.getProperty("file.separator");
+		if (!path.endsWith(separator)) {
+		    path += separator;
+		}
+		
+		return path;
 	}
 
 	public String getAdminEmail() {
