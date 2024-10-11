@@ -26,17 +26,8 @@ public class EmailServiceImpl implements EmailService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    //@Autowired
-    //private ExchangeServiceFactory exchangeServiceFactory;
-
-    //@Autowired
-    //private ExchangeProperties exchangeProperties;
-
     @Autowired
     private SentMessageRepository sentMessageRepository;
-
-    //@Autowired
-    //private PdfService pdfService;
     
     @Autowired
     private MSGraphService gService;
@@ -50,7 +41,8 @@ public class EmailServiceImpl implements EmailService {
 
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.typeMap(Message.class, GmailMessage.class).addMappings(mapper -> {
-			mapper.map(src -> src.getBodyPreview(), GmailMessage::setBody);
+			// Body content is expected as text. See MSGraphServiceImpl.java Ln: 84
+			mapper.map(src -> src.getBody().getContent(), GmailMessage::setBody);
 			mapper.map(src -> src.getSubject(), GmailMessage::setSubject);
 		});
 
@@ -62,40 +54,6 @@ public class EmailServiceImpl implements EmailService {
 
 		return o;
 	}   
-    
-// TODO - clean up
-// Original code used for Jusefaxd.     
-//    @Override
-//    public List<EmailMessage> getInboxEmails() throws Exception {
-//        logger.trace("Retrieving inbox emails");
-//
-//        ItemView view = new ItemView(Integer.MAX_VALUE);
-//        view.getOrderBy().add(ItemSchema.DateTimeReceived, SortDirection.Ascending);
-//
-//        ExchangeService exchangeService = exchangeServiceFactory.createService();
-//        FindItemsResults<Item> emails = exchangeService.findItems(WellKnownFolderName.Inbox, view);
-//
-//        if (!emails.getItems().isEmpty()) {
-//            exchangeService.loadPropertiesForItems(emails, PropertySet.FirstClassProperties);
-//        }
-//
-//        List<EmailMessage> emailMessages = emails.getItems().stream().map(item -> (EmailMessage) item).collect(Collectors.toList());
-//        logger.trace("Retrieved {} emails", emailMessages.size());
-//        
-//        
-//        //sm
-//        if (!emails.getItems().isEmpty()) {
-//        	for (EmailMessage item: emailMessages) {
-//        		System.out.println("itemSubject: " + item.getSubject());
-//        		System.out.println("itemBody: " + item.getBody());
-//        		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(EFaxGraphConstants.dateFormat);
-//        		System.out.println("itemDateReceived: " + simpleDateFormat.format(item.getDateTimeReceived()) + "\n");
-//        	}
-//        }
-//        
-//        return emailMessages;
-//    }
-  
   
 	@Override
 	public void deleteEmail(String id) throws Exception {
@@ -103,15 +61,6 @@ public class EmailServiceImpl implements EmailService {
 		logger.trace("Deleting email with id: " + id);
 		gService.deleteMessage(id);
 	} 
-
-// TODO - clean up 	
-// Original code used for Jusefaxd. 	
-//    @Override
-//    public void deleteEmail(GmailMessage emailMessage) throws Exception {
-//        ExchangeService exchangeService = exchangeServiceFactory.createService();
-//        exchangeService.deleteItem(emailMessage.getId(), DeleteMode.MoveToDeletedItems, null, null);
-//    	System.out.println("deleteEmail - Implement me!");
-//    }
 
     @Override
     public void sendMessage(final MailMessage mailMessage) {
@@ -131,41 +80,6 @@ public class EmailServiceImpl implements EmailService {
             throw new FAXSendFault("Unknown Exception in class sendMessage", e);
         }
     }
-
-// TODO - clean up    
-// Original code used for Jusefaxd.     
-//    private boolean processMessage(MailMessage mailMessage) throws Exception {
-//        try {
-//            ExchangeService service = exchangeServiceFactory.createService();
-//
-//            EmailMessage message = new EmailMessage(service);
-//            message.getToRecipients().add(new EmailAddress(mailMessage.getTo()));
-//            message.setSubject(mailMessage.getSubject());
-//            message.setBody(MessageBody.getMessageBodyFromText(mailMessage.getBody()));
-//
-//            List<String> attachmentURLs = mailMessage.getAttachments();
-//            if (attachmentURLs != null) {
-//                for (int i = 0; i < attachmentURLs.size(); i++) {
-//                    String url = attachmentURLs.get(i);
-//                    String fileName = FileUtils.getTempFilename(mailMessage, i);
-//                    File file = readFileFromURL(new URL(url), fileName, mailMessage.getJobId());
-//                    message.getAttachments().addFileAttachment(fileName, FileUtils.fileToByteArray(file));
-//                }
-//            }
-//            
-//            if (exchangeProperties.getSaveInSent()) {
-//                message.sendAndSaveCopy(WellKnownFolderName.SentItems);
-//            }
-//            else {
-//                message.send();
-//            }
-//        } finally {
-//            cleanupMessage(mailMessage);
-//        }
-//
-//        return true;
-//    }
-    
     
     private boolean processMessage(MailMessage mailMessage) throws Exception {
     	
@@ -193,31 +107,4 @@ public class EmailServiceImpl implements EmailService {
             logger.error("Could not cleanup mailMessage attachments", e);
         }
     }
-
-// TODO - clean up    
-//    private File readFileFromURL(final URL url, final String fileName, String jobId) throws Exception {
-//        InputStream inputStream = null;
-//
-//        try {
-//            String path = exchangeProperties.getTempDirectory() + fileName;
-//            
-//            // try first to flatten the PDF
-//            File file = pdfService.flattenPdf(url, path, jobId);
-//
-//            // if unsuccessful, simply download the file as is
-//            if (file == null) {
-//                logger.info("PDF Flattening: jobId {} not flattened, using original file.", jobId);
-//                // Open the URL and get metadata
-//                inputStream = url.openStream();
-//                Files.copy(inputStream, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
-//                file = new File(path);
-//            }
-//
-//            return file;
-//        } finally {
-//            if (inputStream != null)
-//                IOUtils.closeQuietly(inputStream);
-//        }
-//    }
-
 }

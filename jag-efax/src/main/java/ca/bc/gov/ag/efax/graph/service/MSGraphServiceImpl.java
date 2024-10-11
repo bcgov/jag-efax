@@ -77,11 +77,13 @@ public class MSGraphServiceImpl implements MSGraphService {
 	@Override
 	public MessageCollectionResponse GetMessages() throws Exception {
 		
-		// Capture by Date Received, Ascending order.  
+		// Capture by Date Received, Ascending order in TEXT format (e.g., strip HTML).    
 		return gComp.getGraphClient().users().byUserId(gProps.getEmailAccount()).mailFolders().byMailFolderId("Inbox")
 				.messages().get(requestConfiguration -> {
 					requestConfiguration.queryParameters.orderby = new String []{"receivedDateTime asc"};
+					requestConfiguration.headers.add("Prefer", "outlook.body-content-type=\"text\"");
 				});
+		
 	}
 
 	/**
@@ -181,34 +183,6 @@ public class MSGraphServiceImpl implements MSGraphService {
 		
 	}
 	
-// TODO - clean up 	
-//	/**
-//	 * 
-//	 * ex: https://graph.microsoft.com/v1.0/users('JAG11_T@extest.gov.bc.ca')/mailFolders/Inbox/messages?$filter=subject%20eq%20'Message%20Succeeded:%207785720693'
-//	 * 
-//	 * @param subject
-//	 * @return
-//	 * @throws Exception 
-//	 */
-//	private String getInboxItemById(String subject) throws Exception {
-//		
-//		MessageCollectionResponse messages =  gComp.getGraphClient().users().byUserId(props.getMsgEmailAccount()).mailFolders().byMailFolderId("Inbox")
-//				.messages().get(requestConfiguration -> {
-//					requestConfiguration.queryParameters.filter = "subject eq '" + subject + "'";
-//				});
-//		
-//		if (null != messages.getValue() && messages.getValue().size() > 0) {
-//			logger.debug("Number of messages found having the given subject were: " + messages.getValue().size());
-//			if (messages.getValue().size() > 1) {
-//				throw new Exception("An unexpected number of messages (" + messages.getValue().size() + ") were found having the given subject of: " + subject + ".");
-//			} else if (messages.getValue().size() == 1) {
-//				return messages.getValue().get(0).getId();
-//			};
-//		}
-//		
-//		return null; 
-//	}
-	
 	/**
 	 * 
 	 * Moves an item to another mailbox. 
@@ -269,7 +243,7 @@ public class MSGraphServiceImpl implements MSGraphService {
 		
 		return gProps.getAzureAppName();
 		
-		// TODO - this could be automated. 
+		// TODO - This could be improved upon to fetch this name from MS Graph API. Something like:  
 		//Application a = gComp.getGraphClient().applications().byApplicationId("{application-id}").get();
 		//return a.getAppId();
 	}

@@ -1,7 +1,7 @@
 package ca.bc.gov.ag.efax.mail.service;
 
 
-//TODO - clean up
+//TODO - Keep until MS Graph version of this service has been properly tested to work. 
 public class ExchangeServiceFactory {
 
 //    private final ExchangeProperties exchangeProperties;
