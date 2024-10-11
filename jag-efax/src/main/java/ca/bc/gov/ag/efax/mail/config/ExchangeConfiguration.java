@@ -1,6 +1,6 @@
 package ca.bc.gov.ag.efax.mail.config;
 
-//TODO - clean up
+//TODO - Flagged for deletion.
 //@Configuration
 //@EnableConfigurationProperties(ExchangeProperties.class)
 public class ExchangeConfiguration {

@@ -3,6 +3,8 @@ package ca.bc.gov.ag.efax.mail.service.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,14 +15,20 @@ import ca.bc.gov.ag.efax.mail.model.DocumentDistributionMainProcessProcessRespon
 import ca.bc.gov.ag.efax.ws.exception.FAXSendFault;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 
-// TODO - Note. This had not been a service previously. Not sure how it had worked. 
 @Service
 public class EmailParser {
 
     private final Logger logger = LoggerFactory.getLogger(EmailParser.class);
 
     private List<EmailVisitor> visitors = new ArrayList<EmailVisitor>();
-
+    
+    @PostConstruct
+    private void postConstruct() {
+    	this.registerVisitor(new SucceededVisitor());
+    	this.registerVisitor(new UndeliverableVisitor());
+    	this.registerVisitor(new FailedVisitor());
+    }
+    
     /** Registers (adds) an EmailVisitor to this parser. */
     public void registerVisitor(EmailVisitor visitor) {
         visitors.add(visitor);
