@@ -1,0 +1,27 @@
+name: PROD Deploy Efax Webservice 
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Artifactory
+        uses: docker/login-action@v1
+        with:
+          registry: artifacts.developer.gov.bc.ca
+          username: ${{ secrets.EFAX_ARTIFACTORY_USERNAME }}
+          password: ${{ secrets.EFAX_ARTIFACTORY_PASSWORD }}
+
+      - name: Docker Pull Test Version
+        run: |  
+          docker pull artifacts.developer.gov.bc.ca/edde-jag-efax-web/jag-efax-webservice:test 
+      
+      - name: Docker Push Tag and Push Prod Version
+        run: | 
+          docker tag artifacts.developer.gov.bc.ca/edde-jag-efax-web/jag-efax-webservice:test artifacts.developer.gov.bc.ca/edde-jag-efax-web/jag-efax-webservice:prod
+          docker push artifacts.developer.gov.bc.ca/edde-jag-efax-web/jag-efax-webservice:prod   
+      
