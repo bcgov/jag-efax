@@ -101,7 +101,9 @@ public class MSGraphServiceImpl implements MSGraphService {
 		Message message = new Message();
 		message.setSubject(mailMessage.getSubject());
 		ItemBody ib = new ItemBody();
-		ib.setContentType(BodyType.Text);
+		// TODO - see here re body as text or html. 
+		//ib.setContentType(BodyType.Text);
+		ib.setContentType(BodyType.Html);
 		ib.setContent(mailMessage.getBody());
 		message.setBody(ib);
 
