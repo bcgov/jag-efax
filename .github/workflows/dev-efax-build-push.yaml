@@ -38,7 +38,7 @@ jobs:
       - name: Docker Tag Version
         run: |  
           docker tag jag-efax-webservice artifacts.developer.gov.bc.ca/edde-jag-efax-web/jag-efax-webservice:dev
-          
+      #Push to Artifactory with a dev image tag    
       - name: Docker Push Version
         run: |  
           docker push artifacts.developer.gov.bc.ca/edde-jag-efax-web/jag-efax-webservice:dev   
