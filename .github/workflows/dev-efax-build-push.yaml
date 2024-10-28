@@ -2,7 +2,7 @@ name: DEV Build and Deploy Efax Webservice
 
 on:
   push:
-    branches: [feature/justincsb-2766]
+    branches: [main]
 
 jobs:
   build:
