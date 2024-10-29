@@ -57,18 +57,17 @@ mvn spring-boot:run
 
 3. Triggering a dummy SOAP request when running locally  
 
-- Load the POSTMAN test collection from the 'testing' folder.
+- Load the POSTMAN test collection from the 'postman' folder.
 - Launch the test 'POST eFax Request 1'.  
 
-Notes for populating the test call, 'eFax Request 1': 
+Notes for populating the POSTMAN test call, Local, eFax Request 1: 
 
 - Transport node holds the receiving fax phone number (this should be a real fax number) 
 - Attachments must be available as a URL on a server accessible from the machine this service is running on.
 - From/To nodes are just names - not email addresses. 
-- dateTime node is populated with a ISO 8601 UTC time with UTC offset, example: '2024-09-20T11:04:18.522-07:00'  
-- set jobId to a unique value for each call. 
-- Update the body node with the same unique value after the label 'JobID: '.
-
-Response from the call should be a HTTP Status 200.  
+- DateTime node is populated with a ISO 8601 UTC time with UTC offset, example: '2024-09-20T11:04:18.522-07:00'  
+- Set 'jobId' and 'subject' to the same unique value for each call. 
+- Set 'body' node to either empty value or HTML enclosed in a CDATA tags.  
+- Response from the call should be a HTTP Status 202 (accepted).
  
 
