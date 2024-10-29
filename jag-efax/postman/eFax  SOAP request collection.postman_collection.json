@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "716f28b6-4336-487f-ac90-8d3fb86ee036",
+		"name": "eFax  SOAP request collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28609383"
+	},
+	"item": [
+		{
+			"name": "Local eFax Service",
+			"item": [
+				{
+					"name": "eFax Request 1",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/xml",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n                   xmlns:ns2=\"http://ag.gov.bc.ca/DocumentDistributionMainProcess\">\r\n  <SOAP-ENV:Header />\r\n  <SOAP-ENV:Body>\r\n    <DocumentDistributionRequest xmlns=\"http://ag.gov.bc.ca/DocumentDistributionMainProcess\">\r\n      <from>someguy</from>\r\n      <to>someone</to>\r\n      <jobId>9827984792930</jobId>\r\n      <dateTime>2024-09-20T11:04:18.522-07:00</dateTime>\r\n      <timeout>PT25M</timeout>\r\n      <channel>fax</channel>\r\n      <transport>[YOUR FAX NUMBER]</transport>\r\n      <subject>9827984792930</subject>\r\n      <body></body>\r\n      <numPages>1</numPages>\r\n      <attachments>\r\n        <uri>[PDF URL]</uri>\r\n      </attachments>\r\n      <extension1>a</extension1>\r\n      <extension2>b</extension2>\r\n    </DocumentDistributionRequest>\r\n  </SOAP-ENV:Body>\r\n</SOAP-ENV:Envelope>",
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/ws/DocumentDistributionMainProcess",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"ws",
+								"DocumentDistributionMainProcess"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eFax Request cover sheet",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/xml",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n                   xmlns:ns2=\"http://ag.gov.bc.ca/DocumentDistributionMainProcess\">\r\n  <SOAP-ENV:Header />\r\n  <SOAP-ENV:Body>\r\n    <DocumentDistributionRequest xmlns=\"http://ag.gov.bc.ca/DocumentDistributionMainProcess\">\r\n      <from>someguy</from>\r\n      <to>someone</to>\r\n      <jobId>9827984792898</jobId>\r\n      <dateTime>2024-09-20T11:04:18.522-07:00</dateTime>\r\n      <timeout>PT25M</timeout>\r\n      <channel>fax</channel>\r\n      <transport>[YOUR FAX NUMBER]</transport>\r\n      <subject>9827984792898</subject>\r\n      <body><![CDATA[<html>\r\n<head>\r\n    <meta http-equiv=Content-Type content=\"text/html;\">\r\n</head>\r\n<body lang=EN-CA><br>\r\n<br>\r\n<h3>Court Services Branch</h3><br>\r\n<br>\r\n<b>To: </b>Joe, Jane<br>\r\n<br>\r\n<b>Fax: </b><br>\r\n<br>\r\n<br>\r\n<br>\r\n<b>From: </b>someguy<br>\r\n<br>\r\n<b>Fax: </b>8339383978<br>\r\n<br>\r\n<b>Phone: </b>1-250-222-9090<br>\r\n<br>\r\n<b>Date: </b>Today<br>\r\n<br>\r\n<br>\r\n<b>Subject: </b>SUBJECT<br>\r\n<br>\r\n<b>File#: </b>FILENUMBER<br>\r\n<br>\r\n<b>NumPages: </b>This\r\nis page 1 of 2 (including this cover sheet)<br>\r\n<br>\r\n<br>\r\n<br>\r\n<b>Disclaimer: </b><i>The contents of this fax,\r\n    including any attachments, may contain confidential or sensitive information and is intended only for the named\r\n    recipient on this cover page. If this fax has been delivered to a recipient other than the named recipient on this\r\n    cover page, please destroy this document and inform the sender as soon as possible.</i></body>\r\n</html>]]></body>\r\n      <numPages>1</numPages>\r\n      <attachments>\r\n        <uri>[PDF URL]</uri>\r\n      </attachments>\r\n      <extension1>a</extension1>\r\n      <extension2>b</extension2>\r\n    </DocumentDistributionRequest>\r\n  </SOAP-ENV:Body>\r\n</SOAP-ENV:Envelope>",
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/ws/DocumentDistributionMainProcess",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"ws",
+								"DocumentDistributionMainProcess"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DEV eFax Service",
+			"item": [
+				{
+					"name": "dev eFax Request",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/xml",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n                   xmlns:ns2=\"http://ag.gov.bc.ca/DocumentDistributionMainProcess\">\r\n  <SOAP-ENV:Header />\r\n  <SOAP-ENV:Body>\r\n    <DocumentDistributionRequest xmlns=\"http://ag.gov.bc.ca/DocumentDistributionMainProcess\">\r\n      <from>someguy</from>\r\n      <to>someone</to>\r\n      <jobId>9827984792911</jobId>\r\n      <dateTime>2024-09-20T11:04:18.522-07:00</dateTime>\r\n      <timeout>PT25M</timeout>\r\n      <channel>fax</channel>\r\n      <transport>[YOUR FAX NUMBER]</transport>\r\n      <subject>9827984792911</subject>\r\n      <body><![CDATA[<html>\r\n<head>\r\n    <meta http-equiv=Content-Type content=\"text/html;\">\r\n</head>\r\n<body lang=EN-CA>\r\n    <br>\r\n    <H5>A cover sheet could be placed here!</H5>\r\n    <br>\r\n</body>\r\n</html>]]></body>\r\n      <numPages>1</numPages>\r\n      <attachments>\r\n        <uri>[PDF URL]</uri>\r\n      </attachments>\r\n      <extension1>a</extension1>\r\n      <extension2>b</extension2>\r\n    </DocumentDistributionRequest>\r\n  </SOAP-ENV:Body>\r\n</SOAP-ENV:Envelope>",
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://nginx-ddea46-dev-new.apps.silver.devops.gov.bc.ca/api/ws/DocumentDistributionMainProcess",
+							"protocol": "https",
+							"host": [
+								"nginx-ddea46-dev-new",
+								"apps",
+								"silver",
+								"devops",
+								"gov",
+								"bc",
+								"ca"
+							],
+							"path": [
+								"api",
+								"ws",
+								"DocumentDistributionMainProcess"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
