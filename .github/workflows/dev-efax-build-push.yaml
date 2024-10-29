@@ -1,0 +1,45 @@
+name: DEV Build and Deploy Efax Webservice 
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Artifactory
+        uses: docker/login-action@v1
+        with:
+          registry: artifacts.developer.gov.bc.ca
+          username: ${{ secrets.EFAX_ARTIFACTORY_USERNAME }}
+          password: ${{ secrets.EFAX_ARTIFACTORY_PASSWORD }}
+            
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+            
+      - name: Get Java Project Version 
+        run: |  
+          _version=$(.github/helpers/latest_java_version.sh)
+          echo "LATEST_VERSION=$_version" >> $GITHUB_ENV
+            
+      - name: Build the Docker image
+        run: |            
+          docker compose build --build-arg ENABLE_SPLUNK=true webservice
+          
+      - name: Docker Tag Version
+        run: |  
+          docker tag jag-efax-webservice artifacts.developer.gov.bc.ca/edde-jag-efax-web/jag-efax-webservice:dev
+      #Push to Artifactory with a dev image tag    
+      - name: Docker Push Version
+        run: |  
+          docker push artifacts.developer.gov.bc.ca/edde-jag-efax-web/jag-efax-webservice:dev   
+      
