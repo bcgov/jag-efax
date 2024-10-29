@@ -1,11 +1,29 @@
 server:
   port: ${SERVER_PORT:8080}
 
+app:
+  version: 0.1.1	
+
 spring:
   redis:
     host: ${REDIS_HOST:localhost}
     port: ${REDIS_PORT:6379}
     password: ${REDIS_PASSWORD:admin}
+
+ms:
+ graph:
+  clientId: ${MSG_CLIENTID}
+  authority: ${MSG_AUTHORITY}
+  secretKey: ${MSG_SECRETKEY}
+  expiry:
+     threshold: ${MSG_EXPIRY_THRESHOLD}
+  endpoint: ${MSG_ENDPOINT}
+  email:
+     account: ${MSG_EMAIL_ACCOUNT}
+  saveToSent: ${MSG_SAVE_IN_SENT:true}
+  tempDirectory: ${MSG_TEMP_DIR:}
+  adminEmail: ${MSG_ADMIN_EMAIL}
+  azureAppName: ${MSG_APP_NAME}
 
 exchange:
   service:

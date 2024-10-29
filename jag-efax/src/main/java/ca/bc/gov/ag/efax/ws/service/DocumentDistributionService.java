@@ -6,7 +6,7 @@ import ca.bc.gov.ag.efax.ws.exception.FaxTransformationFault;
 import ca.bc.gov.ag.efax.ws.exception.UnknownChannelFault;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
-import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
+//import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
 
 public interface DocumentDistributionService {
 

@@ -36,7 +36,7 @@ public class DocumentDistributionEndpoint {
         logRequest(request);
 
         try {
-
+        	
             documentDistributionService.initiateRequestToSendMessage(request);
 
         } catch (FaxTransformationFault e) { // catch and re-throw with jobId

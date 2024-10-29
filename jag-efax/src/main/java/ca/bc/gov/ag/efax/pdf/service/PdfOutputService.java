@@ -38,6 +38,7 @@ public class PdfOutputService extends WebServiceGatewaySupport implements PdfSer
      * @return a flattened PDF, or null if an error occurred.
      */
     public File flattenPdf(URL url, String path, String jobId) {
+    	
         try {
             logger.info("PDF OutputService Flattening: jobId {} attempting flattening.", jobId);
 

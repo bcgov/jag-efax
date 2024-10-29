@@ -1,0 +1,4 @@
+Oct 29, 2024
+
+(TODO) - Clean up the unit tests. These need to be re-aligned with the work to integrate MS Graph API. 
+(TODO) - Add version number to application which is displayed at startup. 
