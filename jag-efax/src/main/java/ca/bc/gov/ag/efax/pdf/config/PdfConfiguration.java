@@ -1,23 +1,24 @@
 package ca.bc.gov.ag.efax.pdf.config;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.namespace.QName;
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.Dispatch;
-import javax.xml.ws.soap.SOAPBinding;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.ws.client.core.WebServiceTemplate;
+import org.springframework.ws.soap.SoapVersion;
+import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 
-import ca.bc.gov.ag.efax.pdf.outputservice.model.TransformPDF;
-import ca.bc.gov.ag.efax.pdf.outputservice.model.TransformPDFResponse;
+import javax.xml.soap.SOAPMessage;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableConfigurationProperties(PdfProperties.class)
 public class PdfConfiguration {
+
+    @Autowired
+    private WebServiceSenderWithAuth webServiceSenderWithAuth;
 
     @Bean
     public Jaxb2Marshaller pdfMarshaller() {
@@ -28,22 +29,27 @@ public class PdfConfiguration {
     }
 
     @Bean
-    public Dispatch<Object> outputServiceDispatch(PdfProperties pdfProperties) throws JAXBException {
-        QName serviceName = new QName("http://adobe.com/idp/services", "OutputServiceService");
-        QName portQName = new QName("http://adobe.com/idp/services", "OutputService");
-        String endpoint = pdfProperties.getEndpoint();
+    public WebServiceTemplate webServiceTemplate() {
+        WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
+        Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
+        webServiceTemplate.setMessageFactory(messageFactory());
+        webServiceTemplate.setMessageSender(webServiceSenderWithAuth);
+        jaxb2Marshaller.setContextPaths(
+                "ca.bc.gov.ag.efax.pdf.outputservice.model");
+        webServiceTemplate.setMarshaller(jaxb2Marshaller);
+        webServiceTemplate.setUnmarshaller(jaxb2Marshaller);
+        webServiceTemplate.afterPropertiesSet();
+        return webServiceTemplate;
+    }
 
-        javax.xml.ws.Service service = javax.xml.ws.Service.create(serviceName);
-        service.addPort(portQName, SOAPBinding.SOAP11HTTP_BINDING, endpoint);
-
-        JAXBContext jc = JAXBContext.newInstance(TransformPDF.class, TransformPDFResponse.class);
-        Dispatch<Object> pdfDispatch = service.createDispatch(portQName, jc, javax.xml.ws.Service.Mode.PAYLOAD);
-
-        BindingProvider prov = (BindingProvider) pdfDispatch;
-        prov.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, pdfProperties.getUsername());
-        prov.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, pdfProperties.getPassword());
-
-        return pdfDispatch;
+    @Bean
+    public SaajSoapMessageFactory messageFactory() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(SOAPMessage.WRITE_XML_DECLARATION, "true");
+        SaajSoapMessageFactory messageFactory = new SaajSoapMessageFactory();
+        messageFactory.setMessageProperties(props);
+        messageFactory.setSoapVersion(SoapVersion.SOAP_11);
+        return messageFactory;
     }
 
 }
