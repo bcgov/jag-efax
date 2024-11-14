@@ -24,13 +24,6 @@
         <snakeyaml.version>2.0</snakeyaml.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>nexus</id>
-            <url>${nexus-url}</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -115,13 +108,6 @@
 		<!-- MS Graph Specific End-->
 
         <!-- Custom dependencies -->
-        <dependency>
-            <!-- Adobe PDF jar -->
-            <groupId>ca.bc.gov.ag</groupId>
-            <artifactId>xpaaj</artifactId>
-            <version>0.0.1</version>
-        </dependency>
-        
         <dependency>
 		  <groupId>org.modelmapper</groupId>
 		  <artifactId>modelmapper</artifactId>
