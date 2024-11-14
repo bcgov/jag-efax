@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Base64;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;

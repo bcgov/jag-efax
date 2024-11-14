@@ -5,20 +5,20 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.13</version>
+        <version>3.3.4</version>
         <relativePath/>
     </parent>
     <packaging>jar</packaging>
 
     <groupId>ca.bc.gov.ag</groupId>
     <artifactId>jag-efax</artifactId>
-    <version>1.1.8</version>
+    <version>2.0.0</version>
     <name>jag-eFax</name>
     <description>A BPEL eFax Replacement project.</description>
 
     <properties>
         <target.fileName>${project.artifactId}-${project.version}</target.fileName>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <log4j2.version>2.17.1</log4j2.version>
         <snakeyaml.version>2.0</snakeyaml.version>
     </properties>
@@ -54,20 +54,21 @@
 
         <!-- OutputService dependencies -->
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.2</version>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>rt</artifactId>
-            <version>2.3.1</version>
+            <version>4.0.3</version>
         </dependency>
 
         <!-- Adobe PDF dependency -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.9.0</version>
+            <version>2.17.0</version>
         </dependency>
 
         <!-- Microsoft ExchangeService client
@@ -119,31 +120,27 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.ws</groupId>
-            <artifactId>spring-ws-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>it.ozimov</groupId>
-            <artifactId>embedded-redis</artifactId>
-            <version>0.7.3</version>
-            <scope>test</scope>
-        </dependency>
 
         <dependency>
             <groupId>com.fasterxml.woodstox</groupId>
             <artifactId>woodstox-core</artifactId>
             <version>5.4.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-common</artifactId>
+            <version>4.1.115.Final</version>
+        </dependency>
+
     </dependencies>
 
     <profiles>
     
         <profile>
-            <id>java11</id>
+            <id>java17</id>
             <activation>
-                <jdk>[11,)</jdk>
+                <jdk>[17,)</jdk>
             </activation>
 
             <dependencies>
@@ -192,7 +189,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
-                <version>2.5.0</version>
+                <version>3.1.0</version>
 
                 <executions>
                     <execution>
@@ -230,9 +227,9 @@
 
             <!-- tag::wsdl[] -->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>com.sun.xml.ws</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.0.0</version>
 
                 <executions>
                     <execution>
@@ -257,7 +254,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
+                <version>0.8.12</version>
 
                 <configuration>
                     <excludes>
