@@ -19,7 +19,6 @@
     <properties>
         <target.fileName>${project.artifactId}-${project.version}</target.fileName>
         <java.version>1.8</java.version>
-        <nexus-url>file:${file.separator}${file.separator}${project.basedir}${file.separator}nexus</nexus-url>
         <log4j2.version>2.17.1</log4j2.version>
         <snakeyaml.version>2.0</snakeyaml.version>
     </properties>
