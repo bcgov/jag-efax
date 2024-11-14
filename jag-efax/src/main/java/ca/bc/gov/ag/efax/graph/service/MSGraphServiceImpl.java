@@ -65,7 +65,7 @@ public class MSGraphServiceImpl implements MSGraphService {
 		this.pdfService = pdfService; 
 	}
 
-	@javax.annotation.PostConstruct
+	@jakarta.annotation.PostConstruct
 	private void postConstruct() {
 		logger.info("MS Graph Service Impl started.");
 	}
