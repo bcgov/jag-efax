@@ -4,14 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import javax.xml.ws.Dispatch;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
+import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 
 import ca.bc.gov.ag.efax.pdf.outputservice.model.BLOB;
@@ -26,9 +26,14 @@ import ca.bc.gov.ag.efax.pdf.outputservice.model.TransformPDFResponse;
 public class PdfOutputService extends WebServiceGatewaySupport implements PdfService {
         
     private Logger logger = LoggerFactory.getLogger(PdfOutputService.class);
-    
-    @Autowired
-    private Dispatch<Object> outputServiceDispatch;
+
+    private final WebServiceTemplate webServiceTemplate;
+    @Value("${aem.output.endpoint}")
+    private String host;
+
+    public PdfOutputService(WebServiceTemplate webServiceTemplate) {
+        this.webServiceTemplate = webServiceTemplate;
+    }
 
     /**
      * Attempts to flatten (aka normalize/simplify) a PDF by delegating the call to a web service.
@@ -46,7 +51,8 @@ public class PdfOutputService extends WebServiceGatewaySupport implements PdfSer
             inPdfDoc.setRemoteURL(url.toString());
             TransformPDF request = new TransformPDF();
             request.setInPdfDoc(inPdfDoc);
-            TransformPDFResponse response = (TransformPDFResponse) outputServiceDispatch.invoke(request);
+            TransformPDFResponse response=
+                    (TransformPDFResponse) webServiceTemplate.marshalSendAndReceive(host, request);
             
             logger.info("PDF OutputService Flattening: jobId {} flattening successful.", jobId);
 

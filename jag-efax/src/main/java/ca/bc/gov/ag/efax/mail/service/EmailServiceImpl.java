@@ -26,14 +26,16 @@ public class EmailServiceImpl implements EmailService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
     private SentMessageRepository sentMessageRepository;
-    
-    @Autowired
+
     private MSGraphService gService;
-    
-     
-  @Override
+
+    public EmailServiceImpl(SentMessageRepository sentMessageRepository, MSGraphService gService) {
+        this.sentMessageRepository = sentMessageRepository;
+        this.gService = gService;
+    }
+
+    @Override
 	public List<GmailMessage> getInboxEmails() throws Exception {
 		logger.trace("Retrieving inbox emails");
 

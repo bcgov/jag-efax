@@ -34,7 +34,7 @@ public class GraphServiceClientComp {
 		this.props = props;
 	}
 
-	@javax.annotation.PostConstruct
+	@jakarta.annotation.PostConstruct
 	private void postConstruct() {
 
 		try {
