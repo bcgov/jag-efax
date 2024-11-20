@@ -5,10 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
-import ca.bc.gov.ag.efax.BaseTestSuite;
 import ca.bc.gov.ag.efax.mail.model.DocumentDistributionMainProcessProcessResponseDecorator;
+import org.junit.jupiter.api.TestInstance;
 
-public class SucceededVisitorTest extends BaseTestSuite {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class SucceededVisitorTest {
 
     @Test
     void testApply_Success() throws Exception {

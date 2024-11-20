@@ -20,4 +20,11 @@ public class ServiceFault {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
+	public static ServiceFault build(String code, String message) {
+		ServiceFault serviceFault = new ServiceFault();
+		serviceFault.setCode(code);
+		serviceFault.setMessage(message);
+		return serviceFault;
+	}
 }

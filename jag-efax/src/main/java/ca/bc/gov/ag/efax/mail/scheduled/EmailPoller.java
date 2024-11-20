@@ -36,6 +36,13 @@ public class EmailPoller {
     @Autowired
     private SentMessageRepository sentMessageRepository;
 
+    public EmailPoller(EmailService emailService, EmailParser emailParser, DocumentDistributionService documentDistributionService, SentMessageRepository sentMessageRepository) {
+        this.emailService = emailService;
+        this.emailParser = emailParser;
+        this.documentDistributionService = documentDistributionService;
+        this.sentMessageRepository = sentMessageRepository;
+    }
+
     @Scheduled(fixedDelayString = "${exchange.poller.interval}")
     public void pollForEmails() throws Exception {
         logger.debug("Started email inbox poll.");
