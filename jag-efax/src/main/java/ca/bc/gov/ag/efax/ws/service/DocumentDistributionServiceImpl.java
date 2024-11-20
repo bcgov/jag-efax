@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
+import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 
 import ca.bc.gov.ag.efax.mail.model.MailMessage;
@@ -23,17 +23,21 @@ import ca.bc.gov.ag.efax.ws.model.DocumentDistributionRequest;
 public class DocumentDistributionServiceImpl extends WebServiceGatewaySupport implements DocumentDistributionService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
-    
-    @Autowired
+
     private DocumentDistributionProperties documentDistributionProperties;
 
-    @Autowired
     private EmailService emailService;
 
-    public DocumentDistributionServiceImpl(DocumentDistributionProperties documentDistributionProperties, Jaxb2Marshaller marshaller) {
+    public DocumentDistributionServiceImpl(DocumentDistributionProperties documentDistributionProperties, EmailService emailService, Jaxb2Marshaller marshaller) {
         setDefaultUri(documentDistributionProperties.getCallback().getEndpoint());
         setMarshaller(marshaller);
         setUnmarshaller(marshaller);
+        this.emailService = emailService;
+        this.documentDistributionProperties = documentDistributionProperties;
+    }
+
+    public void initWebServiceTemplateForUnitTest(WebServiceTemplate webServiceTemplate) {
+        this.setWebServiceTemplate(webServiceTemplate);
     }
     
     @Override

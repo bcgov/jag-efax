@@ -3,14 +3,13 @@ package ca.bc.gov.ag.efax.mail.service.parser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import ca.bc.gov.ag.efax.BaseTestSuite;
+import ca.bc.gov.ag.efax.graph.model.GmailMessage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import ca.bc.gov.ag.efax.BaseTestSuite;
 import ca.bc.gov.ag.efax.ws.exception.FAXSendFault;
 import ca.bc.gov.ag.efax.ws.model.DocumentDistributionMainProcessProcessResponse;
-import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
-import microsoft.exchange.webservices.data.property.complex.MessageBody;
 
 public class EmailParserTest extends BaseTestSuite {
 
@@ -19,9 +18,9 @@ public class EmailParserTest extends BaseTestSuite {
     
     @Test
     void testParse_1() throws Exception {
-        EmailMessage emailMessage = new EmailMessage(exchangeService);
+        GmailMessage emailMessage = new GmailMessage();
         emailMessage.setSubject("Test subject");
-        emailMessage.setBody(MessageBody.getMessageBodyFromText("Test body"));
+        emailMessage.setBody("Test body");
                 
         DocumentDistributionMainProcessProcessResponse response = emailParser.parse(emailMessage);
         
@@ -31,10 +30,10 @@ public class EmailParserTest extends BaseTestSuite {
 
     @Test
     void testParse_2() throws Exception {
-        EmailMessage emailMessage = new EmailMessage(exchangeService);
+        GmailMessage emailMessage = new GmailMessage();
         emailMessage.setSubject("Undeliverable: <jobId>1234</jobId><uuid>aabb</uuid>");
-        emailMessage.setBody(MessageBody.getMessageBodyFromText("Test body"));
-                
+        emailMessage.setBody("Test body");
+
         DocumentDistributionMainProcessProcessResponse response = emailParser.parse(emailMessage);
 
         FAXSendFault fault = new FAXSendFault();

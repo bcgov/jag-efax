@@ -25,8 +25,11 @@ public class DocumentDistributionEndpoint {
 
     private Logger logger = LoggerFactory.getLogger(DocumentDistributionEndpoint.class);
 
-    @Autowired
     private DocumentDistributionService documentDistributionService;
+
+    public DocumentDistributionEndpoint(DocumentDistributionService documentDistributionService) {
+        this.documentDistributionService = documentDistributionService;
+    }
 
     @PayloadRoot(namespace = WebServiceConfig.NAMESPACE_URI, localPart = "DocumentDistributionRequest")
     public void initiate(@RequestPayload DocumentDistributionRequest request) {

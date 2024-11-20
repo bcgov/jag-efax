@@ -12,18 +12,18 @@ spring:
 
 ms:
  graph:
-  clientId: ${MSG_CLIENTID}
-  authority: ${MSG_AUTHORITY}
-  secretKey: ${MSG_SECRETKEY}
+  clientId: ${MSG_CLIENTID:}
+  authority: ${MSG_AUTHORITY:}
+  secretKey: ${MSG_SECRETKEY:}
   expiry:
-     threshold: ${MSG_EXPIRY_THRESHOLD}
-  endpoint: ${MSG_ENDPOINT}
+     threshold: ${MSG_EXPIRY_THRESHOLD:}
+  endpoint: ${MSG_ENDPOINT:}
   email:
-     account: ${MSG_EMAIL_ACCOUNT}
+     account: ${MSG_EMAIL_ACCOUNT:}
   saveToSent: ${MSG_SAVE_IN_SENT:true}
   tempDirectory: ${MSG_TEMP_DIR:}
-  adminEmail: ${MSG_ADMIN_EMAIL}
-  azureAppName: ${MSG_APP_NAME}
+  adminEmail: ${MSG_ADMIN_EMAIL:}
+  azureAppName: ${MSG_APP_NAME:}
 
 exchange:
   service:

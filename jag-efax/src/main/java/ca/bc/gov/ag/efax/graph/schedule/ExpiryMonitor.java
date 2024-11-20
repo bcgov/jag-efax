@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,6 @@ public class ExpiryMonitor {
 	@PostConstruct
 	private void postConstruct() throws ParseException {
 		logger.info("MS Graph API Credential Expiry Monitor started.");
-		this.checkExpiryDt();
 	}
 
 	/**
