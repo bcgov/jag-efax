@@ -47,7 +47,6 @@ public class ExpiryMonitor {
 	@PostConstruct
 	private void postConstruct() throws ParseException {
 		logger.info("MS Graph API Credential Expiry Monitor started.");
-		this.checkExpiryDt();
 	}
 
 	/**
