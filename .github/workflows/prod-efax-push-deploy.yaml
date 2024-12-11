@@ -15,7 +15,13 @@ jobs:
           registry: artifacts.developer.gov.bc.ca
           username: ${{ secrets.EFAX_ARTIFACTORY_USERNAME }}
           password: ${{ secrets.EFAX_ARTIFACTORY_PASSWORD }}
-
+      
+      - name: Docker Backup Prod Version
+        run: |  
+          docker pull artifacts.developer.gov.bc.ca/edde-jag-efax-web/jag-efax-webservice:prod
+          docker tag artifacts.developer.gov.bc.ca/edde-jag-efax-web/jag-efax-webservice:prod artifacts.developer.gov.bc.ca/edde-jag-efax-web/jag-efax-webservice:prod-backup
+          docker push artifacts.developer.gov.bc.ca/edde-jag-efax-web/jag-efax-webservice:prod-backup   
+      
       - name: Docker Pull Test Version
         run: |  
           docker pull artifacts.developer.gov.bc.ca/edde-jag-efax-web/jag-efax-webservice:test 
