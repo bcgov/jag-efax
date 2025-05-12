@@ -3,6 +3,7 @@ name: DEV Build and Deploy Efax Webservice
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   build:
