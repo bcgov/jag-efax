@@ -1,0 +1,46 @@
+# This workflow is used to build & scan image using trivy vulnerability scanner and upload the results to github security tab
+
+name: Build & Vulnerability Scan using Trivy Scanner
+
+on:
+  push:
+    branches: [ main, release/* ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ main, release/*]
+  workflow_dispatch:
+    branches: [ main, release/*, feature/*]
+
+jobs:
+  build-and-scan-image:
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Git Checkout
+        uses: actions/checkout@v3
+
+      #Build image webservice
+      - name: Build the Docker image
+        run: |
+          docker compose build --build-arg ENABLE_SPLUNK=true webservice
+
+      #Run Vulnerability Scan usinig Trivy scanner
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: image
+          image-ref: jag-efax-webservice
+          format: sarif
+          output: trivy-results.sarif
+          exit-code: 1
+          ignore-unfixed: true
+          limit-severities-for-sarif: true
+          severity: HIGH,CRITICAL
+
+      #Upload results to the Github security tab.
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-results.sarif
