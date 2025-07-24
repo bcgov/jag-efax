@@ -103,4 +103,4 @@ jobs:
     
       # Upload total coverage report to Code Climate
       - name: Upload coverage report to Code Climate
-        run: ./cc-test-reporter upload-coverage -i coverage/efax-codeclimate.json
+        run: ./cc-test-reporter upload-coverage -d -i coverage/efax-codeclimate.json

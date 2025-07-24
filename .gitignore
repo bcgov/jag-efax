@@ -38,6 +38,7 @@ hs_err_pid*
 
 # Build files
 target/
+*.versionsBackup
 
 # macOS
 .DS_STORE
