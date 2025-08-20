@@ -4,6 +4,5 @@ updates:
   - package-ecosystem: "maven"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "tuesday"
+      interval: "daily"
       time: "05:00"
