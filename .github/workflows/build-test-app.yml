@@ -11,10 +11,8 @@ on:
 
 jobs:
   spring-boot:
-    env:
-      CC_TEST_REPORTER_ID: 8dfb70ce91b02659f7213078a8af0793b487eb85bc0f7854c6a9a4444058bb02
 
-    name: Create, format and upload Java coverage artifact
+    name: Build and Test Springboot Application
     runs-on: ubuntu-latest
 
     steps:
