@@ -1,5 +1,7 @@
 name: Build and Test Application (Java)
-
+permissions:
+  contents: read
+  
 on:
   push:
     branches: [main]
