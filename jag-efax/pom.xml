@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.5</version>
+        <version>3.5.1</version>
         <relativePath/>
     </parent>
     <packaging>jar</packaging>
@@ -130,7 +130,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-common</artifactId>
-            <version>4.1.118.Final</version>
+            <version>4.1.122.Final</version>
         </dependency>
         <dependency>
             <groupId>it.ozimov</groupId>
