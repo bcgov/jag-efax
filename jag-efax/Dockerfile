@@ -25,6 +25,12 @@ FROM eclipse-temurin:17-jre-alpine
 
 ARG MODULE=
 
+# fix CVE-2025-65018, CVE-2025-64720, CVE-2025-66293, CVE-2025-59375, CVE-2025-9230
+RUN apk update \
+    && apk add --upgrade --no-cache libexpat \
+    && apk add --upgrade --no-cache libpng \
+    && apk add --upgrade --no-cache openssl
+
 COPY --from=build /efax/jag-efax/target/jag-efax.jar /app/service.jar
 
 CMD ["java", "-jar", "/app/service.jar"]
